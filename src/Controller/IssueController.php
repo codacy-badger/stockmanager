@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Issue;
 use App\Form\IssueType;
+use App\Form\IssueUserType;
 use App\Repository\IssueRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +23,7 @@ class IssueController extends AbstractController
     {
         return $this->render('issue/index.html.twig', ['issues' => $issueRepository->findAll()]);
     }
+
 
     /**
      * @Route("/new", name="issue_new", methods="GET|POST")
@@ -43,6 +45,35 @@ class IssueController extends AbstractController
         return $this->render('issue/new.html.twig', [
             'issue' => $issue,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/user", name="issue_user")
+     * @param Request $request
+     * @return Response
+     */
+    public function userIssue(Request $request)
+    {
+        $issue = new Issue();
+
+
+        $form = $this->createForm(IssueUserType::class, $issue);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            dump($issue);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($issue);
+            $em->flush();
+
+        }
+
+        return $this->render('issue/userForm.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 
@@ -79,7 +110,7 @@ class IssueController extends AbstractController
      */
     public function delete(Request $request, Issue $issue): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$issue->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $issue->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($issue);
             $em->flush();
@@ -87,4 +118,6 @@ class IssueController extends AbstractController
 
         return $this->redirectToRoute('issue_index');
     }
+
+
 }
