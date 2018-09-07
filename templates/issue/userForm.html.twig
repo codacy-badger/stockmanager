@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {{ render(controller('App\\Controller\\EquipmentController::search')) }}
 {% include 'issue/_form.html.twig' %}
 {% endblock %}

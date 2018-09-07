@@ -47,6 +47,19 @@ class EquipmentController extends AbstractController
     }
 
     /**
+     * @Route("/search", name="equipment_search")
+     * @param Request $request
+     * @return Response
+     */
+    public function search(Request $request)
+    {
+        $q = $request->query->get('term'); // use "term" instead of "q" for jquery-ui
+        $results = $this->getDoctrine()->getRepository('App:Equipment')->findLike($a)
+
+        return $this->render(':default/search.json.twig', ['equipments' => $results]);
+    }
+
+    /**
      * @Route("/{id}", name="equipment_show", methods="GET")
      */
     public function show(Equipment $equipment): Response

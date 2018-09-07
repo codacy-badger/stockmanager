@@ -19,32 +19,20 @@ class EquipmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Equipment::class);
     }
 
-//    /**
-//     * @return Equipment[] Returns an array of Equipment objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $serial
+     * @return mixed
+     */
+    public function findLike($serial)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
+        return $this
+            ->createQueryBuilder('a')
+            ->where('a.serial LIKE :serial')
+            ->setParameter('serial', "%serial%")
+            ->orderBy('a.serial')
+            ->setMaxResults(5)
             ->getQuery()
-            ->getResult()
-        ;
+            ->execute()
+            ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Equipment
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
