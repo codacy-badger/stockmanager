@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}IssueSymptom{% endblock %}
+
+{% block body %}
+    <h1>IssueSymptom</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ issue_symptom.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('issue_symptom_index') }}">back to list</a>
+
+    <a href="{{ path('issue_symptom_edit', {'id': issue_symptom.id}) }}">edit</a>
+
+    {{ include('issue_symptom/_delete_form.html.twig') }}
+{% endblock %}

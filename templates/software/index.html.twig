@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Software index{% endblock %}
+
+{% block body %}
+    <h1>Software index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Version</th>
+                <th>Detail</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for software in softwares %}
+            <tr>
+                <td>{{ software.id }}</td>
+                <td>{{ software.version }}</td>
+                <td>{{ software.detail }}</td>
+                <td>
+                    <a href="{{ path('software_show', {'id': software.id}) }}">show</a>
+                    <a href="{{ path('software_edit', {'id': software.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('software_new') }}">Create new</a>
+{% endblock %}

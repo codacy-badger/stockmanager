@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Software{% endblock %}
+
+{% block body %}
+    <h1>Software</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ software.id }}</td>
+            </tr>
+            <tr>
+                <th>Version</th>
+                <td>{{ software.version }}</td>
+            </tr>
+            <tr>
+                <th>Detail</th>
+                <td>{{ software.detail }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('software_index') }}">back to list</a>
+
+    <a href="{{ path('software_edit', {'id': software.id}) }}">edit</a>
+
+    {{ include('software/_delete_form.html.twig') }}
+{% endblock %}

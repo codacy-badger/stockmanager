@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit IssueSymptom{% endblock %}
+
+{% block body %}
+    <h1>Edit IssueSymptom</h1>
+
+    {{ include('issue_symptom/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('issue_symptom_index') }}">back to list</a>
+
+    {{ include('issue_symptom/_delete_form.html.twig') }}
+{% endblock %}
