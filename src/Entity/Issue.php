@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,6 +52,17 @@ class Issue
      * @ORM\ManyToOne(targetEntity="App\Entity\Repair")
      */
     private $repair;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\BreakdownSymptom")
+     */
+    private $symptoms;
+
+    public function __construct()
+    {
+        $this->symptoms = new ArrayCollection();
+        $this->dateRequest = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -136,6 +149,37 @@ class Issue
     public function setRepair(?Repair $repair): self
     {
         $this->repair = $repair;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|IssueSymptom[]
+     */
+    public function getSymptoms(): Collection
+    {
+        return $this->symptoms;
+    }
+
+    public function addSymptom(IssueSymptom $symptom): self
+    {
+        if (!$this->symptoms->contains($symptom)) {
+            $this->symptoms[] = $symptom;
+            $symptom->setIssue($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSymptom(IssueSymptom $symptom): self
+    {
+        if ($this->symptoms->contains($symptom)) {
+            $this->symptoms->removeElement($symptom);
+            // set the owning side to null (unless already changed)
+            if ($symptom->getIssue() === $this) {
+                $symptom->setIssue(null);
+            }
+        }
 
         return $this;
     }

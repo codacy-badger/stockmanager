@@ -17,7 +17,7 @@ class IssueSymptom
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Issue")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Issue", inversedBy="symptoms")
      */
     private $issue;
 
