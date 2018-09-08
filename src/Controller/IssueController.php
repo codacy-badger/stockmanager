@@ -48,34 +48,6 @@ class IssueController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/user", name="issue_user")
-     * @param Request $request
-     * @return Response
-     */
-    public function userIssue(Request $request)
-    {
-        $issue = new Issue();
-
-
-        $form = $this->createForm(IssueUserType::class, $issue);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            dump($issue);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($issue);
-            $em->flush();
-
-        }
-
-        return $this->render('issue/userForm.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
 
     /**
      * @Route("/{id}", name="issue_show", methods="GET")

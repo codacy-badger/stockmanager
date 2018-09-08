@@ -44,17 +44,17 @@ class Issue
     private $technician;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Equipment")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Equipment", inversedBy="issues")
      */
     private $equipment;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Repair")
+     * @ORM\OneToOne(targetEntity="App\Entity\Repair")
      */
     private $repair;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\BreakdownSymptom")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Symptom")
      */
     private $symptoms;
 
@@ -154,33 +154,29 @@ class Issue
     }
 
     /**
-     * @return Collection|IssueSymptom[]
+     * @return Collection|Symptom[]
      */
     public function getSymptoms(): Collection
     {
         return $this->symptoms;
     }
 
-    public function addSymptom(IssueSymptom $symptom): self
+    public function addSymptom(Symptom $symptom): self
     {
         if (!$this->symptoms->contains($symptom)) {
             $this->symptoms[] = $symptom;
-            $symptom->setIssue($this);
         }
 
         return $this;
     }
 
-    public function removeSymptom(IssueSymptom $symptom): self
+    public function removeSymptom(Symptom $symptom): self
     {
         if ($this->symptoms->contains($symptom)) {
             $this->symptoms->removeElement($symptom);
-            // set the owning side to null (unless already changed)
-            if ($symptom->getIssue() === $this) {
-                $symptom->setIssue(null);
-            }
         }
 
         return $this;
     }
+
 }

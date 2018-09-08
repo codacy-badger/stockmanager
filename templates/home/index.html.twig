@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello !{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-4">
+            {{ render (controller(
+                'App\\Controller\\IssueController::new'
+            )) }}
+        </div>
+
+        <div class="col-md-8">
+
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Id ticket</th>
+                    <th>Type d'équipement</th>
+                    <th>Modèle</th>
+                    <th>Numéro de série</th>
+                    <th>Date de la demande</th>
+                    <th>Prise en compte de la demande</th>
+                    <th>Symptomes</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for issue in issues %}
+                    <tr>
+                        <td>{{ issue.id }}</td>
+                        <td>{{ issue.equipment.brand.category.name }}</td>
+                        <td>{{ issue.equipment.brand.name }}</td>
+                        <td>{{ issue.equipment.serial }}</td>
+                        <td>{{ issue.dateRequest }}</td>
+                        <td>{{ issue.dateChecked }}</td>
+                        <td>{{ issue.symptoms }}</td>
+
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">Pas d'enregistrement</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

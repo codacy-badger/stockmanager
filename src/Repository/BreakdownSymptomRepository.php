@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\BreakdownSymptom;
+use App\Entity\Symptom;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method BreakdownSymptom|null find($id, $lockMode = null, $lockVersion = null)
- * @method BreakdownSymptom|null findOneBy(array $criteria, array $orderBy = null)
- * @method BreakdownSymptom[]    findAll()
- * @method BreakdownSymptom[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Symptom|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Symptom|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Symptom[]    findAll()
+ * @method Symptom[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class BreakdownSymptomRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, BreakdownSymptom::class);
+        parent::__construct($registry, Symptom::class);
     }
 
 //    /**

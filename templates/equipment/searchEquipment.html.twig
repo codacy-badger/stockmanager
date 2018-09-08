@@ -1,5 +1,0 @@
-{% for equipement in results %}
-    {{ {id: equipment.id, label: equipment.serial, value: equipment.serial}|json_encode|raw }}
-    {# use "value" instead of "id" key, if you use jquery-ui #}
-    {%- if not loop.last %},{% endif -%}
-{%- endfor %}]

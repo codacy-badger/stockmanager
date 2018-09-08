@@ -1,11 +1,7 @@
-{% extends 'base.html.twig' %}
+<h1>Déclarer une panne</h1>
 
-{% block title %}New Issue{% endblock %}
+{{ include('issue/_form.html.twig') }}
 
-{% block body %}
-    <h1>Create new Issue</h1>
+<a href="{{ path('issue_index') }}">back to list</a>
 
-    {{ include('issue/_form.html.twig') }}
 
-    <a href="{{ path('issue_index') }}">back to list</a>
-{% endblock %}

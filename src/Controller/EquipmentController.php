@@ -46,18 +46,6 @@ class EquipmentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/search", name="equipment_search")
-     * @param Request $request
-     * @return Response
-     */
-    public function search(Request $request)
-    {
-        $q = $request->query->get('term'); // use "term" instead of "q" for jquery-ui
-        $results = $this->getDoctrine()->getRepository('App:Equipment')->findLike($a)
-
-        return $this->render(':default/search.json.twig', ['equipments' => $results]);
-    }
 
     /**
      * @Route("/{id}", name="equipment_show", methods="GET")
@@ -92,7 +80,7 @@ class EquipmentController extends AbstractController
      */
     public function delete(Request $request, Equipment $equipment): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$equipment->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $equipment->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($equipment);
             $em->flush();
@@ -100,4 +88,7 @@ class EquipmentController extends AbstractController
 
         return $this->redirectToRoute('equipment_index');
     }
+
+
+
 }

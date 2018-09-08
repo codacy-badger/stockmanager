@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -32,6 +34,16 @@ class Equipment
      * @ORM\ManyToOne(targetEntity="App\Entity\Contract")
      */
     private $contract;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Issue", mappedBy="equipment" )
+     */
+    private $issues;
+
+    public function __construct()
+    {
+        $this->issues = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -71,6 +83,37 @@ class Equipment
     public function setContract(?Contract $contract): self
     {
         $this->contract = $contract;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Issue[]
+     */
+    public function getIssues(): Collection
+    {
+        return $this->issues;
+    }
+
+    public function addIssue(Issue $issue): self
+    {
+        if (!$this->issues->contains($issue)) {
+            $this->issues[] = $issue;
+            $issue->setEquipment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIssue(Issue $issue): self
+    {
+        if ($this->issues->contains($issue)) {
+            $this->issues->removeElement($issue);
+            // set the owning side to null (unless already changed)
+            if ($issue->getEquipment() === $this) {
+                $issue->setEquipment(null);
+            }
+        }
 
         return $this;
     }

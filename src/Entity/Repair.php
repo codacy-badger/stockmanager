@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,6 +42,17 @@ class Repair
      * @ORM\ManyToOne(targetEntity="App\Entity\Image")
      */
     private $image;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Symptom")
+     */
+    private $symptoms;
+
+    public function __construct()
+    {
+        $this->symptoms = new ArrayCollection();
+        $this->startDate = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -102,6 +115,32 @@ class Repair
     public function setImage(?Image $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Symptom[]
+     */
+    public function getSymptoms(): Collection
+    {
+        return $this->symptoms;
+    }
+
+    public function addSymptom(Symptom $symptom): self
+    {
+        if (!$this->symptoms->contains($symptom)) {
+            $this->symptoms[] = $symptom;
+        }
+
+        return $this;
+    }
+
+    public function removeSymptom(Symptom $symptom): self
+    {
+        if ($this->symptoms->contains($symptom)) {
+            $this->symptoms->removeElement($symptom);
+        }
 
         return $this;
     }

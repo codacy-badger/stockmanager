@@ -25,14 +25,15 @@ class EquipmentRepository extends ServiceEntityRepository
      */
     public function findLike($serial)
     {
-        return $this
-            ->createQueryBuilder('a')
-            ->where('a.serial LIKE :serial')
-            ->setParameter('serial', "%serial%")
+        $qb = $this->createQueryBuilder('a')
+            ->where('a.serial LIKE :string')
+            ->setParameter('string', "%$serial%")
             ->orderBy('a.serial')
             ->setMaxResults(5)
-            ->getQuery()
-            ->execute()
-            ;
+        ;
+
+        return $qb->getQuery()
+            ->getResult();
+
     }
 }

@@ -2,26 +2,24 @@
 
 namespace App\Form;
 
-use App\Entity\EquipmentSoftware;
+use App\Entity\Symptom;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EquipmentSoftwareType extends AbstractType
+class SymptomType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
-            ->add('equipment')
-            ->add('software')
+            ->add('name')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => EquipmentSoftware::class,
+            'data_class' => Symptom::class,
         ]);
     }
 }
