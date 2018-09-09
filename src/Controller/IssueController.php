@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Issue;
 use App\Form\IssueType;
-use App\Form\IssueUserType;
 use App\Repository\IssueRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,11 +34,13 @@ class IssueController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($issue);
             $em->flush();
 
-            return $this->redirectToRoute('issue_index');
+            $this->addFlash('notice', "La panne a bien été enregistrée");
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('issue/new.html.twig', [

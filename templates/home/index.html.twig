@@ -4,11 +4,21 @@
 
 {% block body %}
 
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="row">
         <div class="col-md-4">
-            {{ render (controller(
-                'App\\Controller\\IssueController::new'
-            )) }}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Déclarer une panne</h5>
+
+                    <a href="{{ path('issue_new') }}" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
         </div>
 
         <div class="col-md-8">
@@ -33,9 +43,15 @@
                         <td>{{ issue.equipment.brand.category.name }}</td>
                         <td>{{ issue.equipment.brand.name }}</td>
                         <td>{{ issue.equipment.serial }}</td>
-                        <td>{{ issue.dateRequest }}</td>
-                        <td>{{ issue.dateChecked }}</td>
-                        <td>{{ issue.symptoms }}</td>
+                        <td>{{ issue.dateRequest | date("m/d/Y H:i:s", "Europe/Paris") }}</td>
+                        <td>{{ issue.dateChecked | date("m/d/Y H:i:s", "Europe/Paris") }}</td>
+                        <td>
+                            <ul>
+                                {% for symptom in issue.symptoms %}
+                                    <li>{{ symptom.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
 
                     </tr>
                 {% else %}

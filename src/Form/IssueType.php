@@ -17,9 +17,9 @@ class IssueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('equipment', TextType::class, [
-                'label' => 'Materiel',
-
+            ->add('equipment', AutocompleteType::class, [
+                'class' => 'App\Entity\Equipment',
+                
             ])
             ->add('symptoms', EntityType::class, [
                 'class' => 'App\Entity\Symptom',
@@ -28,12 +28,9 @@ class IssueType extends AbstractType
                 'multiple' => true,
                 'expanded' => true
             ])
-
             ->add('description', TextareaType::class, [
                 'label' => 'Description'
-            ])
-
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
