@@ -19,7 +19,7 @@ class IssueType extends AbstractType
         $builder
             ->add('equipment', AutocompleteType::class, [
                 'class' => 'App\Entity\Equipment',
-                
+
             ])
             ->add('symptoms', EntityType::class, [
                 'class' => 'App\Entity\Symptom',

@@ -44,7 +44,8 @@
                         <td>{{ issue.equipment.brand.name }}</td>
                         <td>{{ issue.equipment.serial }}</td>
                         <td>{{ issue.dateRequest | date("m/d/Y H:i:s", "Europe/Paris") }}</td>
-                        <td>{{ issue.dateChecked | date("m/d/Y H:i:s", "Europe/Paris") }}</td>
+                        <td>{% if issue.dateChecked %}{{ issue.dateChecked | date("m/d/Y H:i:s", "Europe/Paris") }}{% else %}
+                                Non renseigné{% endif %}</td>
                         <td>
                             <ul>
                                 {% for symptom in issue.symptoms %}
