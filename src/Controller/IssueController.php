@@ -12,13 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Date;
 
-/**
- * @Route("/issue")
- */
 class IssueController extends AbstractController
 {
     /**
-     * @Route("/", name="issue_index", methods="GET")
+     * @Route("admin/issue", name="issue_index", methods="GET")
      */
     public function index(IssueRepository $issueRepository): Response
     {
@@ -27,7 +24,7 @@ class IssueController extends AbstractController
 
 
     /**
-     * @Route("/new", name="issue_new", methods="GET|POST")
+     * @Route("member/issue/new", name="issue_new", methods="GET|POST")
      */
     public function new(Request $request, Security $security): Response
     {
@@ -58,7 +55,7 @@ class IssueController extends AbstractController
 
 
     /**
-     * @Route("/{id}", name="issue_show", methods="GET")
+     * @Route("admin/issue/{id}", name="issue_show", methods="GET")
      */
     public function show(Issue $issue): Response
     {
@@ -66,7 +63,7 @@ class IssueController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="issue_edit", methods="GET|POST")
+     * @Route("admin/issue/{id}/edit", name="issue_edit", methods="GET|POST")
      */
     public function edit(Request $request, Issue $issue): Response
     {
@@ -86,7 +83,7 @@ class IssueController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="issue_delete", methods="DELETE")
+     * @Route("admin/issue/{id}", name="issue_delete", methods="DELETE")
      */
     public function delete(Request $request, Issue $issue): Response
     {
@@ -100,7 +97,7 @@ class IssueController extends AbstractController
     }
 
     /**
-     * @Route("/validate-{id}", name="issue_validate", methods="VALIDATE")
+     * @Route("admin/issue/validate-{id}", name="issue_validate", methods="VALIDATE")
      * @param Issue $issue
      */
     public function validate(Request $request, Issue $issue)

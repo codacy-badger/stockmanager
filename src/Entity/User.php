@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -54,10 +56,8 @@ class User implements UserInterface, \Serializable
      */
     private $operator;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $roles = [];
+
+
 
 
     public function getId(): ?int
@@ -143,12 +143,10 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+
     public function getRoles()
     {
-        if (empty($this->roles)) {
-            return ['ROLE_USER'];
-        }
-        return $this->roles;
+        return [$this->getAuthorization()->getRole()];
     }
 
     public function getSalt()
@@ -187,10 +185,6 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
 
-        return $this;
-    }
+
 }

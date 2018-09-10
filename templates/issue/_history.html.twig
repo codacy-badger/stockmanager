@@ -16,7 +16,8 @@
     </thead>
     <tbody>
     {% for issue in issues %}
-        <tr {% if issue.dateChecked %}class="table-success"{% else %}class="table-warning"{% endif %}>
+        {#backgroud color changes when issue checkedDate is in#}
+        <tr {% if issue.dateChecked %}class="table-success" {% else %}class="table-warning"{% endif %}>
             <td>{{ issue.id }}</td>
             <td>{{ issue.user.firstname }}
             <td>{{ issue.user.lastname }}
@@ -29,6 +30,8 @@
             <td>{{ issue.dateChecked ? issue.dateChecked|date("m/d/Y H:i:s", "Europe/Paris") : '' }}</td>
             <td>
                 <a class="btn btn-primary btn-sm" href="{{ path('issue_show', {'id': issue.id}) }}">détails</a>
+
+                {#validate only if the checkedDate is in#}
                 {% if not issue.dateChecked %}{% include 'issue/_validate.html.twig' %}{% endif %}
             </td>
         </tr>

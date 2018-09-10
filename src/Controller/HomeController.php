@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
+     * @Route("member/", name="home")
      */
     public function index()
     {
@@ -25,7 +25,7 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/autocomplete", name="home_autocomplete", defaults={"_format"="json"})
+     * @Route("member/autocomplete", name="home_autocomplete", defaults={"_format"="json"})
      * @param $term
      */
     public function autocomplete(Request $request)
@@ -37,5 +37,7 @@ class HomeController extends AbstractController
           'equipments' => $results
        ]);
     }
+
+
 
 }

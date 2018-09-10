@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/", name="user_index", methods="GET")
+     * @Route("admin/", name="user_index", methods="GET")
      */
     public function index(UserRepository $userRepository): Response
     {
