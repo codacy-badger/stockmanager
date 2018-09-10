@@ -1,0 +1,41 @@
+<h3>Tableau d'historique</h3>
+<table class="table table-sm">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Exploitant</th>
+        <th>date</th>
+        <th>N°serie</th>
+        <th>Type</th>
+        <th>Catégorie</th>
+        <th>Pris en compte</th>
+        <th>actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for issue in issues %}
+        <tr {% if issue.dateChecked %}class="table-success"{% else %}class="table-warning"{% endif %}>
+            <td>{{ issue.id }}</td>
+            <td>{{ issue.user.firstname }}
+            <td>{{ issue.user.lastname }}
+            <td>{{ issue.user.operator.name }}
+            <td>{{ issue.dateRequest ? issue.dateRequest|date("m/d/Y H:i:s", "Europe/Paris") : '' }}</td>
+            <td>{{ issue.equipment.serial }}</td>
+            <td>{{ issue.equipment.brand.name }}</td>
+            <td>{{ issue.equipment.brand.category.name }}</td>
+
+            <td>{{ issue.dateChecked ? issue.dateChecked|date("m/d/Y H:i:s", "Europe/Paris") : '' }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('issue_show', {'id': issue.id}) }}">détails</a>
+                {% if not issue.dateChecked %}{% include 'issue/_validate.html.twig' %}{% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

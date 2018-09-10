@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('issue_validate', {'id': issue.id}) }}" >
+    <input type="hidden" name="_method" value="VALIDATE">
+    <input type="hidden" name="_token" value="{{ csrf_token('validate' ~ issue.id) }}">
+    <button class="btn btn-success btn-sm">Valider</button>
+</form>

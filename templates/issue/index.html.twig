@@ -1,39 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Issue index{% endblock %}
+{% block title %}Tickets{% endblock %}
 
 {% block body %}
-    <h1>Issue index</h1>
+    <h1>Tickets</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>DateRequest</th>
-                <th>Description</th>
-                <th>DateChecked</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for issue in issues %}
-            <tr>
-                <td>{{ issue.id }}</td>
-                <td>{{ issue.dateRequest ? issue.dateRequest|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ issue.description }}</td>
-                <td>{{ issue.dateChecked ? issue.dateChecked|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('issue_show', {'id': issue.id}) }}">show</a>
-                    <a href="{{ path('issue_edit', {'id': issue.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {#History table#}
+{% include 'issue/_history.html.twig' %}
 
     <a href="{{ path('issue_new') }}">Create new</a>
 {% endblock %}

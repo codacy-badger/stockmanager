@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BrandRepository")
+ * @UniqueEntity(fields={"name"}, message="La marque existe déjà.")
  */
 class Brand
 {

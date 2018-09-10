@@ -14,6 +14,7 @@
                 <th>Login</th>
                 <th>Password</th>
                 <th>Email</th>
+                <th>Auth</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -23,9 +24,10 @@
                 <td>{{ user.id }}</td>
                 <td>{{ user.lastname }}</td>
                 <td>{{ user.firstname }}</td>
-                <td>{{ user.login }}</td>
+                <td>{{ user.username }}</td>
                 <td>{{ user.password }}</td>
                 <td>{{ user.email }}</td>
+                <td>{{ user.authorization.name }}</td>
                 <td>
                     <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
                     <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>

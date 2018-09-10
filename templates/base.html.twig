@@ -13,6 +13,32 @@
 </head>
 <body>
 {% include 'navbar.html.twig' %}
+
+{# flash messages #}
+{% block flash %}
+    {% for flashMessage in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.flashes('info') %}
+        <div class="alert alert-info" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.flashes('warning') %}
+        <div class="alert alert-warning" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.flashes('danger') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{#Body#}
 <div class="container-fluid">
     {% block body %}{% endblock %}
 </div>

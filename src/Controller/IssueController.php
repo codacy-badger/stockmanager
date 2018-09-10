@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Route("/issue")
@@ -27,7 +29,7 @@ class IssueController extends AbstractController
     /**
      * @Route("/new", name="issue_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Security $security): Response
     {
         $issue = new Issue();
         $form = $this->createForm(IssueType::class, $issue);
@@ -35,11 +37,16 @@ class IssueController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            //adds the current user into object issue
+            $user = $security->getUser();
+            $issue->setUser($user);
+
+            //save into database
             $em = $this->getDoctrine()->getManager();
             $em->persist($issue);
             $em->flush();
 
-            $this->addFlash('notice', "La panne a bien été enregistrée");
+            $this->addFlash('success', "La panne a bien été enregistrée");
             return $this->redirectToRoute('home');
         }
 
@@ -87,6 +94,27 @@ class IssueController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->remove($issue);
             $em->flush();
+        }
+
+        return $this->redirectToRoute('issue_index');
+    }
+
+    /**
+     * @Route("/validate-{id}", name="issue_validate", methods="VALIDATE")
+     * @param Issue $issue
+     */
+    public function validate(Request $request, Issue $issue)
+    {
+        if ($this->isCsrfTokenValid('validate' . $issue->getId(), $request->request->get('_token'))) {
+
+            $dateTime = new \DateTime();
+
+            $issue->setDateChecked($dateTime);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            $this->addFlash('success', "Ticket validé!");
         }
 
         return $this->redirectToRoute('issue_index');

@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"username"}, message="Ce login existe déjà.")
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -29,7 +32,7 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $login;
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -45,6 +48,17 @@ class User
      * @ORM\ManyToOne(targetEntity="App\Entity\Authorization")
      */
     private $authorization;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Operator")
+     */
+    private $operator;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $roles = [];
+
 
     public function getId(): ?int
     {
@@ -75,17 +89,11 @@ class User
         return $this;
     }
 
-    public function getLogin(): ?string
+    public function getUsername(): ?string
     {
-        return $this->login;
+        return $this->username;
     }
 
-    public function setLogin(string $login): self
-    {
-        $this->login = $login;
-
-        return $this;
-    }
 
     public function getPassword(): ?string
     {
@@ -119,6 +127,69 @@ class User
     public function setAuthorization(?Authorization $authorization): self
     {
         $this->authorization = $authorization;
+
+        return $this;
+    }
+
+    public function getOperator(): ?Operator
+    {
+        return $this->operator;
+    }
+
+    public function setOperator(?Operator $operator): self
+    {
+        $this->operator = $operator;
+
+        return $this;
+    }
+
+    public function getRoles()
+    {
+        if (empty($this->roles)) {
+            return ['ROLE_USER'];
+        }
+        return $this->roles;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->username,
+            $this->password,
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->username,
+            $this->password,
+            ) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
