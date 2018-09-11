@@ -37,6 +37,17 @@ class IssueRepository extends ServiceEntityRepository
     }
 
 
+    public function countByUser(User $user)
+    {
+        $qb = $this->createQueryBuilder('t');
+        $qb->select('count(t.id)');
+        $qb->where('t.user = :user');
+        $qb->setParameter('user', $user);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+
     /*
     public function findOneBySomeField($value): ?Issue
     {
