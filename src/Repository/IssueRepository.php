@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Issue;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,22 +20,22 @@ class IssueRepository extends ServiceEntityRepository
         parent::__construct($registry, Issue::class);
     }
 
-//    /**
-//     * @return Issue[] Returns an array of Issue objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Issue[] Returns an array of Issue objects
+     */
+
+    public function findByUser(User $user)
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('i.user = :val')
+            ->andWhere('i.dateChecked IS NULL')
+            ->setParameter('val', $user)
             ->orderBy('i.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Issue

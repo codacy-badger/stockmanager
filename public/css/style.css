@@ -1,5 +1,5 @@
 body {
-    font-size: 0.875rem;
+    font-size: 0.8rem !important;
 }
 
 .ui-autocomplete {
@@ -51,4 +51,6 @@ body {
     -moz-border-radius: 0px;
     background-image: none;
 }
+
+
 

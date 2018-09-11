@@ -1,10 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>Déclarer une panne</h1>
+    <div class="col-6 mx-auto mt-3">
+    <div class="card">
+            <h4 class="card-header">Déclarer une panne</h4>
+        <div class="card-body">
+            {{ include('issue/_form.html.twig') }}
+        </div>
+    </div>
 
-{{ include('issue/_form.html.twig') }}
-
-<a href="{{ path('issue_index') }}">back to list</a>
+    </div>
+    <a href="{{ path('issue_index') }}">back to list</a>
 {% endblock %}
 

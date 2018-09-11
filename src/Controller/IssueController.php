@@ -105,8 +105,11 @@ class IssueController extends AbstractController
         if ($this->isCsrfTokenValid('validate' . $issue->getId(), $request->request->get('_token'))) {
 
             $dateTime = new \DateTime();
+            $technician = $this->getUser();
 
             $issue->setDateChecked($dateTime);
+            $issue->setTechnician($technician);
+
 
             $em = $this->getDoctrine()->getManager();
             $em->flush();

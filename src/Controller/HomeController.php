@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class HomeController extends AbstractController
 {
@@ -16,8 +17,11 @@ class HomeController extends AbstractController
      */
     public function index()
     {
+//        get the current user logged in
+        $user = $this->getUser();
 
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->findAll();
+//        find all issues by the current user
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByUser($user);
 
         return $this->render('home/index.html.twig', [
             'issues' => $issues,
@@ -33,11 +37,10 @@ class HomeController extends AbstractController
         $term = $request->query->get('term'); // use "term" instead of "q" for jquery-ui
         $results = $this->getDoctrine()->getRepository('App:Equipment')->findLike($term);
 
-       return $this->render('equipment/search.json.twig', [
-          'equipments' => $results
-       ]);
+        return $this->render('equipment/search.json.twig', [
+            'equipments' => $results
+        ]);
     }
-
 
 
 }
