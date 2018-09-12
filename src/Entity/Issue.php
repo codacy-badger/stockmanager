@@ -64,6 +64,16 @@ class Issue
      */
     private $symptoms;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateReady;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Transportation")
+     */
+    private $transportation;
+
     public function __construct()
     {
         $this->symptoms = new ArrayCollection();
@@ -181,6 +191,30 @@ class Issue
         if ($this->symptoms->contains($symptom)) {
             $this->symptoms->removeElement($symptom);
         }
+
+        return $this;
+    }
+
+    public function getDateReady(): ?\DateTimeInterface
+    {
+        return $this->dateReady;
+    }
+
+    public function setDateReady(?\DateTimeInterface $dateReady): self
+    {
+        $this->dateReady = $dateReady;
+
+        return $this;
+    }
+
+    public function getTransportation(): ?Transportation
+    {
+        return $this->transportation;
+    }
+
+    public function setTransportation(?Transportation $transportation): self
+    {
+        $this->transportation = $transportation;
 
         return $this;
     }

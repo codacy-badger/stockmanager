@@ -2,14 +2,21 @@
 
 {% block body %}
     <div class="col-6 mx-auto mt-3">
-    <div class="card">
+        <div class="card">
             <h4 class="card-header">Déclarer une panne</h4>
-        <div class="card-body">
-            {{ include('issue/_form.html.twig') }}
+            <div class="card-body">
+                {{ include('issue/_form.html.twig') }}
+            </div>
         </div>
-    </div>
 
     </div>
     <a href="{{ path('issue_index') }}">back to list</a>
 {% endblock %}
-
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#issue_equipment').autocompleter({
+            url_list: '/member/search'
+        });
+    </script>
+{% endblock %}

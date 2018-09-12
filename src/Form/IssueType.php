@@ -21,6 +21,11 @@ class IssueType extends AbstractType
                 'class' => 'App\Entity\Equipment',
 
             ])
+            ->add('transportation', EntityType::class, [
+                'class' => 'App\Entity\Transportation',
+                'label' => 'Réseau de transport',
+                'choice_label' => 'tradeName'
+            ])
             ->add('symptoms', EntityType::class, [
                 'class' => 'App\Entity\Symptom',
                 'label' => 'Problèmes constatés',

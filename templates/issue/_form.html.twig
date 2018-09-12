@@ -1,5 +1,7 @@
 {{ form_start(form) }}
-{{ form_widget(form.equipment, {'id': 'search'}) }}
+{{ form_errors(form) }}
+{{ form_widget(form.equipment) }}
+<input type="hidden" id="value"/>
     {{ form_widget(form) }}
     <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 

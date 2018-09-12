@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Operator;
+use App\Entity\Transportation;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,6 +16,13 @@ class OperatorType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['label' => 'Nom'])
+            ->add('transportations', EntityType::class, [
+                'class' => 'App\Entity\Transportation',
+                'label' => 'Réseau',
+                'choice_label' => 'tradeName',
+                'multiple' => true,
+
+            ])
         ;
     }
 

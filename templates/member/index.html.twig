@@ -25,9 +25,5 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        $('#search').autocomplete({
-            source: '{{ path("member_autocomplete") }}'
-        });
-    </script>
+
 {% endblock %}

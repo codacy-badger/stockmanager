@@ -1,6 +1,6 @@
 [{% for equipment in equipments -%}
 
-    {{ {value: equipment.id, label: equipment.serial}|json_encode|raw }}
+    {{ {value: equipment.id, label: equipment.serial, id: equipment.id }|json_encode|raw }}
 
     {%- if not loop.last %},{% endif -%}
     {%- endfor %}]

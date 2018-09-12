@@ -33,19 +33,6 @@ class MemberController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/autocomplete", name="member_autocomplete", defaults={"_format"="json"})
-     * @param $term
-     */
-    public function autocomplete(Request $request)
-    {
-        $term = $request->query->get('term'); // use "term" instead of "q" for jquery-ui
-        $results = $this->getDoctrine()->getRepository('App:Equipment')->findLike($term);
-
-        return $this->render('equipment/search.json.twig', [
-            'equipments' => $results
-        ]);
-    }
 
     /**
      * @Route("/count-issue", name="member_countIssue")
@@ -57,6 +44,20 @@ class MemberController extends AbstractController
 
         return $this->render('member/_countIssue.html.twig', [
            'count' => $count
+        ]);
+    }
+
+    /**
+     * @Route("/search", name="equipment_search", defaults={"_format"="json"})
+     * @param $term
+     */
+    public function search(Request $request)
+    {
+        $term = $request->query->get('term'); // use "term" instead of "q" for jquery-ui
+        $results = $this->getDoctrine()->getRepository('App:Equipment')->findLike($term);
+
+        return $this->render('equipment/search.json.twig', [
+            'equipments' => $results
         ]);
     }
 
