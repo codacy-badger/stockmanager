@@ -35,7 +35,7 @@
                     <td>
                         <a href="{{ path('issue_show', {'id': issue.id}) }}"><i class="fas fa-info fa-xs"></i></a>
                         {#validate only if the checkedDate is in#}
-                        {% if not issue.dateChecked %}{% include 'issue/_validate.html.twig' %}{% endif %}
+                        {% if not issue.dateChecked %}{% include 'admin/issue/_validate.html.twig' %}{% endif %}
                     </td>
                 </tr>
             {% else %}
