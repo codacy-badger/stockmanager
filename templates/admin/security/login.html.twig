@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Stock Manager{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+              integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+              crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery-ui.min.css') }}">
+    {% endblock %}
+</head>
+<body class="bg-dark">
+<div class="container">
+    <div class="col-md-5 mx-auto mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h3>Authentification</h3>
+            </div>
+            <div class="card-body">
+
+                {% if error %}
+                    <div class="alert alert-danger">
+                        <ul class="list-unstyled mb-0">
+                            <li><span class="initialism form-error-icon badge badge-danger">Error</span>
+                                <span class="form-error-message">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% block javascripts %}
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/autocompleter-jqueryui.js') }}"></script>
+{% endblock %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

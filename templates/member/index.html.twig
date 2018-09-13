@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Gestion des pannes - {{ parent() }}{% endblock %}
-
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link active" href="{{ path('member_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord</a>
+    </li>
+{% endblock %}
 {% block body %}
     <div class="row">
         <div class="col-md-3">

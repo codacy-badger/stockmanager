@@ -9,48 +9,90 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
               integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
               crossorigin="anonymous">
-        {#<link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">#}
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery-ui.min.css') }}">
     {% endblock %}
 </head>
 <body>
-{% include 'navbar.html.twig' %}
-<div class="container-fluid mt-3">
+
+{#navbar#}
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% block mainPath %}{{ path('home_index') }}{% endblock %}">Gestion
+        des pannes</a>
+
+
+    {#<ul class="navbar-nav mr-auto">#}
+    {#{% block navbar %}#}
+    {#{% endblock %}#}
+    {#</ul>#}
+
+    {#user button to logout#}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="dropdown">
+            <button class="btn btn-secondary btn-sm dropdown-toggle mr-3" id="dropdownMenuButton" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user"></i>{{ app.user.firstname }} {{ app.user.lastname }}
+            </button>
+            <div class="dropdown-menu">
+                <a class="nav-link" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
+            </div>
+        </div>
+    {% endif %}
+</nav>
+
+
+<div class="container-fluid">
     {# flash messages #}
     {% block flash %}
         {% for flashMessage in app.flashes('success') %}
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ flashMessage }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span
+                            aria-hidden="true">&times;</span>
                 </button>
             </div>
         {% endfor %}
         {% for flashMessage in app.flashes('info') %}
             <div class="alert alert-info alert-dismissible fade show" role="alert">
                 {{ flashMessage }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span
+                            aria-hidden="true">&times;</span>
                 </button>
             </div>
         {% endfor %}
         {% for flashMessage in app.flashes('warning') %}
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 {{ flashMessage }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span
+                            aria-hidden="true">&times;</span>
                 </button>
             </div>
         {% endfor %}
         {% for flashMessage in app.flashes('danger') %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ flashMessage }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span
+                            aria-hidden="true">&times;</span>
                 </button>
             </div>
         {% endfor %}
     {% endblock %}
 
-    {#Body#}
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    {% block navbar %}
+                    {% endblock %}
+                </ul>
+            </div>
+        </nav>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            {#Body#}
+            {% block body %}{% endblock %}
+        </main>
 
-    {% block body %}{% endblock %}
+    </div>
 </div>
 {% block javascripts %}
     <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>

@@ -21,7 +21,7 @@ class IssueController extends AbstractController
      */
     public function index(IssueRepository $issueRepository): Response
     {
-        return $this->render('issue/index.html.twig', ['issues' => $issueRepository->findAll()]);
+        return $this->render('admin/issue/index.html.twig', ['issues' => $issueRepository->findAll()]);
     }
 
 
@@ -50,7 +50,7 @@ class IssueController extends AbstractController
             return $this->redirectToRoute('member_index');
         }
 
-        return $this->render('issue/new.html.twig', [
+        return $this->render('admin/issue/new.html.twig', [
             'issue' => $issue,
             'form' => $form->createView(),
         ]);
@@ -62,7 +62,7 @@ class IssueController extends AbstractController
      */
     public function show(Issue $issue): Response
     {
-        return $this->render('issue/show.html.twig', ['issue' => $issue]);
+        return $this->render('admin/issue/show.html.twig', ['issue' => $issue]);
     }
 
     /**
@@ -79,7 +79,7 @@ class IssueController extends AbstractController
             return $this->redirectToRoute('issue_edit', ['id' => $issue->getId()]);
         }
 
-        return $this->render('issue/edit.html.twig', [
+        return $this->render('admin/issue/edit.html.twig', [
             'issue' => $issue,
             'form' => $form->createView(),
         ]);
