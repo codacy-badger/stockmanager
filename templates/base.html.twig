@@ -29,12 +29,12 @@
     {#user button to logout#}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <div class="dropdown">
-            <button class="btn btn-secondary btn-sm dropdown-toggle mr-3" id="dropdownMenuButton" data-toggle="dropdown"
+            <button class="btn btn-secondary dropdown-toggle mr-3" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-user"></i>{{ app.user.firstname }} {{ app.user.lastname }}
+                <i class="fas fa-user"></i> {{ app.user.firstname }} {{ app.user.lastname }}
             </button>
             <div class="dropdown-menu">
-                <a class="nav-link" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
+                <a class="nav-link my-color" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
             </div>
         </div>
     {% endif %}

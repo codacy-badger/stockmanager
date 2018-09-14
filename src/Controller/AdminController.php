@@ -12,8 +12,8 @@ class AdminController extends AbstractController
      */
     public function index()
     {
-        return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
+        return $this->render('admin/dashboard.html.twig', [
+            'isActiveDash' => true
         ]);
     }
 }

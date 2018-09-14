@@ -2,6 +2,21 @@
 
 {% block mainPath %}{{ path('admin_index') }}{%  endblock %}
 
+{% block sidebar %}
+    <li class="nav-item">
+        <a class="nav-link {% if isActiveDash is defined and isActiveDash is not null %}active{% endif %}" href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}" href="{{ path('issue_index') }}"><i class="fas fa-briefcase-medical"></i> Pannes déclarées</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}" href="{{ path('issue_new') }}"><i class="fas fa-screwdriver"></i> Administration</a>
+    </li>
+
+
+{% endblock %}
+
+
 {% block navbar %}
     <li class="nav-item">
         <a class="nav-link" href="{{ path('issue_index') }}">Tickets</a>
@@ -32,4 +47,6 @@
         </div>
     </li>
 
+{% endblock %}
+{% block body %}
 {% endblock %}

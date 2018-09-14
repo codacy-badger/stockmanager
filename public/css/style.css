@@ -1,5 +1,13 @@
+html{
+    font-size: 0.875rem;
+}
+
 [role="main"]{
     padding-top: 48px;
+}
+
+.my-color{
+    color: #333;
 }
 
 /*sitebar*/
@@ -36,6 +44,14 @@
     color: #007bff;
 }
 
+/*collapse menu*/
+.collapse.show {
+    display: block;
+}
+
+.collapse {
+    display: none;
+}
 /*autocomplete*/
 
 .ui-autocomplete {
