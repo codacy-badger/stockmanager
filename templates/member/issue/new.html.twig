@@ -1,16 +1,19 @@
-{% extends 'base.html.twig' %}
+{% extends 'member/index.html.twig' %}
+{% block sidebar %}
+    {{ parent() }}
 
+{% endblock %}
+
+{% block isActiveNew %}{% if isActiveNew %}active{% endif %}{% endblock %}
 {% block body %}
     <div class="col-6 mx-auto mt-3">
         <div class="card">
             <h4 class="card-header">Déclarer une panne</h4>
             <div class="card-body">
-                {{ include('issue/_form.html.twig') }}
+                {{ include('member/issue/_form.html.twig') }}
             </div>
         </div>
-
     </div>
-    <a href="{{ path('issue_index') }}">back to list</a>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

@@ -50,9 +50,10 @@ class IssueController extends AbstractController
             return $this->redirectToRoute('member_index');
         }
 
-        return $this->render('admin/issue/new.html.twig', [
+        return $this->render('member/issue/new.html.twig', [
             'issue' => $issue,
             'form' => $form->createView(),
+            'isActiveNew' => true
         ]);
     }
 

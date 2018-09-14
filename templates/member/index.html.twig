@@ -1,27 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Gestion des pannes - {{ parent() }}{% endblock %}
-{% block navbar %}
+{% block sidebar %}
     <li class="nav-item">
-        <a class="nav-link active" href="{{ path('member_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord</a>
+        <a class="nav-link {% if isActiveDash is defined and isActiveDash is not null %}active{% endif %}" href="{{ path('member_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}" href="{{ path('issue_new') }}"><i class="fas fa-briefcase-medical"></i> Déclarer une panne</a>
     </li>
 {% endblock %}
 {% block body %}
     <div class="row">
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-briefcase-medical"></i> Déclarer une panne</h5>
-
-                    <a href="{{ path('issue_new') }}" class="btn btn-primary">Ajouter</a>
-                </div>
-                <div class="card-body">
-                    {{ render(controller('App\\Controller\\MemberController::countIssue')) }}
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-9">
+        <div class="col">
             {% include 'member/_historic.html.twig' %}
         </div>
     </div>

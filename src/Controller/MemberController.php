@@ -30,6 +30,8 @@ class MemberController extends AbstractController
 
         return $this->render('member/index.html.twig', [
             'issues' => $issues,
+//            bootstrap active link
+            'isActiveDash' => true
         ]);
     }
 
@@ -42,7 +44,7 @@ class MemberController extends AbstractController
     {
         $count = $this->getDoctrine()->getRepository(Issue::class)->countByUser($this->getUser());
 
-        return $this->render('member/_countIssue.html.twig', [
+        return $this->render('member/issue/_countIssue.html.twig', [
            'count' => $count
         ]);
     }
@@ -56,7 +58,7 @@ class MemberController extends AbstractController
         $term = $request->query->get('term'); // use "term" instead of "q" for jquery-ui
         $results = $this->getDoctrine()->getRepository('App:Equipment')->findLike($term);
 
-        return $this->render('equipment/search.json.twig', [
+        return $this->render('admin/equipment/search.json.twig', [
             'equipments' => $results
         ]);
     }
