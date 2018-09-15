@@ -20,7 +20,7 @@ class TransportationController extends AbstractController
      */
     public function index(TransportationRepository $transportationRepository): Response
     {
-        return $this->render('transportation/index.html.twig', ['transportations' => $transportationRepository->findAll()]);
+        return $this->render('admin/transportation/index.html.twig', ['transportations' => $transportationRepository->findAll()]);
     }
 
     /**
@@ -40,7 +40,7 @@ class TransportationController extends AbstractController
             return $this->redirectToRoute('transportation_index');
         }
 
-        return $this->render('transportation/new.html.twig', [
+        return $this->render('admin/transportation/new.html.twig', [
             'transportation' => $transportation,
             'form' => $form->createView(),
         ]);
@@ -51,7 +51,7 @@ class TransportationController extends AbstractController
      */
     public function show(Transportation $transportation): Response
     {
-        return $this->render('transportation/show.html.twig', ['transportation' => $transportation]);
+        return $this->render('admin/transportation/show.html.twig', ['transportation' => $transportation]);
     }
 
     /**
@@ -68,7 +68,7 @@ class TransportationController extends AbstractController
             return $this->redirectToRoute('transportation_edit', ['id' => $transportation->getId()]);
         }
 
-        return $this->render('transportation/edit.html.twig', [
+        return $this->render('admin/transportation/edit.html.twig', [
             'transportation' => $transportation,
             'form' => $form->createView(),
         ]);

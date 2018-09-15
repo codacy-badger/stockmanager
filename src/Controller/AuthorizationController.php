@@ -20,7 +20,7 @@ class AuthorizationController extends AbstractController
      */
     public function index(AuthorizationRepository $authorizationRepository): Response
     {
-        return $this->render('authorization/index.html.twig', ['authorizations' => $authorizationRepository->findAll()]);
+        return $this->render('admin/authorization/index.html.twig', ['authorizations' => $authorizationRepository->findAll()]);
     }
 
     /**
@@ -40,7 +40,7 @@ class AuthorizationController extends AbstractController
             return $this->redirectToRoute('authorization_index');
         }
 
-        return $this->render('authorization/new.html.twig', [
+        return $this->render('admin/authorization/new.html.twig', [
             'authorization' => $authorization,
             'form' => $form->createView(),
         ]);
@@ -51,7 +51,7 @@ class AuthorizationController extends AbstractController
      */
     public function show(Authorization $authorization): Response
     {
-        return $this->render('authorization/show.html.twig', ['authorization' => $authorization]);
+        return $this->render('admin/authorization/show.html.twig', ['authorization' => $authorization]);
     }
 
     /**
@@ -68,7 +68,7 @@ class AuthorizationController extends AbstractController
             return $this->redirectToRoute('authorization_edit', ['id' => $authorization->getId()]);
         }
 
-        return $this->render('authorization/edit.html.twig', [
+        return $this->render('admin/authorization/edit.html.twig', [
             'authorization' => $authorization,
             'form' => $form->createView(),
         ]);

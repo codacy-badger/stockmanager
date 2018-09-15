@@ -20,7 +20,7 @@ class OperatorController extends AbstractController
      */
     public function index(OperatorRepository $operatorRepository): Response
     {
-        return $this->render('operator/index.html.twig', ['operators' => $operatorRepository->findAll()]);
+        return $this->render('admin/operator/index.html.twig', ['operators' => $operatorRepository->findAll()]);
     }
 
     /**
@@ -40,7 +40,7 @@ class OperatorController extends AbstractController
             return $this->redirectToRoute('operator_index');
         }
 
-        return $this->render('operator/new.html.twig', [
+        return $this->render('admin/operator/new.html.twig', [
             'operator' => $operator,
             'form' => $form->createView(),
         ]);
@@ -51,7 +51,7 @@ class OperatorController extends AbstractController
      */
     public function show(Operator $operator): Response
     {
-        return $this->render('operator/show.html.twig', ['operator' => $operator]);
+        return $this->render('admin/operator/show.html.twig', ['operator' => $operator]);
     }
 
     /**
@@ -68,7 +68,7 @@ class OperatorController extends AbstractController
             return $this->redirectToRoute('operator_edit', ['id' => $operator->getId()]);
         }
 
-        return $this->render('operator/edit.html.twig', [
+        return $this->render('admin/operator/edit.html.twig', [
             'operator' => $operator,
             'form' => $form->createView(),
         ]);

@@ -49,6 +49,7 @@ class MemberController extends AbstractController
         ]);
     }
 
+
     /**
      * @Route("/search", name="equipment_search", defaults={"_format"="json"})
      * @param $term

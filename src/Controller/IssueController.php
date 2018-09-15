@@ -3,14 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Issue;
-use App\Entity\User;
 use App\Form\IssueType;
 use App\Repository\IssueRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
 
 
@@ -125,7 +123,16 @@ class IssueController extends AbstractController
 
     }
 
-
-
+    /**
+     * @Route("admin/issue/count-new", name="issue_countNew")
+     * @return Response
+     */
+    public function countNew()
+    {
+        $count = $this->getDoctrine()->getRepository(Issue::class)->countNew();
+        return $this->render('admin/issue/countNew.html.twig', [
+            'count' => $count
+        ]);
+    }
 
 }

@@ -47,6 +47,15 @@ class IssueRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function countNew()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->select('count(i.id)');
+        $qb->where('i.dateChecked IS NULL');
+
+        return $qb->getQuery()->getSingleScalarResult();
+
+    }
 
     /*
     public function findOneBySomeField($value): ?Issue

@@ -5,9 +5,9 @@
 {% block body %}
     <h1>Edit BreakdownSymptom</h1>
 
-    {{ include('breakdown_symptom/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('admin/breakdown_symptom/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('breakdown_symptom_index') }}">back to list</a>
 
-    {{ include('breakdown_symptom/_delete_form.html.twig') }}
+    {{ include('admin/breakdown_symptom/_delete_form.html.twig') }}
 {% endblock %}
