@@ -56,6 +56,38 @@ class IssueRepository extends ServiceEntityRepository
 
     }
 
+    public function countPrepare()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->select('count(i.id)');
+        $qb->where('i.dateReady IS NULL');
+        $qb->andWhere('i.dateChecked IS NOT NULL');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countReady()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->select('count(i.id)');
+        $qb->where('i.dateReady IS NOT NULL');
+        $qb->andWhere('i.dateChecked IS NOT NULL');
+
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countEnd()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->select('count(i.id)');
+        $qb->where('i.dateEnd IS NOT NULL');
+
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+
     /*
     public function findOneBySomeField($value): ?Issue
     {

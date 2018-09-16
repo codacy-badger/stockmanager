@@ -2,7 +2,6 @@
 
 {% block body %}
     <div class="d-flex justify-content-around flex-wrap">
-        {{ render(controller('App\\Controller\\IssueController::countNew', {})) }}
+        {{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}
     </div>
-
-{% endblock %}
+  {% endblock %}

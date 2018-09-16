@@ -124,15 +124,23 @@ class IssueController extends AbstractController
     }
 
     /**
-     * @Route("admin/issue/count-new", name="issue_countNew")
+     * @Route("admin/issue/count-widget", name="issue_countWidget")
      * @return Response
      */
-    public function countNew()
+    public function countWidget()
     {
-        $count = $this->getDoctrine()->getRepository(Issue::class)->countNew();
-        return $this->render('admin/issue/countNew.html.twig', [
-            'count' => $count
+        $countNew = $this->getDoctrine()->getRepository(Issue::class)->countNew();
+        $countPrepare = $this->getDoctrine()->getRepository(Issue::class)->countPrepare();
+        $countReady = $this->getDoctrine()->getRepository(Issue::class)->countReady();
+        $countEnd = $this->getDoctrine()->getRepository(Issue::class)->countReady();
+
+        return $this->render('admin/issue/countWidget.html.twig', [
+            'countNew' => $countNew,
+            'countPrepare' => $countPrepare,
+            'countReady' => $countReady,
+            'countEnd' => $countEnd
         ]);
     }
+
 
 }
