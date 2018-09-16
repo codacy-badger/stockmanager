@@ -19,10 +19,6 @@ class Issue
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateRequest;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -35,9 +31,19 @@ class Issue
     private $description;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateRequest;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateChecked;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateReady;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
@@ -64,10 +70,6 @@ class Issue
      */
     private $symptoms;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $dateReady;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Transportation")

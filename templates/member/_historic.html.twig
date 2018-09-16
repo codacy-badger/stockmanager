@@ -1,5 +1,5 @@
 <div class="card">
-    <h4 class="card-header">Problèmes récents</h4>
+    <h4 class="card-header">Pannes déclarées</h4>
     <div class="card-body">
 
         <table class="table table-striped table-sm">
@@ -10,9 +10,9 @@
                 <th>Modèle</th>
                 <th>N° série</th>
                 <th>Date</th>
-                <th>Date prise en charge</th>
                 <th>Symptomes</th>
                 <th>Descriptions</th>
+                <th>Status</th>
 
 
             </tr>
@@ -25,8 +25,6 @@
                     <td>{{ issue.equipment.brand.name }}</td>
                     <td>{{ issue.equipment.serial }}</td>
                     <td>{{ issue.dateRequest | date("m/d/Y H:i:s", "Europe/Paris") }}</td>
-                    <td>{% if issue.dateChecked %}{{ issue.dateChecked | date("m/d/Y H:i:s", "Europe/Paris") }}{% else %}
-                            Non renseigné{% endif %}</td>
                     <td>
                         <ul>
                             {% for symptom in issue.symptoms %}
@@ -35,6 +33,15 @@
                         </ul>
                     </td>
                     <td>{{ issue.description }}</td>
+                    <td>
+                        {% if issue.dateChecked %}
+                            <span class="badge badge-pill badge-info">Pris en compte</span>
+                        {% elseif issue.dateReady %}
+                            <span class="badge badge-pill badge-info">Prêt</span>
+                        {% else %}
+                            <span class="badge badge-pill badge-info">En Attente</span>
+                        {% endif %}
+                    </td>
 
                 </tr>
             {% else %}
