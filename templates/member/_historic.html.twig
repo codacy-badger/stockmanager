@@ -21,9 +21,13 @@
             {% for issue in issues %}
                 <tr>
                     <td>{{ issue.id }}</td>
-                    <td><img class="img-circle" width="50" height="50"
+                    <td>
+                        <img class="img-circle" data-toggle="tooltip" data-placement="top"
+                             title="{{ issue.equipment.brand.category.name }}" width="50"
+                             height="50"
                              src="{{ issue.equipment.brand.category.image.url }}"
-                             alt="{{ issue.equipment.brand.category.image.alt }}">{{ issue.equipment.brand.category.name }}
+                             alt="{{ issue.equipment.brand.category.image.alt }}">
+
                     </td>
                     <td>{{ issue.equipment.brand.name }}</td>
                     <td>{{ issue.equipment.serial }}</td>
