@@ -20,7 +20,7 @@ class ImageController extends AbstractController
      */
     public function index(ImageRepository $imageRepository): Response
     {
-        return $this->render('image/index.html.twig', ['images' => $imageRepository->findAll()]);
+        return $this->render('admin/image/index.html.twig', ['images' => $imageRepository->findAll()]);
     }
 
     /**
@@ -40,7 +40,7 @@ class ImageController extends AbstractController
             return $this->redirectToRoute('image_index');
         }
 
-        return $this->render('image/new.html.twig', [
+        return $this->render('admin/image/new.html.twig', [
             'image' => $image,
             'form' => $form->createView(),
         ]);
@@ -51,7 +51,7 @@ class ImageController extends AbstractController
      */
     public function show(Image $image): Response
     {
-        return $this->render('image/show.html.twig', ['image' => $image]);
+        return $this->render('admin/image/show.html.twig', ['image' => $image]);
     }
 
     /**
@@ -68,7 +68,7 @@ class ImageController extends AbstractController
             return $this->redirectToRoute('image_edit', ['id' => $image->getId()]);
         }
 
-        return $this->render('image/edit.html.twig', [
+        return $this->render('admin/image/edit.html.twig', [
             'image' => $image,
             'form' => $form->createView(),
         ]);

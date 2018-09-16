@@ -28,10 +28,9 @@ class IssueRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.user = :val')
-            ->andWhere('i.dateChecked IS NULL')
+            ->andWhere('i.dateEnd IS NULL')
             ->setParameter('val', $user)
             ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }

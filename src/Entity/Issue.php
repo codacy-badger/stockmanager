@@ -46,6 +46,11 @@ class Issue
     private $dateReady;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateEnd;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     private $user;
@@ -75,6 +80,8 @@ class Issue
      * @ORM\ManyToOne(targetEntity="App\Entity\Transportation")
      */
     private $transportation;
+
+
 
     public function __construct()
     {
@@ -217,6 +224,18 @@ class Issue
     public function setTransportation(?Transportation $transportation): self
     {
         $this->transportation = $transportation;
+
+        return $this;
+    }
+
+    public function getDateEnd(): ?\DateTimeInterface
+    {
+        return $this->dateEnd;
+    }
+
+    public function setDateEnd(?\DateTimeInterface $dateEnd): self
+    {
+        $this->dateEnd = $dateEnd;
 
         return $this;
     }

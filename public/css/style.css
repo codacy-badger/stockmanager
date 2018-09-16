@@ -52,6 +52,14 @@ html{
 .collapse {
     display: none;
 }
+
+/*circle image*/
+
+.img-circle{
+    border-radius: 50%;
+}
+
+
 /*autocomplete*/
 
 .ui-autocomplete {
