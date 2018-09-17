@@ -17,14 +17,18 @@ class SymptomController extends AbstractController
 {
     /**
      * @Route("/", name="symptom_index", methods="GET")
+     * @param BreakdownSymptomRepository $breakdownSymptomRepository
+     * @return Response
      */
     public function index(BreakdownSymptomRepository $breakdownSymptomRepository): Response
     {
-        return $this->render('symptom/index.html.twig', ['symptoms' => $breakdownSymptomRepository->findAll()]);
+        return $this->render('admin/symptom/index.html.twig', ['symptoms' => $breakdownSymptomRepository->findAll()]);
     }
 
     /**
      * @Route("/new", name="symptom_new", methods="GET|POST")
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -40,7 +44,7 @@ class SymptomController extends AbstractController
             return $this->redirectToRoute('symptom_index');
         }
 
-        return $this->render('symptom/new.html.twig', [
+        return $this->render('admin/symptom/new.html.twig', [
             'symptom' => $symptom,
             'form' => $form->createView(),
         ]);
@@ -48,14 +52,19 @@ class SymptomController extends AbstractController
 
     /**
      * @Route("/{id}", name="symptom_show", methods="GET")
+     * @param Symptom $symptom
+     * @return Response
      */
     public function show(Symptom $symptom): Response
     {
-        return $this->render('symptom/show.html.twig', ['symptom' => $symptom]);
+        return $this->render('admin/symptom/show.html.twig', ['symptom' => $symptom]);
     }
 
     /**
      * @Route("/{id}/edit", name="symptom_edit", methods="GET|POST")
+     * @param Request $request
+     * @param Symptom $symptom
+     * @return Response
      */
     public function edit(Request $request, Symptom $symptom): Response
     {
@@ -68,7 +77,7 @@ class SymptomController extends AbstractController
             return $this->redirectToRoute('symptom_edit', ['id' => $symptom->getId()]);
         }
 
-        return $this->render('symptom/edit.html.twig', [
+        return $this->render('admin/symptom/edit.html.twig', [
             'symptom' => $symptom,
             'form' => $form->createView(),
         ]);
@@ -76,6 +85,9 @@ class SymptomController extends AbstractController
 
     /**
      * @Route("/{id}", name="symptom_delete", methods="DELETE")
+     * @param Request $request
+     * @param Symptom $symptom
+     * @return Response
      */
     public function delete(Request $request, Symptom $symptom): Response
     {

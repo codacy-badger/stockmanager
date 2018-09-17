@@ -17,14 +17,18 @@ class ContractController extends AbstractController
 {
     /**
      * @Route("/", name="contract_index", methods="GET")
+     * @param ContractRepository $contractRepository
+     * @return Response
      */
     public function index(ContractRepository $contractRepository): Response
     {
-        return $this->render('contract/index.html.twig', ['contracts' => $contractRepository->findAll()]);
+        return $this->render('admin/contract/index.html.twig', ['contracts' => $contractRepository->findAll()]);
     }
 
     /**
      * @Route("/new", name="contract_new", methods="GET|POST")
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -40,7 +44,7 @@ class ContractController extends AbstractController
             return $this->redirectToRoute('contract_index');
         }
 
-        return $this->render('contract/new.html.twig', [
+        return $this->render('admin/contract/new.html.twig', [
             'contract' => $contract,
             'form' => $form->createView(),
         ]);
@@ -48,14 +52,19 @@ class ContractController extends AbstractController
 
     /**
      * @Route("/{id}", name="contract_show", methods="GET")
+     * @param Contract $contract
+     * @return Response
      */
     public function show(Contract $contract): Response
     {
-        return $this->render('contract/show.html.twig', ['contract' => $contract]);
+        return $this->render('admin/contract/show.html.twig', ['contract' => $contract]);
     }
 
     /**
      * @Route("/{id}/edit", name="contract_edit", methods="GET|POST")
+     * @param Request $request
+     * @param Contract $contract
+     * @return Response
      */
     public function edit(Request $request, Contract $contract): Response
     {
@@ -68,7 +77,7 @@ class ContractController extends AbstractController
             return $this->redirectToRoute('contract_edit', ['id' => $contract->getId()]);
         }
 
-        return $this->render('contract/edit.html.twig', [
+        return $this->render('admin/contract/edit.html.twig', [
             'contract' => $contract,
             'form' => $form->createView(),
         ]);
@@ -76,6 +85,9 @@ class ContractController extends AbstractController
 
     /**
      * @Route("/{id}", name="contract_delete", methods="DELETE")
+     * @param Request $request
+     * @param Contract $contract
+     * @return Response
      */
     public function delete(Request $request, Contract $contract): Response
     {

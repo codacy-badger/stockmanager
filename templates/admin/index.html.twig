@@ -1,16 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block mainPath %}{{ path('admin_index') }}{%  endblock %}
+{% block mainPath %}{{ path('admin_index') }}{% endblock %}
 
 {% block sidebar %}
     <li class="nav-item">
-        <a class="nav-link {% if isActiveDash is defined and isActiveDash is not null %}active{% endif %}" href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord</a>
+        <a class="nav-link {% if isActiveDash is defined and isActiveDash is not null %}active{% endif %}"
+           href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}" href="{{ path('issue_index') }}"><i class="fas fa-briefcase-medical"></i> Pannes déclarées</a>
+        <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}"
+           href="{{ path('issue_index') }}"><i class="fas fa-briefcase-medical"></i> Pannes déclarées</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}" href="{{ path('issue_new') }}"><i class="fas fa-screwdriver"></i> Administration</a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#pageSubmenu" id="navbarDropdown" role="button"
+           data-toggle="collapse"
+           aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-toolbox"></i> Administration
+        </a>
+        <div class="collapse list-unstyled" id="pageSubmenu">
+            <a class="nav-link" href="{{ path('category_index') }}">Catégorie</a>
+            <a class="nav-link" href="{{ path('brand_index') }}">Modèle</a>
+            <a class="nav-link" href="{{ path('contract_index') }}">Contrats</a>
+            <a class="nav-link" href="{{ path('equipment_index') }}">Equipements</a>
+            <div class="dropdown-divider"></div>
+            <a class="nav-link" href="{{ path('symptom_index') }}">Symptomes</a>
+            <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
+            <a class="nav-link" href="{{ path('software_index') }}">Logiciels</a>
+
+            <div class="dropdown-divider"></div>
+            <a class="nav-link" href="{{ path('operator_index') }}">Exploitants</a>
+            <a class="nav-link" href="{{ path('site_index') }}">Sites</a>
+            <div class="dropdown-divider"></div>
+            <a class="nav-link" href="{{ path('user_index') }}">Utilisateurs</a>
+            <a class="nav-link" href="{{ path('authorization_index') }}">Authorisations</a>
+
+        </div>
     </li>
 
 
@@ -21,31 +45,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ path('issue_index') }}">Tickets</a>
     </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-           data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
-            Administration
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ path('category_index') }}">Catégorie</a>
-            <a class="dropdown-item" href="{{ path('brand_index') }}">Modèle</a>
-            <a class="dropdown-item" href="{{ path('contract_index') }}">Contrats</a>
-            <a class="dropdown-item" href="{{ path('equipment_index') }}">Equipements</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ path('symptom_index') }}">Symptomes</a>
-            <a class="dropdown-item" href="{{ path('part_index') }}">Pièces détachées</a>
-            <a class="dropdown-item" href="{{ path('software_index') }}">Logiciels</a>
 
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ path('operator_index') }}">Exploitants</a>
-            <a class="dropdown-item" href="{{ path('site_index') }}">Sites</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ path('user_index') }}">Utilisateurs</a>
-            <a class="dropdown-item" href="{{ path('authorization_index') }}">Authorisations</a>
-
-        </div>
-    </li>
 
 {% endblock %}
 {% block body %}

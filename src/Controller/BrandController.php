@@ -17,14 +17,18 @@ class BrandController extends AbstractController
 {
     /**
      * @Route("/", name="brand_index", methods="GET")
+     * @param BrandRepository $brandRepository
+     * @return Response
      */
     public function index(BrandRepository $brandRepository): Response
     {
-        return $this->render('brand/index.html.twig', ['brands' => $brandRepository->findAll()]);
+        return $this->render('admin/brand/index.html.twig', ['brands' => $brandRepository->findAll()]);
     }
 
     /**
      * @Route("/new", name="brand_new", methods="GET|POST")
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -40,7 +44,7 @@ class BrandController extends AbstractController
             return $this->redirectToRoute('brand_index');
         }
 
-        return $this->render('brand/new.html.twig', [
+        return $this->render('admin/brand/new.html.twig', [
             'brand' => $brand,
             'form' => $form->createView(),
         ]);
@@ -48,14 +52,20 @@ class BrandController extends AbstractController
 
     /**
      * @Route("/{id}", name="brand_show", methods="GET")
+     * @param Brand $brand
+     * @return Response
      */
     public function show(Brand $brand): Response
     {
-        return $this->render('brand/show.html.twig', ['brand' => $brand]);
+        return $this->render('admin/brand/show.html.twig', ['brand' => $brand]);
     }
 
     /**
+     * Edit a brand
      * @Route("/{id}/edit", name="brand_edit", methods="GET|POST")
+     * @param Request $request
+     * @param Brand $brand
+     * @return Response
      */
     public function edit(Request $request, Brand $brand): Response
     {
@@ -68,14 +78,18 @@ class BrandController extends AbstractController
             return $this->redirectToRoute('brand_edit', ['id' => $brand->getId()]);
         }
 
-        return $this->render('brand/edit.html.twig', [
+        return $this->render('admin/brand/edit.html.twig', [
             'brand' => $brand,
             'form' => $form->createView(),
         ]);
     }
 
     /**
+     * Delete a brand
      * @Route("/{id}", name="brand_delete", methods="DELETE")
+     * @param Request $request
+     * @param Brand $brand
+     * @return Response
      */
     public function delete(Request $request, Brand $brand): Response
     {

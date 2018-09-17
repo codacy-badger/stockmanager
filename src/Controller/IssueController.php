@@ -16,6 +16,8 @@ class IssueController extends AbstractController
 {
     /**
      * @Route("admin/issue", name="issue_index", methods="GET")
+     * @param IssueRepository $issueRepository
+     * @return Response
      */
     public function index(IssueRepository $issueRepository): Response
     {
@@ -25,6 +27,9 @@ class IssueController extends AbstractController
 
     /**
      * @Route("member/issue/new", name="issue_new", methods="GET|POST")
+     * @param Request $request
+     * @param Security $security
+     * @return Response
      */
     public function new(Request $request, Security $security): Response
     {
@@ -58,6 +63,8 @@ class IssueController extends AbstractController
 
     /**
      * @Route("admin/issue/{id}", name="issue_show", methods="GET")
+     * @param Issue $issue
+     * @return Response
      */
     public function show(Issue $issue): Response
     {
@@ -66,6 +73,9 @@ class IssueController extends AbstractController
 
     /**
      * @Route("admin/issue/{id}/edit", name="issue_edit", methods="GET|POST")
+     * @param Request $request
+     * @param Issue $issue
+     * @return Response
      */
     public function edit(Request $request, Issue $issue): Response
     {

@@ -17,14 +17,18 @@ class SoftwareController extends AbstractController
 {
     /**
      * @Route("/", name="software_index", methods="GET")
+     * @param SoftwareRepository $softwareRepository
+     * @return Response
      */
     public function index(SoftwareRepository $softwareRepository): Response
     {
-        return $this->render('software/index.html.twig', ['softwares' => $softwareRepository->findAll()]);
+        return $this->render('admin/software/index.html.twig', ['softwares' => $softwareRepository->findAll()]);
     }
 
     /**
      * @Route("/new", name="software_new", methods="GET|POST")
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -40,7 +44,7 @@ class SoftwareController extends AbstractController
             return $this->redirectToRoute('software_index');
         }
 
-        return $this->render('software/new.html.twig', [
+        return $this->render('admin/software/new.html.twig', [
             'software' => $software,
             'form' => $form->createView(),
         ]);
@@ -48,14 +52,19 @@ class SoftwareController extends AbstractController
 
     /**
      * @Route("/{id}", name="software_show", methods="GET")
+     * @param Software $software
+     * @return Response
      */
     public function show(Software $software): Response
     {
-        return $this->render('software/show.html.twig', ['software' => $software]);
+        return $this->render('admin/software/show.html.twig', ['software' => $software]);
     }
 
     /**
      * @Route("/{id}/edit", name="software_edit", methods="GET|POST")
+     * @param Request $request
+     * @param Software $software
+     * @return Response
      */
     public function edit(Request $request, Software $software): Response
     {
@@ -68,7 +77,7 @@ class SoftwareController extends AbstractController
             return $this->redirectToRoute('software_edit', ['id' => $software->getId()]);
         }
 
-        return $this->render('software/edit.html.twig', [
+        return $this->render('admin/software/edit.html.twig', [
             'software' => $software,
             'form' => $form->createView(),
         ]);
@@ -76,6 +85,9 @@ class SoftwareController extends AbstractController
 
     /**
      * @Route("/{id}", name="software_delete", methods="DELETE")
+     * @param Request $request
+     * @param Software $software
+     * @return Response
      */
     public function delete(Request $request, Software $software): Response
     {

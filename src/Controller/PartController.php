@@ -17,14 +17,18 @@ class PartController extends AbstractController
 {
     /**
      * @Route("/", name="part_index", methods="GET")
+     * @param PartRepository $partRepository
+     * @return Response
      */
     public function index(PartRepository $partRepository): Response
     {
-        return $this->render('part/index.html.twig', ['parts' => $partRepository->findAll()]);
+        return $this->render('admin/part/index.html.twig', ['parts' => $partRepository->findAll()]);
     }
 
     /**
      * @Route("/new", name="part_new", methods="GET|POST")
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -40,7 +44,7 @@ class PartController extends AbstractController
             return $this->redirectToRoute('part_index');
         }
 
-        return $this->render('part/new.html.twig', [
+        return $this->render('admin/part/new.html.twig', [
             'part' => $part,
             'form' => $form->createView(),
         ]);
@@ -48,14 +52,19 @@ class PartController extends AbstractController
 
     /**
      * @Route("/{id}", name="part_show", methods="GET")
+     * @param Part $part
+     * @return Response
      */
     public function show(Part $part): Response
     {
-        return $this->render('part/show.html.twig', ['part' => $part]);
+        return $this->render('admin/part/show.html.twig', ['part' => $part]);
     }
 
     /**
      * @Route("/{id}/edit", name="part_edit", methods="GET|POST")
+     * @param Request $request
+     * @param Part $part
+     * @return Response
      */
     public function edit(Request $request, Part $part): Response
     {
@@ -68,7 +77,7 @@ class PartController extends AbstractController
             return $this->redirectToRoute('part_edit', ['id' => $part->getId()]);
         }
 
-        return $this->render('part/edit.html.twig', [
+        return $this->render('admin/part/edit.html.twig', [
             'part' => $part,
             'form' => $form->createView(),
         ]);
@@ -76,6 +85,9 @@ class PartController extends AbstractController
 
     /**
      * @Route("/{id}", name="part_delete", methods="DELETE")
+     * @param Request $request
+     * @param Part $part
+     * @return Response
      */
     public function delete(Request $request, Part $part): Response
     {

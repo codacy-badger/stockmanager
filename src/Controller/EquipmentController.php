@@ -17,14 +17,18 @@ class EquipmentController extends AbstractController
 {
     /**
      * @Route("/", name="equipment_index", methods="GET")
+     * @param EquipmentRepository $equipmentRepository
+     * @return Response
      */
     public function index(EquipmentRepository $equipmentRepository): Response
     {
-        return $this->render('equipment/index.html.twig', ['equipment' => $equipmentRepository->findAll()]);
+        return $this->render('admin/equipment/index.html.twig', ['equipment' => $equipmentRepository->findAll()]);
     }
 
     /**
      * @Route("/new", name="equipment_new", methods="GET|POST")
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -40,23 +44,27 @@ class EquipmentController extends AbstractController
             return $this->redirectToRoute('equipment_index');
         }
 
-        return $this->render('equipment/new.html.twig', [
+        return $this->render('admin/equipment/new.html.twig', [
             'equipment' => $equipment,
             'form' => $form->createView(),
         ]);
     }
 
-
     /**
      * @Route("/{id}", name="equipment_show", methods="GET")
+     * @param Equipment $equipment
+     * @return Response
      */
     public function show(Equipment $equipment): Response
     {
-        return $this->render('equipment/show.html.twig', ['equipment' => $equipment]);
+        return $this->render('admin/equipment/show.html.twig', ['equipment' => $equipment]);
     }
 
     /**
      * @Route("/{id}/edit", name="equipment_edit", methods="GET|POST")
+     * @param Request $request
+     * @param Equipment $equipment
+     * @return Response
      */
     public function edit(Request $request, Equipment $equipment): Response
     {
@@ -69,7 +77,7 @@ class EquipmentController extends AbstractController
             return $this->redirectToRoute('equipment_edit', ['id' => $equipment->getId()]);
         }
 
-        return $this->render('equipment/edit.html.twig', [
+        return $this->render('admin/equipment/edit.html.twig', [
             'equipment' => $equipment,
             'form' => $form->createView(),
         ]);
@@ -77,6 +85,9 @@ class EquipmentController extends AbstractController
 
     /**
      * @Route("/{id}", name="equipment_delete", methods="DELETE")
+     * @param Request $request
+     * @param Equipment $equipment
+     * @return Response
      */
     public function delete(Request $request, Equipment $equipment): Response
     {
@@ -88,10 +99,6 @@ class EquipmentController extends AbstractController
 
         return $this->redirectToRoute('equipment_index');
     }
-
-
-
-
 
 
 }
