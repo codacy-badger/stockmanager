@@ -6,13 +6,12 @@
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Type d'équipement</th>
-                <th>Modèle</th>
-                <th>N° série</th>
+                <th>Equipement</th>
+
                 <th>Date</th>
                 <th>Symptomes</th>
                 <th>Descriptions</th>
-                <th>Status</th>
+                <th>Statut</th>
 
 
             </tr>
@@ -21,16 +20,27 @@
             {% for issue in issues %}
                 <tr>
                     <td>{{ issue.id }}</td>
-                    <td>
+                    <td class="d-flex">
                         <img class="img-circle" data-toggle="tooltip" data-placement="top"
                              title="{{ issue.equipment.brand.category.name }}" width="50"
                              height="50"
                              src="{{ asset(issue.equipment.brand.category.image.url) }}"
                              alt="{{ issue.equipment.brand.category.image.alt }}">
+                        <div class="d-flex flex-column">
+                            <div>
+                                {{ issue.equipment.brand.name }}
+                            </div>
+                            <div class="badge badge-secondary">
+                                {{ issue.equipment.serial }}
+                            </div>
+                            {% if issue.equipment.contract.id == 3 %}
+                            <div>
+                                Contrat {{ issue.equipment.contract.name }}
+                            </div>
+                            {% endif %}
+                        </div>
 
                     </td>
-                    <td>{{ issue.equipment.brand.name }}</td>
-                    <td>{{ issue.equipment.serial }}</td>
                     <td>{{ issue.dateRequest | date("m/d/Y H:i:s", "Europe/Paris") }}</td>
                     <td>
                         <ul>
