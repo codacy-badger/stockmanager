@@ -96,6 +96,9 @@ class IssueController extends AbstractController
 
     /**
      * @Route("admin/issue/{id}", name="issue_delete", methods="DELETE")
+     * @param Request $request
+     * @param Issue $issue
+     * @return Response
      */
     public function delete(Request $request, Issue $issue): Response
     {
@@ -110,7 +113,9 @@ class IssueController extends AbstractController
 
     /**
      * @Route("admin/issue/validate-{id}", name="issue_validate", methods="VALIDATE")
+     * @param Request $request
      * @param Issue $issue
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function validate(Request $request, Issue $issue)
     {
