@@ -60,6 +60,18 @@ class IssueController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("admin/issue/show-new", name="issue_showNew")
+     * @return Response
+     */
+    public function showNew(){
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->findBy(['dateChecked' => null]);
+
+        return $this->render('admin/issue/showNew.html.twig', [
+            'issues' => $issues
+        ]);
+    }
+
 
     /**
      * @Route("admin/issue/{id}", name="issue_show", methods="GET")
@@ -156,6 +168,8 @@ class IssueController extends AbstractController
             'countEnd' => $countEnd
         ]);
     }
+
+
 
 
 }
