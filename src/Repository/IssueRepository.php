@@ -87,7 +87,31 @@ class IssueRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function getChecked()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->andWhere('i.dateChecked IS NOT NULL');
+        $qb->andWhere('i.dateReady IS NULL');
 
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getReady()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->andWhere('i.dateReady IS NOT NULL');
+        $qb->andWhere('i.dateEnd IS NULL');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getEnd()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->andWhere('i.dateEnd IS NOT NULL');
+
+        return $qb->getQuery()->getResult();
+    }
     /*
     public function findOneBySomeField($value): ?Issue
     {

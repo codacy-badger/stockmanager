@@ -64,14 +64,55 @@ class IssueController extends AbstractController
      * @Route("admin/issue/show-new", name="issue_showNew")
      * @return Response
      */
-    public function showNew(){
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->findBy(['dateChecked' => null]);
+    public function showNew()
+    {
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->findBy([
+            'dateChecked' => null
+        ]);
 
         return $this->render('admin/issue/showNew.html.twig', [
             'issues' => $issues
         ]);
     }
 
+    /**
+     * @Route("admin/issue/show-checked", name="issue_showChecked")
+     * @return Response
+     */
+    public function showChecked()
+    {
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->getChecked();
+
+        return $this->render('admin/issue/showChecked.html.twig', [
+            'issues' => $issues
+        ]);
+    }
+
+    /**
+     * @Route("admin/issue/show-ready", name="issue_showReady")
+     * @return Response
+     */
+    public function showReady()
+    {
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->getReady();
+
+        return $this->render('admin/issue/showReady.html.twig', [
+            'issues' => $issues
+        ]);
+    }
+
+    /**
+     * @Route("admin/issue/show-end", name="issue_showEnd")
+     * @return Response
+     */
+    public function showEnd()
+    {
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->getEnd();
+
+        return $this->render('admin/issue/showEnd.html.twig', [
+            'issues' => $issues
+        ]);
+    }
 
     /**
      * @Route("admin/issue/{id}", name="issue_show", methods="GET")
@@ -168,8 +209,6 @@ class IssueController extends AbstractController
             'countEnd' => $countEnd
         ]);
     }
-
-
 
 
 }
