@@ -165,14 +165,21 @@ class IssueController extends AbstractController
     }
 
     /**
-     * @Route("admin/issue/validate-{id}", name="issue_validate", methods="VALIDATE")
+     * @Route("admin/issue/validate-{id}", name="issue_validate", methods="POST")
      * @param Request $request
      * @param Issue $issue
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function validate(Request $request, Issue $issue)
     {
-        if ($this->isCsrfTokenValid('validate' . $issue->getId(), $request->request->get('_token'))) {
+
+        $submittedToken = $request->request->get('token');
+
+        if ($this->isCsrfTokenValid('check-issue', $submittedToken)) {
+
+
+            dump($issue);
+
 
             $dateTime = new \DateTime();
             $technician = $this->getUser();
@@ -184,10 +191,10 @@ class IssueController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
-            $this->addFlash('success', "Ticket validé!");
+            $this->addFlash('success', "Ticket pris en compte!");
         }
 
-        return $this->redirectToRoute('issue_index');
+        return $this->redirectToRoute('issue_showNew');
 
     }
 

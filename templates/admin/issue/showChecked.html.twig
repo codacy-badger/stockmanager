@@ -108,12 +108,12 @@
 
                         {#actions column#}
                         <td>
-                            {% if not issue.dateChecked %}
-                                <a href="#" class="badge badge-primary"><i class="fas fa-check-square"></i> Préparer</a>
-                            {% elseif issue.dateChecked and not issue.dateReady %}
-                                <a href="#" class="badge badge-primary"><i class="fas fa-check-square"></i> Livrer</a>
-                            {% endif %}
-
+                            <form action="{{ path('issue_ready', {'id': issue.id}) }}" method="post">
+                                <input type="hidden" name="token" value="{{ csrf_token('check-issue') }}"/>
+                                <button type="submit" class="btn btn-sm btn-primary"><i
+                                            class="fas fa-check-square"></i> Prêt à livrer
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% else %}
