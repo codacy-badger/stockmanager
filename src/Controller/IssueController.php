@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Issue;
 use App\Form\IssueType;
 use App\Repository\IssueRepository;
+use http\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,58 +62,29 @@ class IssueController extends AbstractController
     }
 
     /**
-     * @Route("admin/issue/show-new", name="issue_showNew")
+     * @Route("admin/issue/show-{status}", name="issue_showByStatus")
      * @return Response
      */
-    public function showNew()
+    public function showByStatus($status)
     {
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->findBy([
-            'dateChecked' => null
-        ]);
+        if ($status == 'new') {
+            $issues = $this->getDoctrine()->getRepository(Issue::class)->findBy([
+                'dateChecked' => null
+            ]);
+        } elseif ($status == 'check') {
+            $issues = $this->getDoctrine()->getRepository(Issue::class)->getChecked();
+        } elseif ($status == 'ready') {
+            $issues = $this->getDoctrine()->getRepository(Issue::class)->getReady();
+        }elseif($status == 'end'){
+            $issues = $this->getDoctrine()->getRepository(Issue::class)->getEnd();
+        }
 
-        return $this->render('admin/issue/showNew.html.twig', [
-            'issues' => $issues
+        return $this->render('admin/issue/show.html.twig', [
+            'issues' => $issues,
+            'status' => $status
         ]);
     }
 
-    /**
-     * @Route("admin/issue/show-checked", name="issue_showChecked")
-     * @return Response
-     */
-    public function showChecked()
-    {
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->getChecked();
-
-        return $this->render('admin/issue/showChecked.html.twig', [
-            'issues' => $issues
-        ]);
-    }
-
-    /**
-     * @Route("admin/issue/show-ready", name="issue_showReady")
-     * @return Response
-     */
-    public function showReady()
-    {
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->getReady();
-
-        return $this->render('admin/issue/showReady.html.twig', [
-            'issues' => $issues
-        ]);
-    }
-
-    /**
-     * @Route("admin/issue/show-end", name="issue_showEnd")
-     * @return Response
-     */
-    public function showEnd()
-    {
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->getEnd();
-
-        return $this->render('admin/issue/showEnd.html.twig', [
-            'issues' => $issues
-        ]);
-    }
 
     /**
      * @Route("admin/issue/{id}", name="issue_show", methods="GET")
@@ -165,38 +137,46 @@ class IssueController extends AbstractController
     }
 
     /**
-     * @Route("admin/issue/validate-{id}", name="issue_validate", methods="POST")
+     * @Route("admin/issue/change-status/{status}-{id}", name="issue_changeStatus", methods="POST")
      * @param Request $request
      * @param Issue $issue
+     * @param $status
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function validate(Request $request, Issue $issue)
+    public function changeStatus(Request $request, Issue $issue, $status)
     {
+
 
         $submittedToken = $request->request->get('token');
 
         if ($this->isCsrfTokenValid('check-issue', $submittedToken)) {
 
-
-            dump($issue);
-
-
             $dateTime = new \DateTime();
-            $technician = $this->getUser();
 
-            $issue->setDateChecked($dateTime);
-            $issue->setTechnician($technician);
+            if ($status == 'new') {
+                $technician = $this->getUser();
+                $issue->setDateChecked($dateTime);
+                $issue->setTechnician($technician);
+            } elseif ($status == 'check') {
+                $issue->setDateReady($dateTime);
+
+            } elseif ($status == 'ready') {
+                $issue->setDateEnd($dateTime);
+            }
 
 
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
-            $this->addFlash('success', "Ticket pris en compte!");
+            $this->addFlash('success', "Demande validée");
         }
 
-        return $this->redirectToRoute('issue_showNew');
+        return $this->redirectToRoute('issue_showByStatus', [
+            'status' => $status
+        ]);
 
     }
+
 
     /**
      * @Route("admin/issue/count-widget", name="issue_countWidget")
@@ -205,13 +185,13 @@ class IssueController extends AbstractController
     public function countWidget()
     {
         $countNew = $this->getDoctrine()->getRepository(Issue::class)->countNew();
-        $countPrepare = $this->getDoctrine()->getRepository(Issue::class)->countPrepare();
+        $countCheck = $this->getDoctrine()->getRepository(Issue::class)->countCheck();
         $countReady = $this->getDoctrine()->getRepository(Issue::class)->countReady();
-        $countEnd = $this->getDoctrine()->getRepository(Issue::class)->countReady();
+        $countEnd = $this->getDoctrine()->getRepository(Issue::class)->countEnd();
 
         return $this->render('admin/issue/countWidget.html.twig', [
             'countNew' => $countNew,
-            'countPrepare' => $countPrepare,
+            'countCheck' => $countCheck,
             'countReady' => $countReady,
             'countEnd' => $countEnd
         ]);

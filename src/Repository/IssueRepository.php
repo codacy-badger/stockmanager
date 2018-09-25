@@ -56,7 +56,7 @@ class IssueRepository extends ServiceEntityRepository
 
     }
 
-    public function countPrepare()
+    public function countCheck()
     {
         $qb = $this->createQueryBuilder('i');
         $qb->select('count(i.id)');
@@ -72,6 +72,7 @@ class IssueRepository extends ServiceEntityRepository
         $qb->select('count(i.id)');
         $qb->where('i.dateReady IS NOT NULL');
         $qb->andWhere('i.dateChecked IS NOT NULL');
+        $qb->andWhere('i.dateEnd IS NULL');
 
 
         return $qb->getQuery()->getSingleScalarResult();
