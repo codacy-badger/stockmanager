@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transportation index{% endblock %}
+
+{% block body %}
+    <h1>Transportation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>TradeName</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for transportation in transportations %}
+            <tr>
+                <td>{{ transportation.id }}</td>
+                <td>{{ transportation.name }}</td>
+                <td>{{ transportation.tradeName }}</td>
+                <td>
+                    <a href="{{ path('transportation_show', {'id': transportation.id}) }}">show</a>
+                    <a href="{{ path('transportation_edit', {'id': transportation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('transportation_new') }}">Create new</a>
+{% endblock %}

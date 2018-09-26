@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Issue;
+use App\Entity\User;
 use App\Form\IssueType;
 use App\Repository\IssueRepository;
 use http\Exception\InvalidArgumentException;
@@ -36,14 +37,26 @@ class IssueController extends AbstractController
     {
         $issue = new Issue();
 
+        $user = $security->getUser();
+
+        if (!$user) {
+            throw new \LogicException(
+                'Le formulaire ne peut être utilisé sans un utilisateur authentifié!'
+            );
+        }
+        $myUser = $this->getDoctrine()->getRepository(User::class)->find($user);
+        $issue->setUser($myUser);
+        $issue->getUser()->getOperator()->getTransportations();
+
+
         $form = $this->createForm(IssueType::class, $issue);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             //adds the current user into object issue
-            $user = $security->getUser();
-            $issue->setUser($user);
+
+            $issue->setUser($myUser);
 
             //save into database
             $em = $this->getDoctrine()->getManager();
@@ -75,7 +88,7 @@ class IssueController extends AbstractController
             $issues = $this->getDoctrine()->getRepository(Issue::class)->getChecked();
         } elseif ($status == 'ready') {
             $issues = $this->getDoctrine()->getRepository(Issue::class)->getReady();
-        }elseif($status == 'end'){
+        } elseif ($status == 'end') {
             $issues = $this->getDoctrine()->getRepository(Issue::class)->getEnd();
         }
 

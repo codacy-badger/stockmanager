@@ -26,13 +26,20 @@ class Operator
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Transportation")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Transportation", mappedBy="operators")
      */
     private $transportations;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="operator")
+     */
+    private $users;
+
     public function __construct()
     {
-        $this->transportation = new ArrayCollection();
+
+        $this->users = new ArrayCollection();
         $this->transportations = new ArrayCollection();
     }
 
@@ -49,6 +56,38 @@ class Operator
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setOperator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getOperator() === $this) {
+                $user->setOperator(null);
+            }
+        }
 
         return $this;
     }
@@ -78,7 +117,6 @@ class Operator
 
         return $this;
     }
-
 
 
 
