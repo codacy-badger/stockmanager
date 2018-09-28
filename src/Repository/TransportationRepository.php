@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Operator;
 use App\Entity\Transportation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -19,16 +20,28 @@ class TransportationRepository extends ServiceEntityRepository
         parent::__construct($registry, Transportation::class);
     }
 
+    public function findByOperator($id)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.operators = :op')
+            ->setParameter('op', $id )
+            ->getQuery()
+            ->getResult()
+            ;
+
+
+    }
+
 //    /**
-//     * @return Transportation[] Returns an array of Transportation objects
+//     * @return Brand[] Returns an array of Brand objects
 //     */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
+            ->orderBy('b.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -37,10 +50,10 @@ class TransportationRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Transportation
+    public function findOneBySomeField($value): ?Brand
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
