@@ -140,7 +140,7 @@ class IssueController extends AbstractController
      */
     public function delete(Request $request, Issue $issue): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $issue->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-issue', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($issue);
             $em->flush();

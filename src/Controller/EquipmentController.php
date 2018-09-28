@@ -91,7 +91,7 @@ class EquipmentController extends AbstractController
      */
     public function delete(Request $request, Equipment $equipment): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $equipment->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-equipment', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($equipment);
             $em->flush();

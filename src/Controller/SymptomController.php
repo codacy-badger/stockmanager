@@ -91,7 +91,7 @@ class SymptomController extends AbstractController
      */
     public function delete(Request $request, Symptom $symptom): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$symptom->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-symptom', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($symptom);
             $em->flush();

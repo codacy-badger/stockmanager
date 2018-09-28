@@ -82,7 +82,7 @@ class TransportationController extends AbstractController
      */
     public function delete(Request $request, Transportation $transportation): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$transportation->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-transportation', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($transportation);
             $em->flush();

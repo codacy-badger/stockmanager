@@ -79,7 +79,7 @@ class AuthorizationController extends AbstractController
      */
     public function delete(Request $request, Authorization $authorization): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$authorization->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-auth', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($authorization);
             $em->flush();

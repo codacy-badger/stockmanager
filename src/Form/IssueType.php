@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Issue;
 use App\Entity\Transportation;
 use App\Repository\TransportationRepository;
-use App\Repository\UserRepository;
 use PUGX\AutocompleterBundle\Form\Type\AutocompleteType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -18,14 +17,9 @@ use Symfony\Component\Security\Core\Security;
 
 class IssueType extends AbstractType
 {
-    private $security;
 
 
-    public function __construct(Security $security, UserRepository $ur)
-    {
-        $this->security = $security;
 
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

@@ -20,7 +20,7 @@ class RepairController extends AbstractController
      */
     public function index(RepairRepository $repairRepository): Response
     {
-        return $this->render('repair/index.html.twig', ['repairs' => $repairRepository->findAll()]);
+        return $this->render('admin/repair/index.html.twig', ['repairs' => $repairRepository->findAll()]);
     }
 
     /**
@@ -40,7 +40,7 @@ class RepairController extends AbstractController
             return $this->redirectToRoute('repair_index');
         }
 
-        return $this->render('repair/new.html.twig', [
+        return $this->render('admin/repair/new.html.twig', [
             'repair' => $repair,
             'form' => $form->createView(),
         ]);
@@ -51,7 +51,7 @@ class RepairController extends AbstractController
      */
     public function show(Repair $repair): Response
     {
-        return $this->render('repair/show.html.twig', ['repair' => $repair]);
+        return $this->render('admin/repair/show.html.twig', ['repair' => $repair]);
     }
 
     /**
@@ -68,7 +68,7 @@ class RepairController extends AbstractController
             return $this->redirectToRoute('repair_edit', ['id' => $repair->getId()]);
         }
 
-        return $this->render('repair/edit.html.twig', [
+        return $this->render('admin/repair/edit.html.twig', [
             'repair' => $repair,
             'form' => $form->createView(),
         ]);
@@ -79,7 +79,7 @@ class RepairController extends AbstractController
      */
     public function delete(Request $request, Repair $repair): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$repair->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-repair', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($repair);
             $em->flush();

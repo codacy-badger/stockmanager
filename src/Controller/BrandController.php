@@ -93,7 +93,7 @@ class BrandController extends AbstractController
      */
     public function delete(Request $request, Brand $brand): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$brand->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-brand', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($brand);
             $em->flush();

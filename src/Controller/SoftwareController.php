@@ -91,7 +91,7 @@ class SoftwareController extends AbstractController
      */
     public function delete(Request $request, Software $software): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$software->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-software', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($software);
             $em->flush();
