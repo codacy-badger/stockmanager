@@ -91,7 +91,7 @@ class ContractController extends AbstractController
      */
     public function delete(Request $request, Contract $contract): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$contract->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-contract', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($contract);
             $em->flush();

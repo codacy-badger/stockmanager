@@ -79,7 +79,7 @@ class OperatorController extends AbstractController
      */
     public function delete(Request $request, Operator $operator): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$operator->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-operator', $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($operator);
             $em->flush();
