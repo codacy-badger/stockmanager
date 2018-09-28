@@ -1,4 +1,6 @@
 {
+    "name": "stockmanager",
+    "description": "manage the customer issue demand for Site.Oise",
     "type": "project",
     "license": "proprietary",
     "require": {
