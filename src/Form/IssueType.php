@@ -54,8 +54,11 @@ class IssueType extends AbstractType
             $formOptions = [
                 'class' => Transportation::class,
                 'choice_label' => 'name',
-                'query_builder' => function (TransportationRepository $tr) use ($event){
-                    return $tr->createQueryBuilder($event->getData()->getUser()->getOperator()->getValues());
+                'label' => 'Réseau de transport',
+                'query_builder' => function (TransportationRepository $tr) use ($event) {
+                    return $tr->createQueryBuilder('t')
+                        ->andWhere(':op MEMBER OF t.operators')
+                        ->setParameter('op', $event->getData()->getUser()->getOperator());
                 }
             ];
 

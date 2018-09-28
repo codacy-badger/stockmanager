@@ -7,6 +7,7 @@
             <tr>
                 <th>Id</th>
                 <th>Materiel</th>
+                <th>Réseau de transport</th>
                 <th>Date</th>
                 <th>Symptomes</th>
                 <th>Descriptions</th>
@@ -48,6 +49,10 @@
                             </div>
                         </div>
                     </td>
+
+                    {#transportation column#}
+
+                    <td>{{ issue.transportation.tradeName }}</td>
 
                     {#date column#}
                     <td>{{ issue.dateRequest | date("d/m/Y H:i:s", "Europe/Paris") }}</td>

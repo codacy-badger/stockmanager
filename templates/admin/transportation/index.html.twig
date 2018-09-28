@@ -9,8 +9,9 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
-                <th>TradeName</th>
+                <th>AOT</th>
+                <th>Nom commercial</th>
+                <th>Exploitants</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -20,6 +21,15 @@
                 <td>{{ transportation.id }}</td>
                 <td>{{ transportation.name }}</td>
                 <td>{{ transportation.tradeName }}</td>
+                <td>
+                <ul>
+                    {% for operator in transportation.operators %}
+                        <li>
+                            {{ operator.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                </td>
                 <td>
                     <a href="{{ path('transportation_show', {'id': transportation.id}) }}">show</a>
                     <a href="{{ path('transportation_edit', {'id': transportation.id}) }}">edit</a>

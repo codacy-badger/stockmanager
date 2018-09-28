@@ -23,10 +23,12 @@ class TransportationRepository extends ServiceEntityRepository
     public function findByOperator($id)
     {
         return $this->createQueryBuilder('t')
-            ->join('t.operators', 'o', 'WITH', 'o.id = :id')
-            ->setParameter('id', $id)
+            ->andWhere('t.operators = :op')
+            ->setParameter('op', $id )
             ->getQuery()
-            ->getResult();
+            ->getResult()
+            ;
+
 
     }
 

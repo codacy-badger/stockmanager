@@ -46,7 +46,7 @@ class IssueController extends AbstractController
         }
         $myUser = $this->getDoctrine()->getRepository(User::class)->find($user);
         $issue->setUser($myUser);
-        $issue->getUser()->getOperator()->getTransportations();
+        $issue->getUser()->getOperator();
 
 
         $form = $this->createForm(IssueType::class, $issue);
