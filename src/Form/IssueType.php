@@ -18,14 +18,12 @@ use Symfony\Component\Security\Core\Security;
 class IssueType extends AbstractType
 {
 
-
-
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('equipment', AutocompleteType::class, [
                 'class' => 'App\Entity\Equipment',
+                'label' => 'Numéro de série du materiel en panne'
 
             ])
             ->add('symptoms', EntityType::class, [
