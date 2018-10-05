@@ -82,6 +82,12 @@ class Issue
     private $transportation;
 
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateMessage;
+
+
 
     public function __construct()
     {
@@ -239,5 +245,19 @@ class Issue
 
         return $this;
     }
+
+
+    public function getDateMessage(): ?\DateTimeInterface
+    {
+        return $this->dateMessage;
+    }
+
+    public function setDateMessage(?\DateTimeInterface $dateMessage): self
+    {
+        $this->dateMessage = $dateMessage;
+
+        return $this;
+    }
+
 
 }

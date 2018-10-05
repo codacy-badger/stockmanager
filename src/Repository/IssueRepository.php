@@ -113,6 +113,19 @@ class IssueRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+
+    public function countNonNotified()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->select('i.user, count(i.id)')
+        ->andWhere('i.dateMessage is null')
+            ->groupBy('i.user')
+
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
     /*
     public function findOneBySomeField($value): ?Issue
     {

@@ -1,0 +1,23 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <tr>
+            <th>utilisateur</th>
+            <th>notifications en attente</th>
+        </tr>
+
+        {% for user in users %}
+            <tr>
+                <td>{{ user.firstname }}</td>
+                <td>
+                    {{ user.issues.count }}
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

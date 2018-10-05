@@ -19,6 +19,18 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+
+    public function countNotSendedNotification()
+    {
+        $qr = $this->createQueryBuilder('u');
+        $qr->select('u, count(u.issues) as count')
+            ->andWhere('u.issues.dateMessage is not null')
+            ->groupBy('u')
+        ;
+
+        return $qr->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
