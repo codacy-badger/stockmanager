@@ -5,15 +5,25 @@
 {% block body %}
     <table class="table">
         <tr>
-            <th>utilisateur</th>
-            <th>notifications en attente</th>
+            <th>Utilisateur</th>
+            <th>Nombre de tickets non notifiés</th>
+            <th>Action</th>
         </tr>
 
         {% for user in users %}
             <tr>
-                <td>{{ user.firstname }}</td>
+
+
+                <td>{{ user.username }}</td>
                 <td>
                     {{ user.issues.count }}
+                </td>
+
+                <td>
+                    <form action="{{ path('notification_send', {'id': user.id }) }}" method="post">
+                        <input type="hidden" name="token" value="{{ csrf_token('send-notification') }}">
+                        <button type="submit" class="btn btn-info">envoyer</button>
+                    </form>
                 </td>
             </tr>
         {% endfor %}

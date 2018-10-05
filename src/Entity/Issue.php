@@ -51,7 +51,7 @@ class Issue
     private $dateEnd;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="issues")
      */
     private $user;
 
