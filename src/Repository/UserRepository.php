@@ -26,18 +26,16 @@ class UserRepository extends ServiceEntityRepository
     public function countNotSendedNotification()
     {
         $qr = $this->createQueryBuilder('u');
-            $qr->select('u')
-                ->leftJoin('u.issues', 'i')
-                ->addSelect('i')
-                ->where('i.dateMessage is null')
-                ->andWhere('i.dateReady is not null')
-
-        ;
+        $qr->select('u')
+            ->leftJoin('u.issues', 'i')
+            ->addSelect('i')
+            ->where('i.dateMessage is null')
+            ->andWhere('i.dateReady is not null');
 
         return $qr->getQuery()->getResult();
     }
 
-    public function getNotSendedNotification(User $user)
+    public function getNotSendedNotification(User $user): User
     {
 
         $qr = $this->createQueryBuilder('u');
@@ -47,9 +45,7 @@ class UserRepository extends ServiceEntityRepository
             ->where('i.dateMessage is null')
             ->andWhere('i.dateReady is not null')
             ->andWhere('u.id = :id')
-            ->setParameter('id', $user->getId())
-
-        ;
+            ->setParameter('id', $user->getId());
 
         return $qr->getQuery()->getSingleResult();
     }

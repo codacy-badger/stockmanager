@@ -1,0 +1,25 @@
+<h3>Notification de livraison proche</h3>
+<p>Bonjour</p>
+<p>Nous vous informons que les équipements suivants sont prêts à être remplacés</p>
+<p>Une personne de Site.Oise vous contactera pour planifier une date d'échange.</p>
+<table class="table">
+    <tr>
+        <th>Type d'équipement</th>
+        <th>Modèle</th>
+        <th>Numéro de série d'équipement</th>
+
+    </tr>
+
+    {% for issue in user.issues %}
+        <tr>
+            <td>{{ issue.equipment.brand.category.name }}</td>
+            <td>{{ issue.equipment.brand.name }}</td>
+            <td>{{ issue.equipment.serial }}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+<p>Site.Oise</p>
+
+
