@@ -3,36 +3,47 @@
 {% block title %}Notifications{% endblock %}
 
 {% block body %}
-    <h3>Exploitants en attente de notification de livraison</h3>
-    <table class="table">
-        <tr>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Exploitant</th>
-            <th>Nombre de tickets non notifiés</th>
-            <th>Action</th>
-        </tr>
+    <div class="card">
 
-        {% for user in users %}
-            <tr>
+        <h4 class="card-header">Exploitants en attente de notification de livraison</h4>
+        <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Exploitant</th>
+                    <th>Nombre de tickets non notifiés</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for user in users %}
+                    <tr>
 
 
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.operator.name }}</td>
-                <td>
-                    {{ user.issues.count }}
-                </td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.operator.name }}</td>
+                        <td>
+                            {{ user.issues.count }}
+                        </td>
 
-                <td>
-                    <form action="{{ path('notification_send', {'id': user.id }) }}" method="post">
-                        <input type="hidden" name="token" value="{{ csrf_token('send-notification') }}">
-                        <button type="submit" class="btn btn-info">envoyer</button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
+                        <td>
+                            <form action="{{ path('notification_send', {'id': user.id }) }}" method="post">
+                                <input type="hidden" name="token" value="{{ csrf_token('send-notification') }}">
+                                <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Envoyer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
 
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 {% endblock %}

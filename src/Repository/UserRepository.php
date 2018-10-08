@@ -50,6 +50,18 @@ class UserRepository extends ServiceEntityRepository
         return $qr->getQuery()->getSingleResult();
     }
 
+
+    public function getTechnicians($role = 'ROLE_ADMIN')
+    {
+        $qr= $this->createQueryBuilder('u');
+        $qr->leftJoin('u.authorization', 'a')
+            ->addSelect('a')
+            ->where('a.role = :role')
+            ->setParameter('role', $role);
+
+            return $qr->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

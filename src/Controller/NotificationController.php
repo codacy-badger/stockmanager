@@ -41,7 +41,7 @@ class NotificationController extends AbstractController
             //mail message
             $message = (new \Swift_Message('Equipements prêts, remplacement imminent'))
                 ->setFrom('send@exemple.com')
-                ->setTo('maintenance.siteoise@gmail.com')
+                ->setTo($myUser->getEmail())
                 ->setBody(
                     $this->renderView(
                         'admin/notification/email.html.twig',
