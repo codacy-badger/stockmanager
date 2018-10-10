@@ -19,6 +19,49 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * get the all users where issues has no notifications
+     * @return mixed
+     */
+    public function countNotSendedNotification()
+    {
+        $qr = $this->createQueryBuilder('u');
+        $qr->select('u')
+            ->leftJoin('u.issues', 'i')
+            ->addSelect('i')
+            ->where('i.dateMessage is null')
+            ->andWhere('i.dateReady is not null');
+
+        return $qr->getQuery()->getResult();
+    }
+
+    public function getNotSendedNotification(User $user): User
+    {
+
+        $qr = $this->createQueryBuilder('u');
+        $qr->select('u')
+            ->leftJoin('u.issues', 'i')
+            ->addSelect('i')
+            ->where('i.dateMessage is null')
+            ->andWhere('i.dateReady is not null')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $user->getId());
+
+        return $qr->getQuery()->getSingleResult();
+    }
+
+
+    public function getTechnicians($role = 'ROLE_ADMIN')
+    {
+        $qr= $this->createQueryBuilder('u');
+        $qr->leftJoin('u.authorization', 'a')
+            ->addSelect('a')
+            ->where('a.role = :role')
+            ->setParameter('role', $role);
+
+            return $qr->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

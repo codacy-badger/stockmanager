@@ -104,13 +104,20 @@
                                 <span class="badge badge-pill badge-success" data-toggle="tooltip" data-placement="top"
                                       title="Le materiel re remplacement est prêt, un échange est imminent"><i
                                             class="fas fa-hourglass-end"></i> Prêt</span>
-                            {% elseif issue.dateRequest == null %}
+                                {% if issue.dateMessage %}
+                                    <span class="badge badge-pill badge-success" data-toggle="tooltip"
+                                          data-placement="top"
+                                          title="L' utilisateur a été notifié.">
+                                        <i class="fas fa-envelope"></i> Notifié</span>
+                                {% endif %}
+                            {% elseif issue.dateChecked == null %}
                                 <span class="badge badge-pill badge-danger" data-toggle="tooltip" data-placement="top"
                                       title="La demande n'a pas encore été prise en compte."><i
                                             class="fas fa-hourglass-start"></i> En Attente</span>
                             {% else %}
-                                <span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top"
-                                      title="La demande n'a pas encore été prise en compte."><i
+                                <span class="badge badge-pill badge-secondary" data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="La demande a été traitée."><i
                                             class="fas fa-hourglass-end"></i> Traité</span>
                             {% endif %}
                         </td>

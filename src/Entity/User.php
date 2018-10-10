@@ -56,8 +56,15 @@ class User implements UserInterface, \Serializable
      */
     private $operator;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Issue", mappedBy="user")
+     */
+    private $issues;
 
-
+    public function __construct()
+    {
+        $this->issues = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -181,6 +188,37 @@ class User implements UserInterface, \Serializable
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Issue[]
+     */
+    public function getIssues(): Collection
+    {
+        return $this->issues;
+    }
+
+    public function addIssue(Issue $issue): self
+    {
+        if (!$this->issues->contains($issue)) {
+            $this->issues[] = $issue;
+            $issue->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIssue(Issue $issue): self
+    {
+        if ($this->issues->contains($issue)) {
+            $this->issues->removeElement($issue);
+            // set the owning side to null (unless already changed)
+            if ($issue->getUser() === $this) {
+                $issue->setUser(null);
+            }
+        }
 
         return $this;
     }

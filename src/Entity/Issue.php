@@ -51,7 +51,7 @@ class Issue
     private $dateEnd;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="issues")
      */
     private $user;
 
@@ -80,6 +80,12 @@ class Issue
      * @ORM\ManyToOne(targetEntity="App\Entity\Transportation")
      */
     private $transportation;
+
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateMessage;
 
 
 
@@ -239,5 +245,19 @@ class Issue
 
         return $this;
     }
+
+
+    public function getDateMessage(): ?\DateTimeInterface
+    {
+        return $this->dateMessage;
+    }
+
+    public function setDateMessage(?\DateTimeInterface $dateMessage): self
+    {
+        $this->dateMessage = $dateMessage;
+
+        return $this;
+    }
+
 
 }

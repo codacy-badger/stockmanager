@@ -33,7 +33,7 @@ class IssueController extends AbstractController
      * @param Security $security
      * @return Response
      */
-    public function new(Request $request, Security $security): Response
+    public function new(Request $request, Security $security, \Swift_Mailer $mailer): Response
     {
         $issue = new Issue();
 
@@ -62,6 +62,29 @@ class IssueController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($issue);
             $em->flush();
+
+            //get all technicians
+            $technicians = $this->getDoctrine()->getRepository(User::class)->getTechnicians();
+
+            $emails = [];
+            //get all emails from technicians
+            foreach ($technicians as $technician) {
+                $emails[] = $technician->getEmail();
+            }
+
+            //send email to technicians
+            $message = (new \Swift_Message('Nouveau ticket de ' . $myUser->getOperator()->getName()))
+                ->setFrom('maintenance.siteoise@gmail.com')
+                ->setTo($emails)
+                ->setBody(
+                    $this->renderView(
+                        'admin/notification/emailTechnician.html.twig',
+                        [
+                            'issue' => $issue
+                        ]
+                    ), 'text/html'
+                );
+            $mailer->send($message);
 
             $this->addFlash('success', "La panne a bien été enregistrée");
             return $this->redirectToRoute('member_index');

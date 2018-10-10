@@ -29,7 +29,7 @@
     {#user button to logout#}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle mr-3" id="dropdownMenuButton" data-toggle="dropdown"
+            <button class="btn btn-secondary dropdown-toggle mr-3 btn-sm" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-user"></i> {{ app.user.firstname }} {{ app.user.lastname }}
             </button>
