@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Edit Operator</h1>
 
-    {{ include(admin/operator/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    {{ include('admin/operator/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
     <a href="{{ path('operator_index') }}">retour à la liste</a>
 
