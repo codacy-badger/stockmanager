@@ -5,9 +5,9 @@
 {% block body %}
     <h1>Edit EquipmentSoftware</h1>
 
-    {{ include('equipment_software/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('admin/equipment_software/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('equipment_software_index') }}">back to list</a>
 
-    {{ include('equipment_software/_delete_form.html.twig') }}
+    {{ include('admin/equipment_software/_delete_form.html.twig') }}
 {% endblock %}
