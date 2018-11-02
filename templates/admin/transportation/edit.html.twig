@@ -1,13 +1,13 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}Modifier un exploitant{% endblock %}
+{% block title %}Modifier un réseau{% endblock %}
 
 {% block body %}
-    <h1>Modifier un exploitant</h1>
+    <h1>Modifier un réseau de transport</h1>
 
-    {{ include('admin/transportation/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('admin/transportation/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('transportation_index') }}">back to list</a>
+    <a href="{{ path('transportation_index') }}">retour à la liste</a>
 
     {{ include('admin/transportation/_delete_form.html.twig') }}
 {% endblock %}
