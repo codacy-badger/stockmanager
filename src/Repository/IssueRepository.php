@@ -119,13 +119,25 @@ class IssueRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('i');
         $qb->select('i.user, count(i.id)')
-        ->andWhere('i.dateMessage is null')
-            ->groupBy('i.user')
-
-        ;
+            ->andWhere('i.dateMessage is null')
+            ->groupBy('i.user');
 
         return $qb->getQuery()->getResult();
     }
+
+    public function countEquipmentInProgress($equipment)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('count(c.id)')
+            ->where('c.dateEnd IS NULL')
+            ->andWhere('c.equipment = :equipment')
+            ->setParameter('equipment', $equipment);
+
+        return $qb->getQuery()->getSingleScalarResult();
+
+
+    }
+
     /*
     public function findOneBySomeField($value): ?Issue
     {
