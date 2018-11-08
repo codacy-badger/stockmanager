@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Equipment;
 use App\Entity\Issue;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,16 +46,16 @@ class MemberController extends AbstractController
         $count = $this->getDoctrine()->getRepository(Issue::class)->countByUser($this->getUser());
 
         return $this->render('member/issue/_countIssue.html.twig', [
-           'count' => $count
+            'count' => $count
         ]);
     }
 
 
     /**
-     * @Route("/search", name="equipment_search", defaults={"_format"="json"})
+     * @Route("/equipment_search", name="equipment_search", defaults={"_format"="json"})
      * @param $term
      */
-    public function search(Request $request)
+    public function searchEquipmeent(Request $request)
     {
         $term = $request->query->get('term'); // use "term" instead of "q" for jquery-ui
         $results = $this->getDoctrine()->getRepository('App:Equipment')->findLike($term);
@@ -64,5 +65,16 @@ class MemberController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/equipment_get", name="equipment_get")
+     * @param null $id
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getEquipment($id = null)
+    {
+        $equipement = $this->getDoctrine()->getRepository(Equipment::class)->find($id);
+
+        return $this->json($equipement->getSerial());
+    }
 
 }

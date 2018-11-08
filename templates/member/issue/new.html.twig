@@ -19,7 +19,8 @@
     {{ parent() }}
     <script>
         $('#issue_equipment').autocompleter({
-            url_list: '/member/search'
+            url_list: '/member/equipment_search',
+            url_get: '/member/equipment_get'
         });
     </script>
 {% endblock %}
