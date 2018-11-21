@@ -5,11 +5,14 @@ namespace App\Controller;
 use App\Entity\Equipment;
 use App\Entity\Issue;
 use App\Entity\User;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/member")
@@ -29,7 +32,7 @@ class MemberController extends AbstractController
 //        find all issues by the current user
         $issues = $this->getDoctrine()->getRepository(Issue::class)->findByUser($user);
 
-        return $this->render('member/index.html.twig', [
+        return $this->render('member/issue/actualList.html.twig', [
             'issues' => $issues,
 //            bootstrap active link
             'isActiveDash' => true
@@ -75,6 +78,36 @@ class MemberController extends AbstractController
         $equipement = $this->getDoctrine()->getRepository(Equipment::class)->find($id);
 
         return $this->json($equipement->getSerial());
+    }
+
+
+    /**
+     * @Route("/historic", name="issue_historic")
+     */
+    public function historic(Security $security, Xlsx $xslx, Spreadsheet $spreadsheet)
+    {
+
+        //get the current logged user
+        $currentUser = $security->getUser();
+
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+            'username' => $currentUser->getUsername()
+        ]);
+
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperator($user->getOperator());
+
+//        $spreadsheet = new Spreadsheet();
+//        $sheet = $spreadsheet->getActiveSheet();
+//        while($issues){
+//            $sheet->setCellValue('A1', );
+//        }
+//
+//
+//        $writer = new Xlsx($spreadsheet);
+
+        return $this->render('member/issue/historicList.html.twig', [
+            'issues' => $issues
+        ]);
     }
 
 }

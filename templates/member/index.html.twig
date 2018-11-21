@@ -10,15 +10,16 @@
         <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}"
            href="{{ path('issue_new') }}"><i class="fas fa-briefcase-medical"></i> Déclarer une panne</a>
     </li>
-{% endblock %}
-{% block body %}
-    <div class="row">
-        <div class="col">
-            {% include 'member/_historic.html.twig' %}
-        </div>
-    </div>
+    <li class="nav-item">
+        <a class="nav-link {% if isActiveHistoric is defined and isActiveHistori is not null %}active{% endif %}"
+           href="{{ path('issue_historic') }}"><i class="fas fa-history"></i> Historique des pannes</a>
+    </li>
 
 {% endblock %}
+{% block body %}
+
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <script>

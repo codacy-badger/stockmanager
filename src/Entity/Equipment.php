@@ -40,6 +40,8 @@ class Equipment
      */
     private $issues;
 
+
+
     public function __construct()
     {
         $this->issues = new ArrayCollection();
