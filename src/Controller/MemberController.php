@@ -8,11 +8,13 @@ use App\Entity\User;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
+use Yectep\PhpSpreadsheetBundle\Factory;
 
 /**
  * @Route("/member")
@@ -82,9 +84,9 @@ class MemberController extends AbstractController
 
 
     /**
-     * @Route("/historic", name="issue_historic")
+     * @Route("/historic", name="member_historic")
      */
-    public function historic(Security $security, Xlsx $xslx, Spreadsheet $spreadsheet)
+    public function historic(Security $security)
     {
 
         //get the current logged user
@@ -96,18 +98,61 @@ class MemberController extends AbstractController
 
         $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperator($user->getOperator());
 
-//        $spreadsheet = new Spreadsheet();
-//        $sheet = $spreadsheet->getActiveSheet();
-//        while($issues){
-//            $sheet->setCellValue('A1', );
-//        }
-//
-//
-//        $writer = new Xlsx($spreadsheet);
-
         return $this->render('member/issue/historicList.html.twig', [
-            'issues' => $issues
+            'issues' => $issues,
+            'isActiveHistoric' => true
         ]);
+    }
+
+    /**
+     * @Route("/export", name="member_export")
+     */
+    public function export(Security $security)
+    {
+
+        //get the current logged user
+        $currentUser = $security->getUser();
+
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+            'username' => $currentUser->getUsername()
+        ]);
+
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperator($user->getOperator());
+
+        // export excel file
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $i = 1 ;
+
+        foreach($issues as $issue) {
+
+            $sheet->setCellValue('A'.$i , $issue->getEquipment()->getSerial());
+            $sheet->setCellValue('B'.$i , $issue->getEquipment()->getBrand()->getCategory()->getName());
+            $sheet->setCellValue('C'.$i , $issue->getEquipment()->getBrand()->getName());
+            $sheet->setCellValue('D'.$i , $issue->getTransportation()->getTradeName());
+            $sheet->setCellValue('E'.$i , $issue->getDateRequest());
+            $i++ ;
+        }
+        $sheet->setTitle("Export");
+
+        $writer = new Xlsx($spreadsheet);
+
+        $fileName = 'export.xlsx';
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+
+        $writer->save($tempFile);
+
+        $response = new Response();
+
+        $response->setContent(file_get_contents($tempFile));
+        $response->headers->set(
+            'Content-type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        $response->headers->set('Content-disposition', 'filename=' . $fileName);
+
+        return $response;
     }
 
 }

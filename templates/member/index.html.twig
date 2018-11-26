@@ -4,15 +4,15 @@
 {% block sidebar %}
     <li class="nav-item">
         <a class="nav-link {% if isActiveDash is defined and isActiveDash is not null %}active{% endif %}"
-           href="{{ path('member_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord</a>
+           href="{{ path('member_index') }}"><i class="fas fa-wrench"></i> Pannes en cours</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}"
            href="{{ path('issue_new') }}"><i class="fas fa-briefcase-medical"></i> Déclarer une panne</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {% if isActiveHistoric is defined and isActiveHistori is not null %}active{% endif %}"
-           href="{{ path('issue_historic') }}"><i class="fas fa-history"></i> Historique des pannes</a>
+        <a class="nav-link {% if isActiveHistoric is defined and isActiveHistoric is not null %}active{% endif %}"
+           href="{{ path('member_historic') }}"><i class="fas fa-history"></i> Historique des pannes</a>
     </li>
 
 {% endblock %}
