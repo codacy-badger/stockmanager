@@ -106,6 +106,10 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/export", name="member_export")
+     * @param Security $security
+     * @return Response
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function export(Security $security)
     {
@@ -119,21 +123,45 @@ class MemberController extends AbstractController
 
         $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperator($user->getOperator());
 
-        // export excel file
+        // phpSpreadsheet part
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $i = 1 ;
+        //begin by the second line
+        $i = 2;
+        $symptom = null;
 
-        foreach($issues as $issue) {
+        //set table static first line
+        $sheet->setCellValue('A1', 'Id');
+        $sheet->setCellValue('B1', 'N° de série');
+        $sheet->setCellValue('C1', 'Catégorie');
+        $sheet->setCellValue('D1', 'Modèle');
+        $sheet->setCellValue('E1', 'Réseau de transport');
+        $sheet->setCellValue('F1', 'Date');
+        $sheet->setCellValue('G1', 'Symptomes');
 
-            $sheet->setCellValue('A'.$i , $issue->getEquipment()->getSerial());
-            $sheet->setCellValue('B'.$i , $issue->getEquipment()->getBrand()->getCategory()->getName());
-            $sheet->setCellValue('C'.$i , $issue->getEquipment()->getBrand()->getName());
-            $sheet->setCellValue('D'.$i , $issue->getTransportation()->getTradeName());
-            $sheet->setCellValue('E'.$i , $issue->getDateRequest());
-            $i++ ;
+        //set table dynamic lines
+        foreach ($issues as $issue) {
+
+            $symptoms = $issue->getSymptoms();
+            dump($symptoms);
+
+            foreach ($symptoms as $symptom) {
+                $allSymptoms = $symptom->getName() . ' ';
+            }
+
+            $sheet->setCellValue('A' . $i, $issue->getEquipment()->getId());
+            $sheet->setCellValue('B' . $i, $issue->getEquipment()->getSerial());
+            $sheet->setCellValue('C' . $i, $issue->getEquipment()->getBrand()->getCategory()->getName());
+            $sheet->setCellValue('D' . $i, $issue->getEquipment()->getBrand()->getName());
+            $sheet->setCellValue('E' . $i, $issue->getTransportation()->getTradeName());
+            $sheet->setCellValue('F' . $i, $issue->getDateRequest()->setTimezone(new \DateTimeZone('Europe/Paris')));
+            $sheet->setCellValue('G' . $i, $allSymptoms);
+
+            $allSymptoms = null;
+            $i++;
         }
+
         $sheet->setTitle("Export");
 
         $writer = new Xlsx($spreadsheet);
