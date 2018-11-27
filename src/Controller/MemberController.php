@@ -144,7 +144,6 @@ class MemberController extends AbstractController
         foreach ($issues as $issue) {
 
             $symptoms = $issue->getSymptoms();
-            dump($symptoms);
 
             foreach ($symptoms as $symptom) {
                 $allSymptoms = $symptom->getName() . ' ';
