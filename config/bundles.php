@@ -15,5 +15,4 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
     PUGX\AutocompleterBundle\PUGXAutocompleterBundle::class => ['all' => true],
-    Yectep\PhpSpreadsheetBundle\PhpSpreadsheetBundle::class => ['all' => true],
 ];

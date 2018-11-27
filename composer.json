@@ -27,8 +27,7 @@
         "symfony/validator": "*",
         "symfony/web-link": "*",
         "symfony/yaml": "*",
-        "twbs/bootstrap": "4.0.0",
-        "yectep/phpspreadsheet-bundle": "^0.0.4"
+        "twbs/bootstrap": "4.0.0"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

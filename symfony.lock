@@ -413,9 +413,6 @@
     "webmozart/assert": {
         "version": "1.3.0"
     },
-    "yectep/phpspreadsheet-bundle": {
-        "version": "v0.0.4"
-    },
     "zendframework/zend-code": {
         "version": "3.3.1"
     },
