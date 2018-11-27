@@ -1,0 +1,114 @@
+{% extends 'member/index.html.twig' %}
+{% block body %}
+    <div class="card">
+        <h4 class="card-header">Historique des pannes</h4>
+        <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Materiel</th>
+                    <th>Réseau de transport</th>
+                    <th>Date</th>
+                    <th>Symptomes</th>
+                    <th>Descriptions</th>
+                    <th>Statut</th>
+
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for issue in issues %}
+                    <tr>
+                        <td>{{ issue.id }}</td>
+
+                        {#equipment column#}
+                        <td>
+                            <div class="d-flex">
+                                <img class="img-circle" data-toggle="tooltip" data-placement="top"
+                                     title="{{ issue.equipment.brand.category.name }}" width="50"
+                                     height="50"
+                                     src="{{ asset(issue.equipment.brand.category.image.url) }}"
+                                     alt="{{ issue.equipment.brand.category.image.alt }}">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <b>Catégorie:</b> {{ issue.equipment.brand.category.name }}
+                                    </div>
+                                    <div>
+                                        <b>Modèle:</b> {{ issue.equipment.brand.name }}
+                                    </div>
+                                    <div>
+                                        <b>N° Serie:</b> {{ issue.equipment.serial }}
+                                    </div>
+                                    {% if issue.equipment.contract.id == 3 %}
+                                        <div>
+                                        <span class="badge badge-info badge-pill">
+                                         Contrat: {{ issue.equipment.contract.name }}
+                                        </span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+
+                        {#transportation column#}
+
+                        <td>{{ issue.transportation.tradeName }}</td>
+
+                        {#date column#}
+                        <td>{{ issue.dateRequest | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
+
+                        {#symptom column#}
+                        <td>
+                            <ul>
+                                {% for symptom in issue.symptoms %}
+                                    <li>{{ symptom.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+
+                        {#descriptions column#}
+                        <td>{{ issue.description }}</td>
+
+                        {#Status column#}
+                        <td>
+                            {% if issue.dateChecked and issue.dateReady == null %}
+                                <span class="badge badge-pill badge-warning" data-toggle="tooltip" data-placement="top"
+                                      title="Un materiel de remplacement est en cours de préparation"><i
+                                            class="fas fa-hourglass-half"></i> Préparation</span>
+                            {% elseif issue.dateReady and issue.dateEnd == null %}
+                                <span class="badge badge-pill badge-success" data-toggle="tooltip" data-placement="top"
+                                      title="Le materiel re remplacement est prêt, un échange est imminent"><i
+                                            class="fas fa-hourglass-end"></i> Prêt</span>
+                                {% if issue.dateMessage %}
+                                    <span class="badge badge-pill badge-success" data-toggle="tooltip"
+                                          data-placement="top"
+                                          title="L' utilisateur a été notifié.">
+                                        <i class="fas fa-envelope"></i> Notifié</span>
+                                {% endif %}
+                            {% elseif issue.dateChecked == null %}
+                                <span class="badge badge-pill badge-danger" data-toggle="tooltip" data-placement="top"
+                                      title="La demande n'a pas encore été prise en compte."><i
+                                            class="fas fa-hourglass-start"></i> En Attente</span>
+                            {% else %}
+                                <span class="badge badge-pill badge-secondary" data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="La demande a été traitée."><i
+                                            class="fas fa-hourglass-end"></i> Traité</span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">Pas d'enregistrement</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div><a href="{{ path('member_export') }}">exporter</a></div>
+        </div>
+    </div>
+
+{% endblock %}

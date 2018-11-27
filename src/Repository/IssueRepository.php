@@ -3,9 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Issue;
+use App\Entity\Operator;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * @method Issue|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,6 +33,16 @@ class IssueRepository extends ServiceEntityRepository
             ->andWhere('i.dateEnd IS NULL')
             ->setParameter('val', $user)
             ->orderBy('i.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByOperator(Operator $operator)
+    {
+        return $this->createQueryBuilder('i')
+            ->join('i.user', 'u', 'WITH', 'u.operator = :operator')
+            ->andWhere('i.dateEnd IS NOT NULL')
+            ->setParameter('operator', $operator)
             ->getQuery()
             ->getResult();
     }
