@@ -68,6 +68,11 @@ class Issue
     private $equipment;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Equipment")
+     */
+    private $equipmentReplace;
+
+    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Repair")
      */
     private $repair;
@@ -257,6 +262,18 @@ class Issue
     public function setDateMessage(?\DateTimeInterface $dateMessage): self
     {
         $this->dateMessage = $dateMessage;
+
+        return $this;
+    }
+
+    public function getEquipmentReplace(): ?Equipment
+    {
+        return $this->equipmentReplace;
+    }
+
+    public function setEquipmentReplace(?Equipment $equipmentReplace): self
+    {
+        $this->equipmentReplace = $equipmentReplace;
 
         return $this;
     }
