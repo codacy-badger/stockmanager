@@ -142,6 +142,7 @@ class IssueRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c');
         $qb->select('count(c.id)')
             ->where('c.dateEnd IS NULL')
+            ->andWhere('c.equipment IS NULL')
             ->andWhere('c.equipment = :equipment')
             ->setParameter('equipment', $equipment);
 

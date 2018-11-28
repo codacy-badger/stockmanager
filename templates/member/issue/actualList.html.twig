@@ -8,7 +8,8 @@
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Materiel</th>
+                    <th>Materiel en panne</th>
+                    <th>Materiel de remplacement</th>
                     <th>Réseau de transport</th>
                     <th>Date</th>
                     <th>Symptomes</th>
@@ -52,8 +53,24 @@
                             </div>
                         </td>
 
-                        {#transportation column#}
+                        {#replacement equipment column#}
+                        <td>
+                            <div class="d-flex">
+                                <div>
+                                    <b>N° Serie:</b>
 
+                                    {% if issue.equipmentReplace is not null %}
+
+                                        {{ issue.equipmentReplace.serial }}
+
+                                    {% else %}
+                                        Pas encore assigné
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+
+                        {#transportation column#}
                         <td>{{ issue.transportation.tradeName }}</td>
 
                         {#date column#}

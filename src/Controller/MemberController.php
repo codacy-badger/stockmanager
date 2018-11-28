@@ -102,6 +102,8 @@ class MemberController extends AbstractController
     }
 
     /**
+     * Export excel file for members by operator
+     *
      * @Route("/export", name="member_export")
      * @param Security $security
      * @return Response
@@ -131,11 +133,12 @@ class MemberController extends AbstractController
         //set table static first line
         $sheet->setCellValue('A1', 'Id');
         $sheet->setCellValue('B1', 'N° de série');
-        $sheet->setCellValue('C1', 'Catégorie');
-        $sheet->setCellValue('D1', 'Modèle');
-        $sheet->setCellValue('E1', 'Réseau de transport');
-        $sheet->setCellValue('F1', 'Date');
-        $sheet->setCellValue('G1', 'Symptomes');
+        $sheet->setCellValue('C1', 'N° de série remplacement');
+        $sheet->setCellValue('D1', 'Catégorie');
+        $sheet->setCellValue('E1', 'Modèle');
+        $sheet->setCellValue('F1', 'Réseau de transport');
+        $sheet->setCellValue('G1', 'Date');
+        $sheet->setCellValue('H1', 'Symptomes');
 
         //set table dynamic lines
         foreach ($issues as $issue) {
@@ -146,13 +149,22 @@ class MemberController extends AbstractController
                 $allSymptoms = $symptom->getName() . ' ';
             }
 
+            if (null === $issue->getEquipmentReplace()) {
+
+                $equipmentReplaceSerial = 'aucun';
+
+            } else {
+                $equipmentReplaceSerial = $issue->getEquipmentReplace()->getSerial();
+            }
+
             $sheet->setCellValue('A' . $i, $issue->getEquipment()->getId());
             $sheet->setCellValue('B' . $i, $issue->getEquipment()->getSerial());
-            $sheet->setCellValue('C' . $i, $issue->getEquipment()->getBrand()->getCategory()->getName());
-            $sheet->setCellValue('D' . $i, $issue->getEquipment()->getBrand()->getName());
-            $sheet->setCellValue('E' . $i, $issue->getTransportation()->getTradeName());
-            $sheet->setCellValue('F' . $i, $issue->getDateRequest()->setTimezone(new \DateTimeZone('Europe/Paris')));
-            $sheet->setCellValue('G' . $i, $allSymptoms);
+            $sheet->setCellValue('C' . $i, $equipmentReplaceSerial);
+            $sheet->setCellValue('D' . $i, $issue->getEquipment()->getBrand()->getCategory()->getName());
+            $sheet->setCellValue('E' . $i, $issue->getEquipment()->getBrand()->getName());
+            $sheet->setCellValue('F' . $i, $issue->getTransportation()->getTradeName());
+            $sheet->setCellValue('G' . $i, $issue->getDateRequest()->setTimezone(new \DateTimeZone('Europe/Paris')));
+            $sheet->setCellValue('H' . $i, $allSymptoms);
 
             $allSymptoms = null;
             $i++;
