@@ -102,6 +102,8 @@ class MemberController extends AbstractController
     }
 
     /**
+     * Export excel file for members by operator
+     *
      * @Route("/export", name="member_export")
      * @param Security $security
      * @return Response
@@ -147,11 +149,17 @@ class MemberController extends AbstractController
                 $allSymptoms = $symptom->getName() . ' ';
             }
 
-            $serialReplace = $issue->getEquipmentReplace() ?? 'aucun';
+            if (null === $issue->getEquipmentReplace()) {
+
+                $equipmentReplaceSerial = 'aucun';
+
+            } else {
+                $equipmentReplaceSerial = $issue->getEquipmentReplace()->getSerial();
+            }
 
             $sheet->setCellValue('A' . $i, $issue->getEquipment()->getId());
             $sheet->setCellValue('B' . $i, $issue->getEquipment()->getSerial());
-            $sheet->setCellValue('C' . $i, $serialReplace );
+            $sheet->setCellValue('C' . $i, $equipmentReplaceSerial);
             $sheet->setCellValue('D' . $i, $issue->getEquipment()->getBrand()->getCategory()->getName());
             $sheet->setCellValue('E' . $i, $issue->getEquipment()->getBrand()->getName());
             $sheet->setCellValue('F' . $i, $issue->getTransportation()->getTradeName());

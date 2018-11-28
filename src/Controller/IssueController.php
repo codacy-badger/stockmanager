@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\Issue;
 use App\Entity\User;
 use App\Form\IssueType;
+use App\Form\ReplaceType;
 use App\Repository\IssueRepository;
-use http\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +28,8 @@ class IssueController extends AbstractController
 
 
     /**
+     * Create an issue
+     *
      * @Route("member/issue/new", name="issue_new", methods="GET|POST")
      * @param Request $request
      * @param Security $security
@@ -98,6 +100,7 @@ class IssueController extends AbstractController
     }
 
     /**
+     * Show issues by status
      * @Route("admin/issue/show-{status}", name="issue_showByStatus")
      * @return Response
      */
@@ -123,6 +126,8 @@ class IssueController extends AbstractController
 
 
     /**
+     * show issue
+     *
      * @Route("admin/issue/{id}", name="issue_show", methods="GET")
      * @param Issue $issue
      * @return Response
@@ -133,6 +138,8 @@ class IssueController extends AbstractController
     }
 
     /**
+     * Edit issue
+     *
      * @Route("admin/issue/{id}/edit", name="issue_edit", methods="GET|POST")
      * @param Request $request
      * @param Issue $issue
@@ -156,6 +163,8 @@ class IssueController extends AbstractController
     }
 
     /**
+     * Delete issue
+     *
      * @Route("admin/issue/{id}", name="issue_delete", methods="DELETE")
      * @param Request $request
      * @param Issue $issue
@@ -172,49 +181,135 @@ class IssueController extends AbstractController
         return $this->redirectToRoute('issue_index');
     }
 
+
     /**
-     * @Route("admin/issue/change-status/{status}-{id}", name="issue_changeStatus", methods="POST")
-     * @param Request $request
+     * Set current datetime into dateChecked variable
+     *
+     * @Route("admin/issue/setChecked/{id}", name="issue_setChecked", methods="POST")
      * @param Issue $issue
-     * @param $status
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Exception
      */
-    public function changeStatus(Request $request, Issue $issue, $status)
+    public function setChecked(Issue $issue, Request $request)
     {
-
-
         $submittedToken = $request->request->get('token');
-
-        if ($this->isCsrfTokenValid('check-issue', $submittedToken)) {
+        if ($this->isCsrfTokenValid('check-issue-check', $submittedToken)) {
 
             $dateTime = new \DateTime();
 
-            if ($status == 'new') {
-                $technician = $this->getUser();
-                $issue->setDateChecked($dateTime);
-                $issue->setTechnician($technician);
-            } elseif ($status == 'check') {
-                $issue->setDateReady($dateTime);
-
-            } elseif ($status == 'ready') {
-                $issue->setDateEnd($dateTime);
-            }
-
+            $technician = $this->getUser();
+            $issue->setDateChecked($dateTime);
+            $issue->setTechnician($technician);
 
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
             $this->addFlash('success', "Demande validée");
+
         }
 
         return $this->redirectToRoute('issue_showByStatus', [
-            'status' => $status
+            'status' => 'new'
+        ]);
+    }
+
+    /**
+     * Add equipment replace and set current datetime into dateReady variable
+     *
+     * @Route("admin/issue/setReadyForm/{id}", name="issue_setReadyForm")
+     * @param Issue $issue
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
+     */
+    public function setReadyForm(Issue $issue, Request $request)
+    {
+
+        $form = $this->createForm(ReplaceType::class, $issue);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $dateTime = new \DateTime();
+            $issue->setDateReady($dateTime);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', "Demande validée");
+
+            return $this->redirectToRoute('issue_showByStatus', [
+                'status' => 'ready'
+            ]);
+        }
+
+        return $this->render('admin/issue/addReplace.html.twig', [
+            'form' => $form->createView(),
+            'issue' => $issue
+        ]);
+    }
+
+    /**
+     * Redirect to setReadyForm
+     *
+     * @Route("admin/issue/setReady/{id}", name="issue_setReady", methods="POST")
+     * @param Request $request
+     * @param Issue $issue
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function setReady(Request $request, Issue $issue)
+    {
+        $submittedToken = $request->request->get('token');
+        if ($this->isCsrfTokenValid('check-issue-ready', $submittedToken)) {
+
+            return $this->redirectToRoute('issue_setReadyForm', [
+                'id' => $issue->getId()
+            ]);
+
+        }
+
+        return $this->redirectToRoute('issue_showByStatus', [
+            'status' => 'check'
+        ]);
+    }
+
+    /**
+     * Set current datetime into dateEnd variable
+     *
+     * @Route("admin/issue/setEnd/{id}", name="issue_setEnd", methods="POST")
+     * @param Issue $issue
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Exception
+     */
+    public function setEnd(Issue $issue, Request $request)
+    {
+        $submittedToken = $request->request->get('token');
+        if ($this->isCsrfTokenValid('check-issue-end', $submittedToken)) {
+
+            $dateTime = new \DateTime();
+
+            $issue->setDateEnd($dateTime);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Ticket cloturé');
+
+            return $this->redirectToRoute('issue_showByStatus', [
+                'status' => 'ready'
+            ]);
+
+        }
+
+        return $this->redirectToRoute('issue_showByStatus', [
+            'status' => 'ready'
         ]);
 
     }
 
-
     /**
+     * Count number of issues by status
+     *
      * @Route("admin/issue/count-widget", name="issue_countWidget")
      * @return Response
      */

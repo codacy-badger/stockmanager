@@ -1,0 +1,24 @@
+{% extends 'admin/index.html.twig' %}
+{% block sidebar %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="col-6 mx-auto mt-3">
+        <div class="card">
+            <h4 class="card-header">Ajouter un équipement de remplacement</h4>
+            <div class="card-body">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#replace_equipmentReplace').autocompleter({
+            url_list: '/member/equipment_search',
+            url_get: '/member/equipment_get'
+        });
+    </script>
+{% endblock %}
