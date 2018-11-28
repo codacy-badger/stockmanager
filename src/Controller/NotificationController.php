@@ -25,7 +25,14 @@ class NotificationController extends AbstractController
     }
 
     /**
+     * Sends mail
+     *
      * @Route("admin/notification/send-{id}", name="notification_send", methods="POST")
+     * @param Request $request
+     * @param User $user
+     * @param \Swift_Mailer $mailer
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Exception
      */
     public function sendNotification(Request $request, User $user, \Swift_Mailer $mailer)
     {

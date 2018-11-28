@@ -18,7 +18,8 @@
     <tr>
         <th>Type d'équipement</th>
         <th>Modèle</th>
-        <th>Numéro de série d'équipement</th>
+        <th>Numéro de série de l' équipement en panne</th>
+        <th>Numéro de série d'équipement remplaçant</th>
 
     </tr>
 
@@ -27,6 +28,7 @@
             <td>{{ issue.equipment.brand.category.name }}</td>
             <td>{{ issue.equipment.brand.name }}</td>
             <td>{{ issue.equipment.serial }}</td>
+            <td>{{ issue.equipmentReplace.serial }}</td>
         </tr>
     {% endfor %}
 
