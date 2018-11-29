@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Issue;
 use App\Entity\User;
+use App\Form\IssueEditType;
 use App\Form\IssueType;
 use App\Form\ReplaceType;
 use App\Repository\IssueRepository;
@@ -147,13 +148,17 @@ class IssueController extends AbstractController
      */
     public function edit(Request $request, Issue $issue): Response
     {
-        $form = $this->createForm(IssueType::class, $issue);
+        $form = $this->createForm(IssueEditType::class, $issue);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('issue_edit', ['id' => $issue->getId()]);
+            $this->addFlash('success', 'Le numéro de série a été modifié.');
+
+            return $this->redirectToRoute('issue_showByStatus', [
+                'status' => 'ready'
+            ]);
         }
 
         return $this->render('admin/issue/edit.html.twig', [
@@ -239,7 +244,7 @@ class IssueController extends AbstractController
             $this->addFlash('success', "Demande validée");
 
             return $this->redirectToRoute('issue_showByStatus', [
-                'status' => 'ready'
+                'status' => 'check'
             ]);
         }
 
