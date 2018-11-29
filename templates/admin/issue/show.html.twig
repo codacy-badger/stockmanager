@@ -163,13 +163,28 @@
                                     </button>
                                 </form>
                             {% elseif status == 'ready' %}
-                                <form action="{{ path('issue_setEnd', {'id': issue.id}) }}"
-                                      method="post">
-                                    <input type="hidden" name="token" value="{{ csrf_token('check-issue-end') }}"/>
-                                    <button type="submit" class="btn btn-sm btn-primary"><i
-                                                class="fas fa-check-square"></i> Terminer
-                                    </button>
-                                </form>
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <form action="{{ path('issue_edit', {'id': issue.id}) }}"
+                                              method="post">
+                                            <input type="hidden" name="token" value="{{ csrf_token('edit-issue') }}"/>
+                                            <button type="submit" class="btn btn-sm btn-warning"><i
+                                                        class="far fa-edit"></i> Modifier
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="pt-1">
+                                        <form action="{{ path('issue_setEnd', {'id': issue.id}) }}"
+                                              method="post">
+                                            <input type="hidden" name="token"
+                                                   value="{{ csrf_token('check-issue-end') }}"/>
+                                            <button type="submit" class="btn btn-sm btn-primary"><i
+                                                        class="fas fa-check-square"></i> Terminer
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
                             {% endif %}
 
                         </td>

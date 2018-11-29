@@ -1,13 +1,19 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/index.html.twig' %}
 
-{% block title %}Edit Issue{% endblock %}
+{% block title %}Modifier le numéro de série{% endblock %}
 
 {% block body %}
-    <h1>Edit Issue</h1>
+    <h1>Modifier le numéro de série</h1>
 
     {{ include('admin/issue/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('issue_index') }}">back to list</a>
-
-    {{ include('admin/issue/_delete_form.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#issue_edit_equipment').autocompleter({
+            url_list: '/member/equipment_search',
+            url_get: '/member/equipment_get'
+        });
+    </script>
 {% endblock %}
