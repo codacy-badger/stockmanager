@@ -145,8 +145,12 @@ class MemberController extends AbstractController
 
             $symptoms = $issue->getSymptoms();
 
+            $allSymptoms = null;
             foreach ($symptoms as $symptom) {
-                $allSymptoms = $symptom->getName() . ' ';
+
+
+
+                $allSymptoms = $symptom->getName().', '.$allSymptoms;
             }
 
             if (null === $issue->getEquipmentReplace()) {
