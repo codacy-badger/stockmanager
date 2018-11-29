@@ -154,6 +154,8 @@ class IssueController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'Le numéro de série a été modifié.')
+
             return $this->redirectToRoute('issue_showByStatus', [
                 'status' => 'ready'
             ]);
