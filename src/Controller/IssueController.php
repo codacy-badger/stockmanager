@@ -292,14 +292,17 @@ class IssueController extends AbstractController
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('check-issue-end', $submittedToken)) {
 
-            $dateTime = new \DateTime();
+            if (null === $issue->getDateMessage()) {
+                $this->addFlash('danger', 'Attention le ticket n\'a pas été notifié à l\'exploitant');
+            } else {
+                $dateTime = new \DateTime();
 
-            $issue->setDateEnd($dateTime);
+                $issue->setDateEnd($dateTime);
 
-            $this->getDoctrine()->getManager()->flush();
+                $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Ticket cloturé');
-
+                $this->addFlash('success', 'Ticket cloturé');
+            }
             return $this->redirectToRoute('issue_showByStatus', [
                 'status' => 'ready'
             ]);
