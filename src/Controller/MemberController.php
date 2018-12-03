@@ -29,7 +29,7 @@ class MemberController extends AbstractController
         $user = $this->getUser();
 
 //        find all issues by the current user
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByUser($user);
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperator($user->getOperator());
 
         return $this->render('member/issue/actualList.html.twig', [
             'issues' => $issues,
@@ -83,17 +83,11 @@ class MemberController extends AbstractController
     /**
      * @Route("/historic", name="member_historic")
      */
-    public function historic(Security $security)
+    public function historic()
     {
+        $user = $this->getUser();
 
-        //get the current logged user
-        $currentUser = $security->getUser();
-
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
-            'username' => $currentUser->getUsername()
-        ]);
-
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperator($user->getOperator());
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperatorEnd($user->getOperator());
 
         return $this->render('member/issue/historicList.html.twig', [
             'issues' => $issues,
@@ -149,8 +143,7 @@ class MemberController extends AbstractController
             foreach ($symptoms as $symptom) {
 
 
-
-                $allSymptoms = $symptom->getName().', '.$allSymptoms;
+                $allSymptoms = $symptom->getName() . ', ' . $allSymptoms;
             }
 
             if (null === $issue->getEquipmentReplace()) {
