@@ -49,11 +49,17 @@ class NotificationController extends AbstractController
             $message = (new \Swift_Message('Equipements prêts, remplacement imminent'))
                 ->setFrom('send@exemple.com')
                 ->setTo($myUser->getEmail())
-                ->setBody(
+            ;
+
+            $myLogo = $message->embed(\Swift_Image::fromPath('img/om.png'));
+
+            $message->setBody(
                     $this->renderView(
                         'admin/notification/email.html.twig',
                         [
-                            'user' => $myUser
+                            'user' => $myUser,
+                            'image' => $myLogo
+
                         ]
                     ), 'text/html'
                 );
