@@ -37,11 +37,21 @@ class IssueRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByOperator(Operator $operator)
+    public function findByOperatorEnd(Operator $operator)
     {
         return $this->createQueryBuilder('i')
             ->join('i.user', 'u', 'WITH', 'u.operator = :operator')
             ->andWhere('i.dateEnd IS NOT NULL')
+            ->setParameter('operator', $operator)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByOperator(Operator $operator)
+    {
+        return $this->createQueryBuilder('i')
+            ->join('i.user', 'u', 'WITH', 'u.operator = :operator')
+            ->andWhere('i.dateEnd IS NULL')
             ->setParameter('operator', $operator)
             ->getQuery()
             ->getResult();
