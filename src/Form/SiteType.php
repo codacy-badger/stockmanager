@@ -17,10 +17,7 @@ class SiteType extends AbstractType
             ->add('adress')
             ->add('postal')
             ->add('city')
-            ->add('operator', EntityType::class, [
-                'class' => 'App\Entity\Operator',
-                'choice_label' => 'name'
-            ])
+
         ;
     }
 

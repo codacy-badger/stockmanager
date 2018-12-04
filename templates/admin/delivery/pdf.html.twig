@@ -4,29 +4,115 @@
     <title>Bon de Livraison</title>
     <meta charset="UTF-8">
     <style>
-        body{
+
+
+        body {
             font-family: "Verdana", sans-serif;
         }
-        .head{
+
+        h4 {
+            text-transform: uppercase;
+        }
+
+        .head {
+            height: 300px;
+            width: 100%;
+            border: 1px dotted red;
+
+        }
+
+        .head-left {
+            position: relative;
+            top: 0;
+            width: 50%;
+            background-color: #1c7430;
+        }
+
+        .head-right {
+            padding-left: 50px;
+            position: relative;
+            top: -150px;
+            left: 50%;
+            width: 40%;
+
+        }
+
+        .from {
+            padding-left: 10px;
+            border: 1px solid black;
+        }
+
+        .adress {
 
 
         }
 
-        h2{
+        .title {
+            position: relative;
+            top: 0px;
+            right: 200px;
             text-transform: uppercase;
             color: #4e555b;
+        }
+
+        .upper {
+            color: #4e555b;;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .other {
+            border: 1px solid black;
         }
 
     </style>
 </head>
 <body>
 <div class="head">
-    <div>
-        <img src="/public/img/om.png" alt="Oise Mobilité">
+    <div class="head-left">
+        <div>
+            <img src="/public/img/om.png" alt="Oise Mobilité">
+        </div>
+        <div class="destination">
+            <h4>Destinataire</h4>
+            <span class="upper">{{ user.operator.name }}</span><br>
+                {{ user.firstname }} {{ user.lastname }}
+
+        </div>
+        <div class="adress">
+            <h4>Adresse de livraison</h4>
+            {{ user.operator.name }}<br>
+            {{ user.operator.site.name }}<br>
+            {{ user.operator.site.adress }}<br>
+            {{ user.operator.site.postal }} {{ user.operator.site.city }}
+
+        </div>
     </div>
-    <div>
-        <h2 class="title">bon de livraison</h2>
+    <div class="head-right">
+        <div class="title">
+            <h2>bon de livraison</h2>
+        </div>
+        <div class="from">
+            <h4>expediteur</h4>
+            <span class="upper">Site.Oise</span><br>
+            <span class="upper">Agence Oise Mobilité</span><br>
+            19 rue Pierre Jacoby <br>
+            60000 Beauvais <br>
+        </div>
     </div>
+</div>
+<div class="other">
+    <div class="date">
+        <p>Date :</p>
+        {{ "now"|date("d/m/Y") }}
+    </div>
+    <div class="modality">
+        <p>Modalités de livraison :</p>
+        En main propre
+    </div>
+</div>
+<div class="content">
+
 </div>
 </body>
 </html>

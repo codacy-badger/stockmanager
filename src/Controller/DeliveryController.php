@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Delivery;
+use App\Entity\User;
 use App\Form\DeliveryType;
 use App\Repository\DeliveryRepository;
 use Dompdf\Dompdf;
@@ -31,6 +32,8 @@ class DeliveryController extends Controller
     public function new()
     {
 
+        $user = $this->getUser();
+
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'Arial');
@@ -43,7 +46,8 @@ class DeliveryController extends Controller
 
         // Retrieve the HTML generated in our twig file
         $html = $this->renderView('admin/delivery/pdf.html.twig', [
-            'title' => "Bon de livraison"
+            'title' => "Bon de livraison",
+            'user' => $user
         ]);
 
         // Load HTML to Dompdf
