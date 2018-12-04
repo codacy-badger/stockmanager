@@ -94,6 +94,11 @@ class Issue
      */
     private $dateMessage;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Delivery", inversedBy="issues")
+     */
+    private $delivery;
+
 
 
     public function __construct()
@@ -274,6 +279,18 @@ class Issue
     public function setEquipmentReplace(?Equipment $equipmentReplace): self
     {
         $this->equipmentReplace = $equipmentReplace;
+
+        return $this;
+    }
+
+    public function getDelivery(): ?Delivery
+    {
+        return $this->delivery;
+    }
+
+    public function setDelivery(?Delivery $delivery): self
+    {
+        $this->delivery = $delivery;
 
         return $this;
     }
