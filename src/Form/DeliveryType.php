@@ -2,29 +2,24 @@
 
 namespace App\Form;
 
-use App\Entity\Site;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Delivery;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SiteType extends AbstractType
+class DeliveryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('adress')
-            ->add('postal')
-            ->add('city')
-
+            ->add('dateCreation')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Site::class,
+            'data_class' => Delivery::class,
         ]);
     }
 }

@@ -30,11 +30,17 @@ class Operator
      */
     private $transportations;
 
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="operator")
      */
     private $users;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Site")
+     */
+    private $site;
+
+
 
     public function __construct()
     {
@@ -117,6 +123,19 @@ class Operator
 
         return $this;
     }
+
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Site $site): self
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
 
 
 

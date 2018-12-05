@@ -52,7 +52,7 @@ class User implements UserInterface, \Serializable
     private $authorization;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Operator", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Operator", inversedBy="users", fetch="EAGER")
      */
     private $operator;
 

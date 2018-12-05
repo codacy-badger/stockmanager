@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Operator;
-use App\Entity\Transportation;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,8 +15,11 @@ class OperatorType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['label' => 'Nom'])
-            
-        ;
+            ->add('site', EntityType::class, [
+                'class' => 'App\Entity\Site',
+                'label' => 'site',
+                'choice_label' => 'name'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

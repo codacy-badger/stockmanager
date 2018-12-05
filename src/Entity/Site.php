@@ -16,6 +16,7 @@ class Site
      */
     private $id;
 
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -35,11 +36,6 @@ class Site
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Operator")
-     */
-    private $operator;
 
     public function getId(): ?int
     {

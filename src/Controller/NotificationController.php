@@ -48,21 +48,25 @@ class NotificationController extends AbstractController
             //mail message
             $message = (new \Swift_Message('Equipements prêts, remplacement imminent'))
                 ->setFrom('send@exemple.com')
-                ->setTo($myUser->getEmail())
-            ;
+                ->setTo($myUser->getEmail());
 
             $myLogo = $message->embed(\Swift_Image::fromPath('img/om.png'));
 
             $message->setBody(
-                    $this->renderView(
-                        'admin/notification/email.html.twig',
-                        [
-                            'user' => $myUser,
-                            'image' => $myLogo
+                $this->renderView(
+                    'admin/notification/email.html.twig',
+                    [
+                        'user' => $myUser,
+                        'image' => $myLogo
 
-                        ]
-                    ), 'text/html'
-                );
+                    ]
+                ), 'text/html'
+            );
+
+            //generate pdf delivery form
+
+
+
             $mailer->send($message);
 
             //set the current date to dateMessage
@@ -79,5 +83,6 @@ class NotificationController extends AbstractController
 
         return $this->redirectToRoute('notification_index');
     }
+
 
 }

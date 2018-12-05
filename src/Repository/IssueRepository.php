@@ -147,6 +147,7 @@ class IssueRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+
     public function countEquipmentInProgress($equipment)
     {
         $qb = $this->createQueryBuilder('c');

@@ -35,6 +35,13 @@ class UserRepository extends ServiceEntityRepository
         return $qr->getQuery()->getResult();
     }
 
+    /**
+     * get one user with non notified issues
+     * @param User $user
+     * @return User
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function getNotSendedNotification(User $user): User
     {
 
