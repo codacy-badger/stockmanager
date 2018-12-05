@@ -64,9 +64,7 @@ class NotificationController extends AbstractController
             );
 
             //generate pdf delivery form
-            $this->redirectToRoute('delivery_new', [
-                'user' => $user
-            ]);
+
 
 
             $mailer->send($message);

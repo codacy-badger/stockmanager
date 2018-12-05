@@ -24,7 +24,6 @@
                 {% for user in users %}
                     <tr>
 
-
                         <td>{{ user.firstname }}</td>
                         <td>{{ user.lastname }}</td>
                         <td>{{ user.operator.name }}</td>
@@ -32,10 +31,14 @@
                             {{ user.issues.count }}
                         </td>
 
-                        <td>
-                            <form action="{{ path('notification_send', {'id': user.id }) }}" method="post">
+                        <td class="d-flex">
+                            <form action="{{ path('delivery_generate', {'id': user.id }) }}" method="post">
+                                <input type="hidden" name="token" value="{{ csrf_token('delivery-generate') }}">
+                                <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-truck"></i> Bon de livraison</button>
+                            </form>
+                            <form class="ml-1" action="{{ path('notification_send', {'id': user.id }) }}" method="post">
                                 <input type="hidden" name="token" value="{{ csrf_token('send-notification') }}">
-                                <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Envoyer</button>
+                                <button type="submit" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Envoyer</button>
                             </form>
                         </td>
                     </tr>
