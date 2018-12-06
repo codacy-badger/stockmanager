@@ -31,7 +31,8 @@ class IssueType extends AbstractType
                 'label' => 'Problèmes constatés',
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
+                'required' => true
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description'

@@ -69,6 +69,7 @@ class Issue
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Equipment")
+     * @IssueAssert\IssueAlreadyExists
      */
     private $equipmentReplace;
 
@@ -79,6 +80,7 @@ class Issue
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Symptom")
+     * @Assert\NotBlank
      */
     private $symptoms;
 
