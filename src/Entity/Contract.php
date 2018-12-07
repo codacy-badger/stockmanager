@@ -11,6 +11,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Contract
 {
+
+
+    const CONTRAT_HORS_SISMO = 3;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

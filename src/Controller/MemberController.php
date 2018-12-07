@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Contract;
 use App\Entity\Equipment;
 use App\Entity\Issue;
 use App\Entity\User;
@@ -25,6 +26,8 @@ class MemberController extends AbstractController
      */
     public function index()
     {
+        $contract = new Contract();
+
 //        get the current user logged in
         $user = $this->getUser();
 
@@ -34,7 +37,8 @@ class MemberController extends AbstractController
         return $this->render('member/issue/actualList.html.twig', [
             'issues' => $issues,
 //            bootstrap active link
-            'isActiveDash' => true
+            'isActiveDash' => true,
+            'contract' => $contract
         ]);
     }
 
@@ -85,13 +89,16 @@ class MemberController extends AbstractController
      */
     public function historic()
     {
+        $contract = new Contract();
+
         $user = $this->getUser();
 
         $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperatorEnd($user->getOperator());
 
         return $this->render('member/issue/historicList.html.twig', [
             'issues' => $issues,
-            'isActiveHistoric' => true
+            'isActiveHistoric' => true,
+            'contract' => $contract
         ]);
     }
 
