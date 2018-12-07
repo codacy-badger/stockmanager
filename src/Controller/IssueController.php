@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Contract;
 use App\Entity\Issue;
 use App\Entity\User;
 use App\Form\IssueEditType;
@@ -107,6 +108,8 @@ class IssueController extends AbstractController
      */
     public function showByStatus($status)
     {
+        $contract = new Contract();
+
         if ($status == 'new') {
             $issues = $this->getDoctrine()->getRepository(Issue::class)->findBy([
                 'dateChecked' => null
@@ -121,7 +124,8 @@ class IssueController extends AbstractController
 
         return $this->render('admin/issue/show.html.twig', [
             'issues' => $issues,
-            'status' => $status
+            'status' => $status,
+            'contract' => $contract
         ]);
     }
 
