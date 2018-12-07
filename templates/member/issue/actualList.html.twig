@@ -57,14 +57,18 @@
                         <td>
                             <div class="d-flex">
                                 <div>
-                                    <b>N° Serie:</b>
-
-                                    {% if issue.equipmentReplace is not null %}
-
-                                        {{ issue.equipmentReplace.serial }}
-
+                                    {% if issue.equipment.contract.id == 3 %}
+                                        Pas de matériel de remplacement pour les équipements hors contrat SISMO
                                     {% else %}
-                                        Pas encore assigné
+                                        <b>N° Serie:</b>
+
+                                        {% if issue.equipmentReplace is not null %}
+
+                                            {{ issue.equipmentReplace.serial }}
+
+                                        {% else %}
+                                            Pas encore affecté
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                             </div>

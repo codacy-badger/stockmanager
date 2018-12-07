@@ -79,6 +79,7 @@ class Issue
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Symptom")
+     * @Assert\NotBlank
      */
     private $symptoms;
 
