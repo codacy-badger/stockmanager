@@ -28,7 +28,13 @@
             <td>{{ issue.equipment.brand.category.name }}</td>
             <td>{{ issue.equipment.brand.name }}</td>
             <td>{{ issue.equipment.serial }}</td>
-            <td>{{ issue.equipmentReplace.serial }}</td>
+            <td>
+                {% if issue.equipmentReplace is null %}
+                    Non affecté
+                {% else %}
+                    {{ issue.equipmentReplace.serial }}
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
 

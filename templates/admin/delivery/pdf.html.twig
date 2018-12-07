@@ -202,7 +202,13 @@
         </tr>
         {% for issue in user.issues %}
             <tr>
-                <td>{{ issue.equipmentReplace.serial }}</td>
+                <td>
+                    {% if issue.equipmentReplace == null %}
+                        Non affecté
+                    {% else %}
+                        {{ issue.equipmentReplace.serial }}
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>

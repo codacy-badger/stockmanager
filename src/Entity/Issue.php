@@ -69,7 +69,6 @@ class Issue
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Equipment")
-     * @IssueAssert\IssueAlreadyExists
      */
     private $equipmentReplace;
 

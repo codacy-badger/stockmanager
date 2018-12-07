@@ -71,14 +71,18 @@
                         <td>
                             <div class="d-flex">
                                 <div>
-                                    <b>N° Serie:</b>
-
-                                    {% if issue.equipmentReplace is not null %}
-
-                                        {{ issue.equipmentReplace.serial }}
-
+                                    {% if issue.equipment.contract.id == 3 %}
+                                        Pas de matériel de remplacement pour les équipements hors contrat SISMO
                                     {% else %}
-                                        Pas encore assigné
+                                        <b>N° Serie:</b>
+
+                                        {% if issue.equipmentReplace is not null %}
+
+                                            {{ issue.equipmentReplace.serial }}
+
+                                        {% else %}
+                                            Pas encore assigné
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
@@ -155,13 +159,26 @@
                                     </button>
                                 </form>
                             {% elseif status == 'check' %}
-                                <form action="{{ path('issue_setReady', {'id': issue.id}) }}"
-                                      method="post">
-                                    <input type="hidden" name="token" value="{{ csrf_token('check-issue-ready') }}"/>
-                                    <button type="submit" class="btn btn-sm btn-primary"><i
-                                                class="fas fa-check-square"></i> Affecter un équipement de remplacement
-                                    </button>
-                                </form>
+                                {% if issue.equipment.contract.id == 3 %}
+                                    <form action="{{ path('issue_setReadyWithoutReplace', {'id': issue.id}) }}"
+                                          method="post">
+                                        <input type="hidden" name="token"
+                                               value="{{ csrf_token('check-issue-ready-without-replace') }}"/>
+                                        <button type="submit" class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-check-square"></i> Valider
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ path('issue_setReady', {'id': issue.id}) }}"
+                                          method="post">
+                                        <input type="hidden" name="token"
+                                               value="{{ csrf_token('check-issue-ready') }}"/>
+                                        <button type="submit" class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-check-square"></i> Affecter un équipement de
+                                            remplacement
+                                        </button>
+                                    </form>
+                                {% endif %}
                             {% elseif status == 'ready' %}
                                 <div class="d-flex flex-column">
                                     <div>

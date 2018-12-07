@@ -234,7 +234,7 @@ class IssueController extends AbstractController
         $form = $this->createForm(ReplaceType::class, $issue);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
 
             $dateTime = new \DateTime();
             $issue->setDateReady($dateTime);
@@ -279,6 +279,34 @@ class IssueController extends AbstractController
     }
 
     /**
+     * set to ready status without adding a replacement equipment
+     *
+     * @Route("admin/issue/setReadyWithoutReplace/{id}", name="issue_setReadyWithoutReplace", methods="POST")
+     * @param Request $request
+     * @param Issue $issue
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Exception
+     */
+    public function setReadyWithoutReplace(Request $request, Issue $issue)
+    {
+        $submittedToken = $request->request->get('token');
+        if ($this->isCsrfTokenValid('check-issue-ready-without-replace', $submittedToken)) {
+
+            $dateTime = new \DateTime();
+            $issue->setDateReady($dateTime);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', "Demande validée");
+
+            return $this->redirectToRoute('issue_showByStatus', [
+                'status' => 'check'
+            ]);
+
+        }
+    }
+
+    /**
      * Set current datetime into dateEnd variable
      *
      * @Route("admin/issue/setEnd/{id}", name="issue_setEnd", methods="POST")
@@ -287,7 +315,8 @@ class IssueController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      */
-    public function setEnd(Issue $issue, Request $request)
+    public
+    function setEnd(Issue $issue, Request $request)
     {
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('check-issue-end', $submittedToken)) {
@@ -321,7 +350,8 @@ class IssueController extends AbstractController
      * @Route("admin/issue/count-widget", name="issue_countWidget")
      * @return Response
      */
-    public function countWidget()
+    public
+    function countWidget()
     {
         $countNew = $this->getDoctrine()->getRepository(Issue::class)->countNew();
         $countCheck = $this->getDoctrine()->getRepository(Issue::class)->countCheck();
