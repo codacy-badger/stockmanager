@@ -67,6 +67,7 @@ class DeliveryController extends Controller
             $dompdf->stream("mypdf.pdf", [
                 "Attachment" => false
             ]);
+            exit;
         }
 
     }
