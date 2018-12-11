@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -61,9 +63,72 @@ class User implements UserInterface, \Serializable
      */
     private $issues;
 
+
+    private $oldPassword;
+
+    /**
+     * @Assert\Length(min="8", minMessage="Votre mot de passe doit faire au minimum 8 caractères")
+     */
+    private $newPassword;
+
+    /**
+     * @Assert\EqualTo(propertyPath="newPassword", message="Vous n'avez pas tappé le même mot de passe")
+     */
+    private $passwordRetry;
+
+
     public function __construct()
     {
         $this->issues = new ArrayCollection();
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getOldPassword()
+    {
+        return $this->oldPassword;
+    }
+
+    /**
+     * @param mixed $oldPassword
+     */
+    public function setOldPassword($oldPassword): void
+    {
+        $this->oldPassword = $oldPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewPassword()
+    {
+        return $this->newPassword;
+    }
+
+    /**
+     * @param mixed $newPassword
+     */
+    public function setNewPassword($newPassword): void
+    {
+        $this->newPassword = $newPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPasswordRetry()
+    {
+        return $this->passwordRetry;
+    }
+
+    /**
+     * @param mixed $passwordRetry
+     */
+    public function setPasswordRetry($passwordRetry): void
+    {
+        $this->passwordRetry = $passwordRetry;
     }
 
 
@@ -222,7 +287,6 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
-
 
 
 }
