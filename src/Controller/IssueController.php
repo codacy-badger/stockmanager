@@ -354,8 +354,7 @@ class IssueController extends AbstractController
      * @Route("admin/issue/count-widget", name="issue_countWidget")
      * @return Response
      */
-    public
-    function countWidget()
+    public function countWidget()
     {
         $countNew = $this->getDoctrine()->getRepository(Issue::class)->countNew();
         $countCheck = $this->getDoctrine()->getRepository(Issue::class)->countCheck();
@@ -370,5 +369,34 @@ class IssueController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("admin/issue/allOpenIssues", name="issue_allOpenIssues")
+     * @return Response
+     */
+    public function countAllOpenIssues()
+    {
+
+        $number = $this->getDoctrine()->getRepository('App:Issue')->countAllOpenIssues();
+
+        return $this->render('admin/issue/_countOpenIssues.html.twig', [
+            'number' => $number
+        ]);
+
+    }
+
+    /**
+     * @Route("admin/issue/userOpenIssues", name="issue_userOpenIssues")
+     * @return Response
+     */
+    public function countUserOpenIssues()
+    {
+        $user = $this->getUser();
+        $number = $this->getDoctrine()->getRepository('App:Issue')->countUserOpenIssues($user->getOperator());
+
+        return $this->render('admin/issue/_countOpenIssues.html.twig', [
+            'number' => $number
+        ]);
+
+    }
 
 }

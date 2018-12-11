@@ -5,7 +5,7 @@
 {% block sidebar %}
     <li class="nav-item">
         <a class="nav-link {% if isActiveDash is defined and isActiveDash is not null %}active{% endif %}"
-           href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord</a>
+           href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord {{ render(controller('App\\Controller\\IssueController::countAllOpenIssues')) }}</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}"
