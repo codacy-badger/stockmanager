@@ -13,7 +13,7 @@ class Contract
 {
 
 
-    const CONTRAT_HORS_SISMO = 3;
+    const CONTRAT_HORS_SISMO = 5;
 
     /**
      * @ORM\Id()
