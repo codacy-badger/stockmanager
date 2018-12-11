@@ -25,13 +25,16 @@ class SecurityController extends AbstractController
         $form = $this->get('form.factory')
             ->createNamedBuilder(null)
             ->add('_username', null, [
-                'label' => 'Votre login'
+                'label' => 'Login',
+                'translation_domain' => 'messages'
             ])
             ->add('_password', PasswordType::class, [
-                'label' => 'Votre mot de passe'
+                'label' => 'Password',
+                'translation_domain' => 'messages'
             ])
             ->add('ok', SubmitType::class, [
-                'label' => 'Valider'
+                'label' => 'Submit',
+                'translation_domain' => 'messages'
             ])
             ->getForm();
 
@@ -75,8 +78,8 @@ class SecurityController extends AbstractController
             $manager->flush();
 
 
-            $this->addFlash('success', 'Le nouveau mot de passe a bien été enregistré');
-            $this->redirectToRoute('member_index');
+            $this->addFlash('success', 'Le nouveau mot de passe a bien été enregistré. Veuillez-vous reconnecter.');
+            return $this->redirectToRoute('logout');
 
         }
 

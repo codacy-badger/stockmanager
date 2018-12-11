@@ -23,19 +23,22 @@ class IssueType extends AbstractType
         $builder
             ->add('equipment', AutocompleteType::class, [
                 'class' => 'App\Entity\Equipment',
-                'label' => 'Numéro de série du materiel en panne'
+                'label' => 'Serial number',
+                'translation_domain' => 'messages'
 
             ])
             ->add('symptoms', EntityType::class, [
                 'class' => 'App\Entity\Symptom',
-                'label' => 'Problèmes constatés',
+                'label' => 'Problems found',
+                'translation_domain' => 'messages',
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true,
                 'required' => true
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'Description'
+                'label' => 'Description',
+                'translation_domain' => 'messages'
             ]);
 
 
@@ -47,7 +50,8 @@ class IssueType extends AbstractType
             $formOptions = [
                 'class' => Transportation::class,
                 'choice_label' => 'name',
-                'label' => 'Réseau de transport',
+                'label' => 'Transit network',
+                'translation_domain' => 'messages',
                 'query_builder' => function (TransportationRepository $tr) use ($event) {
                     return $tr->createQueryBuilder('t')
                         ->andWhere(':op MEMBER OF t.operators')
