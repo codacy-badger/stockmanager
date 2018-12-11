@@ -45,8 +45,17 @@ class DeliveryController extends Controller
             // Instantiate Dompdf with our options
             $dompdf = new Dompdf($pdfOptions);
 
+		$context = stream_context_create([ 
+    'ssl' => [ 
+        'verify_peer' => FALSE, 
+        'verify_peer_name' => FALSE,
+        'allow_self_signed'=> TRUE 
+    ] 
+]);
+$dompdf->setHttpContext($context);
 
-            $dompdf->setBasePath('/');
+
+        //    $dompdf->setBasePath('/');
 
             // Retrieve the HTML generated in our twig file
             $html = $this->renderView('admin/delivery/pdf.html.twig', [
