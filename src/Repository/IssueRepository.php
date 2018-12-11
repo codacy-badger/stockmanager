@@ -161,6 +161,29 @@ class IssueRepository extends ServiceEntityRepository
 
     }
 
+
+    public function countAllOpenIssues()
+    {
+        $qb = $this->createQueryBuilder('k');
+        $qb->select('count(k.id)')
+            ->where('k.dateEnd IS NULL');
+
+        return $qb->getQuery()->getSingleScalarResult();
+
+    }
+
+
+    public function countUserOpenIssues(Operator $operator)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('count(i)')
+            ->join('i.user', 'u', 'WITH', 'u.operator = :operator')
+            ->andWhere('i.dateEnd IS NULL')
+            ->setParameter('operator', $operator)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     /*
     public function findOneBySomeField($value): ?Issue
     {

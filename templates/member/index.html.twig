@@ -4,7 +4,7 @@
 {% block sidebar %}
     <li class="nav-item">
         <a class="nav-link {% if isActiveDash is defined and isActiveDash is not null %}active{% endif %}"
-           href="{{ path('member_index') }}"><i class="fas fa-wrench"></i> Pannes en cours</a>
+           href="{{ path('member_index') }}"><i class="fas fa-wrench"></i> Pannes en cours {{ render(controller('App\\Controller\\IssueController::countUserOpenIssues')) }}</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}"
