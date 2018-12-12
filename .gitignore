@@ -1,4 +1,3 @@
-###> symfony/framework-bundle ###
 /.env
 /public/bundles/
 /var/
@@ -15,4 +14,6 @@
 ###< symfony/web-server-bundle ###
 
 "/node_modules"
+.htaccess
+composer.phar
 security.yaml
