@@ -25,6 +25,11 @@
                         settings.on_select_callback($this, event, ui);
                     }
                 },
+                focus: function(event, ui) {
+                    event.preventDefault();
+                    $(this).val(ui.item.label);
+                },
+
                 minLength: settings.min_length
                 
             });
