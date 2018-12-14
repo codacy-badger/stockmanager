@@ -20,11 +20,16 @@
                     <th>Materiel</th>
                     <th>Materiel de remplacement</th>
                     <th><i class="fas fa-bus-alt"></i> Exploitant</th>
-                    <th>Date</th>
+                    <th>Date Création</th>
+                    {% if status == 'end' %}
+                        <th>Date fin</th>
+                    {% endif %}
                     <th>Symptomes</th>
                     <th>Description</th>
                     <th>Statut</th>
-                    <th>Action</th>
+                    {% if status != 'end' %}
+                        <th>Action</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -107,6 +112,10 @@
                         {#date column#}
                         <td>{{ issue.dateRequest | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
 
+                        {#end date#}
+                        {% if status == 'end' %}
+                            <td>{{ issue.dateEnd | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
+                        {% endif %}
                         {#symptom column#}
                         <td>
                             <ul>
@@ -148,63 +157,67 @@
                         </td>
 
                         {#actions column#}
-                        <td>
+                        {% if status != 'end' %}
+                            <td>
 
-                            {% if status == 'new' %}
-                                <form action="{{ path('issue_setChecked', {'id': issue.id}) }}"
-                                      method="post">
-                                    <input type="hidden" name="token" value="{{ csrf_token('check-issue-check') }}"/>
-                                    <button type="submit" class="btn btn-sm btn-primary"><i
-                                                class="fas fa-check-square"></i> Prendre en compte
-                                    </button>
-                                </form>
-                            {% elseif status == 'check' %}
-                                {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
-                                    <form action="{{ path('issue_setReadyWithoutReplace', {'id': issue.id}) }}"
+                                {% if status == 'new' %}
+                                    <form action="{{ path('issue_setChecked', {'id': issue.id}) }}"
                                           method="post">
                                         <input type="hidden" name="token"
-                                               value="{{ csrf_token('check-issue-ready-without-replace') }}"/>
+                                               value="{{ csrf_token('check-issue-check') }}"/>
                                         <button type="submit" class="btn btn-sm btn-primary"><i
-                                                    class="fas fa-check-square"></i> Valider
+                                                    class="fas fa-check-square"></i> Prendre en compte
                                         </button>
                                     </form>
-                                {% else %}
-                                    <form action="{{ path('issue_setReady', {'id': issue.id}) }}"
-                                          method="post">
-                                        <input type="hidden" name="token"
-                                               value="{{ csrf_token('check-issue-ready') }}"/>
-                                        <button type="submit" class="btn btn-sm btn-primary"><i
-                                                    class="fas fa-check-square"></i> Affecter un équipement de
-                                            remplacement
-                                        </button>
-                                    </form>
-                                {% endif %}
-                            {% elseif status == 'ready' %}
-                                <div class="d-flex flex-column">
-                                    <div>
-                                        <form action="{{ path('issue_edit', {'id': issue.id}) }}"
-                                              method="post">
-                                            <input type="hidden" name="token" value="{{ csrf_token('edit-issue') }}"/>
-                                            <button type="submit" class="btn btn-sm btn-warning"><i
-                                                        class="far fa-edit"></i> Modifier
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="pt-1">
-                                        <form action="{{ path('issue_setEnd', {'id': issue.id}) }}"
+                                {% elseif status == 'check' %}
+                                    {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
+                                        <form action="{{ path('issue_setReadyWithoutReplace', {'id': issue.id}) }}"
                                               method="post">
                                             <input type="hidden" name="token"
-                                                   value="{{ csrf_token('check-issue-end') }}"/>
+                                                   value="{{ csrf_token('check-issue-ready-without-replace') }}"/>
                                             <button type="submit" class="btn btn-sm btn-primary"><i
-                                                        class="fas fa-check-square"></i> Terminer
+                                                        class="fas fa-check-square"></i> Valider
                                             </button>
                                         </form>
+                                    {% else %}
+                                        <form action="{{ path('issue_setReady', {'id': issue.id}) }}"
+                                              method="post">
+                                            <input type="hidden" name="token"
+                                                   value="{{ csrf_token('check-issue-ready') }}"/>
+                                            <button type="submit" class="btn btn-sm btn-primary"><i
+                                                        class="fas fa-check-square"></i> Affecter un équipement de
+                                                remplacement
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                {% elseif status == 'ready' %}
+                                    <div class="d-flex flex-column">
+                                        <div>
+                                            <form action="{{ path('issue_edit', {'id': issue.id}) }}"
+                                                  method="post">
+                                                <input type="hidden" name="token"
+                                                       value="{{ csrf_token('edit-issue') }}"/>
+                                                <button type="submit" class="btn btn-sm btn-warning"><i
+                                                            class="far fa-edit"></i> Modifier
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="pt-1">
+                                            <form action="{{ path('issue_setEnd', {'id': issue.id}) }}"
+                                                  method="post">
+                                                <input type="hidden" name="token"
+                                                       value="{{ csrf_token('check-issue-end') }}"/>
+                                                <button type="submit" class="btn btn-sm btn-primary"><i
+                                                            class="fas fa-check-square"></i> Terminer
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
 
-                            {% endif %}
+                                {% endif %}
 
-                        </td>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% else %}
                     <tr>
