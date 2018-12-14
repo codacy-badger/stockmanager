@@ -30,7 +30,10 @@ class UserRepository extends ServiceEntityRepository
             ->leftJoin('u.issues', 'i')
             ->addSelect('i')
             ->where('i.dateMessage is null')
-            ->andWhere('i.dateReady is not null');
+            ->andWhere('i.dateReady is not null')
+
+        ;
+
 
         return $qr->getQuery()->getResult();
     }

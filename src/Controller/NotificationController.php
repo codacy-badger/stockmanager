@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Issue;
+use App\Entity\Operator;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,11 +17,11 @@ class NotificationController extends AbstractController
     public function index()
     {
 
-        $users = $this->getDoctrine()->getRepository(User::class)->countNotSendedNotification();
+        $operators = $this->getDoctrine()->getRepository(Operator::class)->getOperatorWithNonNotifiedIssues();
 
 
         return $this->render('admin/notification/index.html.twig', [
-            'users' => $users,
+            'operators' => $operators,
         ]);
     }
 
