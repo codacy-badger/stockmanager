@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Delivery;
 use App\Entity\Operator;
-use App\Entity\User;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,15 +17,24 @@ class DeliveryController extends Controller
 {
 
     /**
-     * @Route("/index", name="delivery_index", methods="GET|POST")
+     * @Route("/index", name="delivery_index")
      */
     public function index()
     {
+        $deliveries = $this->getDoctrine()->getRepository(Delivery::class)->findAll();
 
+        return $this->render('admin/delivery/index.html.twig', [
+            'deliveries' => $deliveries
+        ]);
     }
 
     /**
+     * Generate a pdf delivery file and persist object delivery
+     *
      * @Route("/generate/{id}", name="delivery_generate", methods="GET|POST")
+     * @param Request $request
+     * @param Operator $operator
+     * @throws \Exception
      */
     public function generate(Request $request, Operator $operator)
     {
@@ -37,6 +46,25 @@ class DeliveryController extends Controller
 
             //get user with only non notified issues from user repository
             $myOperator = $this->getDoctrine()->getRepository(Operator::class)->getOneOperatorWithNonNotifedIssues($operator);
+
+
+            //delivery object
+            $delivery = new Delivery();
+            $date = new \DateTime();
+
+            $delivery->setDateCreation($date);
+
+            foreach ($myOperator->getUsers() as $user) {
+                foreach ($user->getIssues() as $issue) {
+                    $delivery->addIssue($issue);
+                    $issue->setDelivery($delivery);
+                }
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($delivery);
+            $em->flush();
+
 
             // Configure Dompdf according to your needs
             $pdfOptions = new Options();
@@ -62,6 +90,7 @@ class DeliveryController extends Controller
             $html = $this->renderView('admin/delivery/pdf.html.twig', [
                 'title' => "Bon de livraison",
                 'operator' => $myOperator,
+                'delivery' => $delivery
             ]);
 
             // Load HTML to Dompdf

@@ -1,0 +1,37 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Bons de livraisons{% endblock %}
+
+{% block body %}
+    <h1>Bons de livraisons</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Nombre de tickets</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for delivery in deliveries %}
+            <tr>
+                <td>{{ delivery.id }}</td>
+                <td>{{ delivery.dateCreation | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
+                <td>
+                    {{ delivery.issues.count }}
+                </td>
+                <td>
+                    rien
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Pas de données</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
