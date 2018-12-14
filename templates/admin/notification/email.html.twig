@@ -22,20 +22,21 @@
         <th>Numéro de série d'équipement remplaçant</th>
 
     </tr>
-
-    {% for issue in user.issues %}
-        <tr>
-            <td>{{ issue.equipment.brand.category.name }}</td>
-            <td>{{ issue.equipment.brand.name }}</td>
-            <td>{{ issue.equipment.serial }}</td>
-            <td>
-                {% if issue.equipmentReplace is null %}
-                    Non affecté
-                {% else %}
-                    {{ issue.equipmentReplace.serial }}
-                {% endif %}
-            </td>
-        </tr>
+    {% for user in operator.users %}
+        {% for issue in user.issues %}
+            <tr>
+                <td>{{ issue.equipment.brand.category.name }}</td>
+                <td>{{ issue.equipment.brand.name }}</td>
+                <td>{{ issue.equipment.serial }}</td>
+                <td>
+                    {% if issue.equipmentReplace is null %}
+                        Non affecté
+                    {% else %}
+                        {{ issue.equipmentReplace.serial }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
     {% endfor %}
 
 </table>
