@@ -12,33 +12,40 @@
                 <thead>
 
                 <tr>
-                    <th>Prénom</th>
-                    <th>Nom</th>
                     <th>Exploitant</th>
                     <th>Nombre de tickets non notifiés</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
 
-                {% for user in users %}
+                {% for operator in operators %}
                     <tr>
-
-                        <td>{{ user.firstname }}</td>
-                        <td>{{ user.lastname }}</td>
-                        <td>{{ user.operator.name }}</td>
+                        <td>{{ operator.name }}</td>
                         <td>
-                            {{ user.issues.count }}
+                            {#count the numr of issues#}
+                            {% set count = 0 %}
+                            {% for user in operator.users %}
+                                {% for issue in user.issues %}
+                                    {% set count = count + 1 %}
+                                {% endfor %}
+                            {% endfor %}
+                            {{ count }}
                         </td>
 
                         <td class="d-flex">
-                            <form action="{{ path('delivery_generate', {'id': user.id }) }}" method="post">
+                            <form action="{{ path('delivery_generate', {'id': operator.id }) }}" method="post">
                                 <input type="hidden" name="token" value="{{ csrf_token('delivery-generate') }}">
-                                <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-truck"></i> Bon de livraison</button>
+                                <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-truck"></i> Bon de
+                                    livraison
+                                </button>
                             </form>
-                            <form class="ml-1" action="{{ path('notification_send', {'id': user.id }) }}" method="post">
+                            <form class="ml-1" action="{{ path('notification_send', {'id': operator.id }) }}"
+                                  method="post">
                                 <input type="hidden" name="token" value="{{ csrf_token('send-notification') }}">
-                                <button type="submit" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Envoyer</button>
+                                <button type="submit" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i>
+                                    Envoyer
+                                </button>
                             </form>
                         </td>
                     </tr>

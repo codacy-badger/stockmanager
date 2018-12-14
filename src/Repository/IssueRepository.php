@@ -184,6 +184,20 @@ class IssueRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+
+    public function getNonNotifed()
+    {
+
+        return $qr = $this->createQueryBuilder('i')
+            ->leftJoin('i.user', 'u')
+            ->addSelect('u')
+            ->where('i.dateMessage is null')
+            ->andWhere('i.dateReady is not null')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Issue
     {

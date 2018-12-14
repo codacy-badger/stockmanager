@@ -19,6 +19,36 @@ class OperatorRepository extends ServiceEntityRepository
         parent::__construct($registry, Operator::class);
     }
 
+
+    public function getOperatorWithNonNotifiedIssues()
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.users', 'u')
+            ->addSelect('u')
+            ->leftJoin('u.issues', 'i')
+            ->addSelect('i')
+            ->where('i.dateMessage is null')
+            ->andWhere('i.dateReady is not null')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getOneOperatorWithNonNotifedIssues(Operator $operator)
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.users', 'u')
+            ->addSelect('u')
+            ->leftJoin('u.issues', 'i')
+            ->addSelect('i')
+            ->where('i.dateMessage is null')
+            ->andWhere('i.dateReady is not null')
+            ->andWhere('o.id = :id')
+            ->setParameter('id', $operator->getId())
+            ->getQuery()
+            ->getSingleResult()
+            ;
+    }
+
 //    /**
 //     * @return Operator[] Returns an array of Operator objects
 //     */
