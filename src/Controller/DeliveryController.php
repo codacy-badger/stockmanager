@@ -37,7 +37,6 @@ class DeliveryController extends Controller
 
             //get user with only non notified issues from user repository
             $myOperator = $this->getDoctrine()->getRepository(Operator::class)->getOneOperatorWithNonNotifedIssues($operator);
-            dump($myOperator);
 
             // Configure Dompdf according to your needs
             $pdfOptions = new Options();
