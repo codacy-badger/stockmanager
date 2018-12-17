@@ -10,6 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>Serial</th>
+                <th>Contrat</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -18,6 +19,7 @@
             <tr>
                 <td>{{ equipment.id }}</td>
                 <td>{{ equipment.serial }}</td>
+                <td>{{ equipment.contract.name}}</td>
                 <td>
                     <a href="{{ path('equipment_show', {'id': equipment.id}) }}">show</a>
                     <a href="{{ path('equipment_edit', {'id': equipment.id}) }}">edit</a>
