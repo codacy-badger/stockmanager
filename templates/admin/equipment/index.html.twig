@@ -3,7 +3,7 @@
 {% block title %}Equipment index{% endblock %}
 
 {% block body %}
-    <h1>Equipment index</h1>
+    <h1>Equipements</h1>
 
     <table class="table">
         <thead>
@@ -25,17 +25,17 @@
                 <td>{{ equipment.serial }}</td>
                 <td>{{ equipment.contract.name}}</td>
                 <td>
-                    <a href="{{ path('equipment_show', {'id': equipment.id}) }}">show</a>
-                    <a href="{{ path('equipment_edit', {'id': equipment.id}) }}">edit</a>
+                    <a href="{{ path('equipment_show', {'id': equipment.id}) }}">Voir</a>
+                    <a href="{{ path('equipment_edit', {'id': equipment.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Pas d'enregistrements</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('equipment_new') }}">Create new</a>
+    <a href="{{ path('equipment_new') }}">Créer</a>
 {% endblock %}

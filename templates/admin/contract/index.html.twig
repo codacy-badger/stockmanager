@@ -1,9 +1,9 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}Contract index{% endblock %}
+{% block title %}Contrats{% endblock %}
 
 {% block body %}
-    <h1>Contract index</h1>
+    <h1>Contrats</h1>
 
     <table class="table">
         <thead>
@@ -25,11 +25,11 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Pas d'enregistrement</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('contract_new') }}">Create new</a>
+    <a href="{{ path('contract_new') }}">Créer</a>
 {% endblock %}
