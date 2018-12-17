@@ -11,6 +11,7 @@
             <th>Id</th>
             <th>Date</th>
             <th>Nombre de tickets</th>
+            <th>Exploitant</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -23,7 +24,21 @@
                     {{ delivery.issues.count }}
                 </td>
                 <td>
-                    rien
+                    {% for issue in delivery.issues %}
+                        {% if loop.first %}
+                            {{ issue.user.operator.name }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    <form action="{{ path('delivery_export', {'id': delivery.id}) }}"
+                          method="post">
+                        <input type="hidden" name="token"
+                               value="{{ csrf_token('delivery-export') }}"/>
+                        <button type="submit" class="btn btn-sm btn-warning"><i
+                                    class="far fa-edit"></i> Exporter
+                        </button>
+                    </form>
                 </td>
             </tr>
         {% else %}
