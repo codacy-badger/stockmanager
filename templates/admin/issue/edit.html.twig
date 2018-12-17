@@ -3,9 +3,14 @@
 {% block title %}Modifier le numéro de série{% endblock %}
 
 {% block body %}
-    <h1>Modifier le numéro de série</h1>
-
-    {{ include('admin/issue/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="col-6 mx-auto mt-3">
+        <div class="card">
+            <h4 class="card-header">Modifier le numéro de série</h4>
+            <div class="card-body">
+                {{ include('admin/issue/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 {% block javascripts %}
