@@ -9,6 +9,8 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Catégorie</th>
+                <th>Modèle</th>
                 <th>Serial</th>
                 <th>Contrat</th>
                 <th>actions</th>
@@ -18,6 +20,8 @@
         {% for equipment in equipment %}
             <tr>
                 <td>{{ equipment.id }}</td>
+                <td>{{ equipment.brand.category.name }}</td>
+                <td>{{ equipment.brand.name }}</td>
                 <td>{{ equipment.serial }}</td>
                 <td>{{ equipment.contract.name}}</td>
                 <td>
