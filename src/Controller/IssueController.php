@@ -28,14 +28,6 @@ class IssueController extends AbstractController
         return $this->render('admin/issue/index.html.twig', ['issues' => $issueRepository->findAll()]);
     }
 
-    /**
-     * @Route("admin/issue/get-opened-issues-by-operator", name="issue_getIssueByOperator")
-     */
-    public function getIssuesByOperator()
-    {
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->findAll();
-    }
-
 
     /**
      * Create an issue
