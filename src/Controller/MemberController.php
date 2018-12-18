@@ -163,7 +163,7 @@ class MemberController extends AbstractController
                 $equipmentReplaceSerial = $issue->getEquipmentReplace()->getSerial();
             }
 
-            $sheet->setCellValue('A' . $i, $issue->getEquipment()->getId());
+            $sheet->setCellValue('A' . $i, $issue->getId());
             $sheet->setCellValue('B' . $i, $issue->getEquipment()->getSerial());
             $sheet->setCellValue('C' . $i, $equipmentReplaceSerial);
             $sheet->setCellValue('D' . $i, $issue->getEquipment()->getBrand()->getCategory()->getName());
