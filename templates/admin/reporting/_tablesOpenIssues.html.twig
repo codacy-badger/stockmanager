@@ -1,0 +1,30 @@
+<div class="card shadow">
+    <div class="card-header">
+    <h4>Pannes en cours par exploitants</h4>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <tr>
+                {% for operator in operators %}
+                    <th>
+                        {{ operator.name }}
+                    </th>
+
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for operator in operators %}
+                <td>
+                    {% set sum = 0 %}
+                    {% for user in operator.users %}
+                        {% set sum = sum + user.issues.count %}
+                    {% endfor %}
+                    {{ sum }}
+                </td>
+                {% endfor %}
+        </table>
+    </div>
+
+
+</div>
+

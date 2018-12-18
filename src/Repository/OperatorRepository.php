@@ -49,6 +49,19 @@ class OperatorRepository extends ServiceEntityRepository
             ;
     }
 
+    public function getOperatorWithNotEndedIssues()
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.users', 'u')
+            ->addSelect('u')
+            ->innerJoin('u.issues', 'i')
+            ->addSelect('i')
+            ->where('i.dateEnd is null')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return Operator[] Returns an array of Operator objects
 //     */

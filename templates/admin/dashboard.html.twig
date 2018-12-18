@@ -4,4 +4,7 @@
     <div class="d-flex justify-content-around flex-wrap">
         {{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}
     </div>
+    <div class="mt-3">
+        {{ render(controller('App\\Controller\\ReportingController::getIssuesByOperator', {})) }}
+    </div>
 {% endblock %}
