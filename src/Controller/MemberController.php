@@ -121,7 +121,7 @@ class MemberController extends AbstractController
             'username' => $currentUser->getUsername()
         ]);
 
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperator($user->getOperator());
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->findByOperatorEnd($user->getOperator());
 
         // phpSpreadsheet part
         $spreadsheet = new Spreadsheet();
@@ -137,9 +137,11 @@ class MemberController extends AbstractController
         $sheet->setCellValue('C1', 'N° de série remplacement');
         $sheet->setCellValue('D1', 'Catégorie');
         $sheet->setCellValue('E1', 'Modèle');
-        $sheet->setCellValue('F1', 'Réseau de transport');
-        $sheet->setCellValue('G1', 'Date');
-        $sheet->setCellValue('H1', 'Symptomes');
+        $sheet->setCellValue('F1', 'Utilisateur');
+        $sheet->setCellValue('G1', 'Réseau de transport');
+        $sheet->setCellValue('H1', 'Date Création');
+        $sheet->setCellValue('I1', 'Date Fin');
+        $sheet->setCellValue('J1', 'Symptomes');
 
         //set table dynamic lines
         foreach ($issues as $issue) {
@@ -166,9 +168,11 @@ class MemberController extends AbstractController
             $sheet->setCellValue('C' . $i, $equipmentReplaceSerial);
             $sheet->setCellValue('D' . $i, $issue->getEquipment()->getBrand()->getCategory()->getName());
             $sheet->setCellValue('E' . $i, $issue->getEquipment()->getBrand()->getName());
-            $sheet->setCellValue('F' . $i, $issue->getTransportation()->getTradeName());
-            $sheet->setCellValue('G' . $i, $issue->getDateRequest()->setTimezone(new \DateTimeZone('Europe/Paris')));
-            $sheet->setCellValue('H' . $i, $allSymptoms);
+            $sheet->setCellValue('F' . $i, $issue->getUser()->getFirstname() . ' ' . $issue->getUser()->getLastname());
+            $sheet->setCellValue('G' . $i, $issue->getTransportation()->getTradeName());
+            $sheet->setCellValue('H' . $i, $issue->getDateRequest()->setTimezone(new \DateTimeZone('Europe/Paris')));
+            $sheet->setCellValue('I' . $i, $issue->getDateEnd() ? $issue->getDateEnd()->setTimeZone(new \DateTimeZone('Europe/Paris')) : 'aucune');
+            $sheet->setCellValue('J' . $i, $allSymptoms);
 
             $allSymptoms = null;
             $i++;

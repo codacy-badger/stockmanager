@@ -6,20 +6,20 @@
 
 {% block body %}
     <div class="card">
-        <h4 class="card-header">Pannes en cours</h4>
+        <h4 class="card-header"><i class="fas fa-wrench"></i> Pannes en cours</h4>
         <div class="card-body">
 
             <table class="table table-striped table-bordered table-sm">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Materiel en panne</th>
-                    <th>Materiel de remplacement</th>
-                    <th>Réseau de transport</th>
-                    <th>Date</th>
-                    <th>Symptomes</th>
-                    <th style="width: 16%">Descriptions</th>
-                    <th>Statut</th>
+                    <th><i class="fas fa-upload"></i> Materiel en panne</th>
+                    <th><i class="fas fa-download"></i> Materiel de remplacement</th>
+                    <th><i class="fas fa-id-card"></i> Utilisateur</th>
+                    <th><i class="fas fa-clock"></i> Date création</th>
+                    <th><i class="fas fa-briefcase-medical"></i> Symptomes</th>
+                    <th style="width: 16%"><i class="fas fa-pencil-alt"></i> Description</th>
+                    <th><i class="fas fa-thermometer-half"></i> Statut</th>
 
 
                 </tr>
@@ -79,8 +79,21 @@
                             </div>
                         </td>
 
-                        {#transportation column#}
-                        <td>{{ issue.transportation.tradeName }}</td>
+                        {#operator column#}
+                        <td>
+                            <div class="dflex flex-column">
+                                <div>
+                                    <span class="badge badge-secondary">{{ issue.user.operator.name }}</span>
+                                </div>
+                                <div class="small">
+                                    {{ issue.user.firstname }} {{ issue.user.lastname }}
+                                </div>
+                                <div class="small">
+                                    {{ issue.transportation.tradeName }}
+                                </div>
+                            </div>
+                        </td>
+
 
                         {#date column#}
                         <td>{{ issue.dateRequest | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
