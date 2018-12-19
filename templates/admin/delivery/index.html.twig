@@ -1,11 +1,11 @@
 {% extends 'admin/index.html.twig' %}
 
 {% block title %}Bons de livraisons{% endblock %}
-
+{% block isActiveDelivery %}active{% endblock %}
 {% block body %}
-    <h1>Bons de livraisons</h1>
+    <h1><i class="fas fa-truck"></i> Bons de livraisons</h1>
 
-    <table class="table">
+    <table class="table table-sm">
         <thead>
         <tr>
             <th>Id</th>
@@ -35,8 +35,7 @@
                           method="post">
                         <input type="hidden" name="token"
                                value="{{ csrf_token('delivery-export') }}"/>
-                        <button type="submit" class="btn btn-sm btn-warning"><i
-                                    class="far fa-edit"></i> Exporter
+                        <button type="submit" class="btn btn-sm btn-warning"><i class="fas fa-file-export"></i> Exporter
                         </button>
                     </form>
                 </td>

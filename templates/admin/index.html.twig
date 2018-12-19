@@ -4,15 +4,16 @@
 
 {% block sidebar %}
     <li class="nav-item">
-        <a class="nav-link {% if isActiveDash is defined and isActiveDash is not null %}active{% endif %}"
-           href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de bord {{ render(controller('App\\Controller\\IssueController::countAllOpenIssues')) }}</a>
+        <a class="nav-link {% block isActiveDash %}{% endblock %}"
+           href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de
+            bord {{ render(controller('App\\Controller\\IssueController::countAllOpenIssues')) }}</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}"
+        <a class="nav-link {% block isActiveNotifications %}{% endblock %}"
            href="{{ path('notification_index') }}"><i class="fas fa-envelope"></i> Notifications</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {% if isActiveNew is defined and isActiveNew is not null %}active{% endif %}"
+        <a class="nav-link {% block isActiveDelivery %}{% endblock %}"
            href="{{ path('delivery_index') }}"><i class="fas fa-truck"></i> Bons de livraisons</a>
     </li>
 

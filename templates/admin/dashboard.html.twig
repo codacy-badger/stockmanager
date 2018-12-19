@@ -1,13 +1,15 @@
 {% extends 'admin/index.html.twig' %}
-
+{% block isActiveDash %}
+    active
+{% endblock %}
 {% block body %}
 
     <div class="d-flex justify-content-around flex-wrap">
 
 
-            {{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}
+        {{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}
 
-            {{ render(controller('App\\Controller\\ReportingController::getIssuesByOperator', {})) }}
+        {{ render(controller('App\\Controller\\ReportingController::getIssuesByOperator', {})) }}
 
     </div>
 {% endblock %}

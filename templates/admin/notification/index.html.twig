@@ -1,59 +1,58 @@
 {% extends 'admin/index.html.twig' %}
 
 {% block title %}Notifications{% endblock %}
-
+{% block isActiveNotifications %}
+    active
+{% endblock %}
 {% block body %}
-    <div class="card">
 
-        <h4 class="card-header">Exploitants en attente de notification de livraison</h4>
-        <div class="card-body">
 
-            <table class="table table-striped table-bordered table-sm">
-                <thead>
+    <h1>Exploitants en attente de notification de livraison</h1>
 
-                <tr>
-                    <th>Exploitant</th>
-                    <th>Nombre de tickets non notifiés</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th>Exploitant</th>
+            <th>Nombre de tickets non notifiés</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
 
-                {% for operator in operators %}
-                    <tr>
-                        <td>{{ operator.name }}</td>
-                        <td>
-                            {#count the numr of issues#}
-                            {% set count = 0 %}
-                            {% for user in operator.users %}
-                                {% for issue in user.issues %}
-                                    {% set count = count + 1 %}
-                                {% endfor %}
-                            {% endfor %}
-                            {{ count }}
-                        </td>
+        {% for operator in operators %}
+            <tr>
+                <td>{{ operator.name }}</td>
+                <td>
+                    {#count the numr of issues#}
+                    {% set count = 0 %}
+                    {% for user in operator.users %}
+                        {% for issue in user.issues %}
+                            {% set count = count + 1 %}
+                        {% endfor %}
+                    {% endfor %}
+                    {{ count }}
+                </td>
 
-                        <td class="d-flex">
-                            <form action="{{ path('delivery_generate', {'id': operator.id }) }}" method="post">
-                                <input type="hidden" name="token" value="{{ csrf_token('delivery-generate') }}">
-                                <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-truck"></i> Générer
-                                    bon de livraison
-                                </button>
-                            </form>
-                            <form class="ml-1" action="{{ path('notification_send', {'id': operator.id }) }}"
-                                  method="post">
-                                <input type="hidden" name="token" value="{{ csrf_token('send-notification') }}">
-                                <button type="submit" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i>
-                                    Envoyer
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
+                <td class="d-flex">
+                    <form action="{{ path('delivery_generate', {'id': operator.id }) }}" method="post">
+                        <input type="hidden" name="token" value="{{ csrf_token('delivery-generate') }}">
+                        <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-truck"></i> Générer
+                            bon de livraison
+                        </button>
+                    </form>
+                    <form class="ml-1" action="{{ path('notification_send', {'id': operator.id }) }}"
+                          method="post">
+                        <input type="hidden" name="token" value="{{ csrf_token('send-notification') }}">
+                        <button type="submit" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i>
+                            Envoyer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
 
-                </tbody>
-            </table>
-        </div>
-    </div>
+        </tbody>
+    </table>
+
 
 {% endblock %}
