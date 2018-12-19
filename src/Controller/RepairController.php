@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Contract;
+use App\Entity\Issue;
 use App\Entity\Repair;
 use App\Form\RepairType;
 use App\Repository\RepairRepository;
@@ -20,7 +22,15 @@ class RepairController extends AbstractController
      */
     public function index(RepairRepository $repairRepository): Response
     {
-        return $this->render('admin/repair/index.html.twig', ['repairs' => $repairRepository->findAll()]);
+        //        cerate new object contract to get the constant and send it into view
+        $contract = new Contract();
+
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->getEnd();
+
+        return $this->render('admin/repair/index.html.twig', [
+            'issues' => $issues,
+            'contract' => $contract
+        ]);
     }
 
     /**

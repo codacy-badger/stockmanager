@@ -1,39 +1,92 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/index.html.twig' %}
 
-{% block title %}Repair index{% endblock %}
-
+{% block title %}Réparations{% endblock %}
+{% block isActiveRepair %}active{% endblock %}
 {% block body %}
-    <h1>Repair index</h1>
+    <div class="card">
+        <div class="card-header">
+            Equipements en pannes non traités
+        </div>
+        <div class="card-body">
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Equipement</th>
+                    <th>Provenance</th>
+                    <th>Date arrivée</th>
+                    <th>Symptomes client</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>StartDate</th>
-                <th>EndDate</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for repair in repairs %}
-            <tr>
-                <td>{{ repair.id }}</td>
-                <td>{{ repair.startDate ? repair.startDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ repair.endDate ? repair.endDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ repair.description }}</td>
-                <td>
-                    <a href="{{ path('repair_show', {'id': repair.id}) }}">show</a>
-                    <a href="{{ path('repair_edit', {'id': repair.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                {% for issue in issues %}
+                    <tr>
 
-    <a href="{{ path('repair_new') }}">Create new</a>
+                        {#equipment column#}
+                        <td>
+                            <div class="d-flex">
+                                <img class="img-circle" data-toggle="tooltip" data-placement="top"
+                                     title="{{ issue.equipment.brand.category.name }}" width="50"
+                                     height="50"
+                                     src="{{ asset(issue.equipment.brand.category.image.url) }}"
+                                     alt="{{ issue.equipment.brand.category.image.alt }}">
+                                <div class="d-flex flex-column">
+                                    <div class="small">
+                                        <b>Catégorie:</b> {{ issue.equipment.brand.category.name }}
+                                    </div>
+                                    <div class="small">
+                                        <b>Modèle:</b> {{ issue.equipment.brand.name }}
+                                    </div>
+                                    <div class="small">
+                                        <b>N° Serie:</b> {{ issue.equipment.serial }}
+                                    </div>
+                                    {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
+                                        <div>
+                                        <span class="badge badge-info badge-pill">
+                                         Contrat: {{ issue.equipment.contract.name }}
+                                        </span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+
+                        {#comming from column#}
+                        <td>
+                            <div class="dflex flex-column">
+                                <div>
+                                    <span class="badge badge-secondary">{{ issue.user.operator.name }}</span>
+                                </div>
+                                <div class="small">
+                                    {{ issue.user.firstname }} {{ issue.user.lastname }}
+                                </div>
+                                <div class="small">
+                                    {{ issue.transportation.tradeName }}
+                                </div>
+                            </div>
+                        </td>
+
+                        {#arrival date#}
+
+                            <td>{{ issue.dateEnd | date("d/m/Y", "Europe/Paris") }}</td>
+
+
+
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    {#{{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}#}
+
+    {#{{ render(controller('App\\Controller\\ReportingController::getIssuesByOperator', {})) }}#}
+
+
 {% endblock %}
