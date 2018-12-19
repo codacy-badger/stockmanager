@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Issue;
 use App\Entity\Transportation;
 use App\Repository\TransportationRepository;
+use Doctrine\ORM\EntityRepository;
 use PUGX\AutocompleterBundle\Form\Type\AutocompleteType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -31,6 +32,10 @@ class IssueType extends AbstractType
                 'class' => 'App\Entity\Symptom',
                 'label' => 'Problems found',
                 'translation_domain' => 'messages',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                        ->orderBy('s.position', 'ASC');
+                },
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true,
