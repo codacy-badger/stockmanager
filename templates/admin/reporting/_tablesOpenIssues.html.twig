@@ -1,37 +1,22 @@
-<div class="card shadow">
+<div class="card shadow" style="width: 15rem;">
     <div class="card-header">
-        <h4><i class="fas fa-tools"></i> Tickets en cours par exploitants</h4>
+        <h5><i class="fas fa-tools"></i> Tickets en cours par exploitants</h5>
     </div>
     <div class="card-body">
-        <table class="table">
-            <tr>
-                {% for operator in operators %}
-                    <th>
-                        {{ operator.name }}
-                    </th>
-                {% else %}
-                    <th>
-                        Pas d'enregistrements
-                    </th>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for operator in operators %}
-                    <td>
-                        {% set sum = 0 %}
-                        {% for user in operator.users %}
-                            {% set sum = sum + user.issues.count %}
-                        {% endfor %}
-                        {{ sum }}
-                    </td>
-                {% else %}
-                    <td>
-                        Pas d'enregistrements
-                    </td>
-                {% endfor %}
-        </table>
+        {% for operator in operators %}
+        <div class="d-flex flex-column">
+            <h5><span class="badge badge-secondary">{{ operator.name }}
+                    {% set sum = 0 %}
+                    {% for user in operator.users %}
+                        {% set sum = sum + user.issues.count %}
+                    {% endfor %}
+                    <span class="badge badge-light">{{ sum }}</span>
+                    </span></h5>
+
+            {% else %}
+                Pas d'enregistrements
+            {% endfor %}
+        </div>
     </div>
-
-
 </div>
 
