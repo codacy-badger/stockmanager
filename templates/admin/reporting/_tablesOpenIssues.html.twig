@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
         {% for operator in operators %}
-        <div class="d-flex flex-column">
+        <div class="d-flex justify-content-around flex-wrap">
             <h5><span class="badge badge-secondary">{{ operator.name }}
                     {% set sum = 0 %}
                     {% for user in operator.users %}
