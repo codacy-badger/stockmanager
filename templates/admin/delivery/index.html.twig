@@ -19,7 +19,7 @@
         {% for delivery in deliveries %}
             <tr>
                 <td>{{ delivery.id }}</td>
-                <td>{{ delivery.dateCreation | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
+                <td>{{ delivery.dateCreation | date("d/m/Y", "Europe/Paris") }}</td>
                 <td>
                     {{ delivery.issues.count }}
                 </td>
