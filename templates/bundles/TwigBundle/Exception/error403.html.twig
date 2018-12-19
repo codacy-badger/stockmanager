@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Accès non autorisé</h1>
+
+    <p>
+        La page demandée n'existe pas. Vérifiez votre URL ou <a href="{{ path('member_index') }}">revenir à la page
+            principale</a>.
+    </p>
+{% endblock %}
