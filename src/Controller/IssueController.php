@@ -108,6 +108,7 @@ class IssueController extends AbstractController
      */
     public function showByStatus($status)
     {
+//        create new object contract to get the constant and send it into view
         $contract = new Contract();
 
         if ($status == 'new') {

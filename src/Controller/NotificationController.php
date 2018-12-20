@@ -51,10 +51,21 @@ class NotificationController extends AbstractController
 
             }
 
+            //get all technicians
+            $technicians = $this->getDoctrine()->getRepository(User::class)->getTechnicians();
+
+            $emails = [];
+            //get all emails from technicians
+            foreach ($technicians as $technician) {
+                $emails[] = $technician->getEmail();
+            }
+
             //mail message
             $message = (new \Swift_Message('Equipements prêts, remplacement imminent'))
                 ->setFrom('send@exemple.com')
-                ->setTo($persons);
+                ->setTo($persons)
+                ->setCc($technicians)
+            ;
 
             $myLogo = $message->embed(\Swift_Image::fromPath('img/om.png'));
 

@@ -3,6 +3,9 @@
 {% block mainPath %}{{ path('admin_index') }}{% endblock %}
 
 {% block sidebar %}
+
+    {#returns section#}
+
     <li class="nav-item">
         <a class="nav-link {% block isActiveDash %}{% endblock %}"
            href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de
@@ -16,7 +19,24 @@
         <a class="nav-link {% block isActiveDelivery %}{% endblock %}"
            href="{{ path('delivery_index') }}"><i class="fas fa-truck"></i> Bons de livraisons</a>
     </li>
+    <div class="dropdown-divider"></div>
 
+    {#repair section#}
+
+    <li class="nav-item">
+        <a class="nav-link {% block isActiveRepair %}{% endblock %}"
+           href="{{ path('repair_index') }}"><i class="fas fa-wrench"></i> Réparations</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {% block isActivePart %}{% endblock %}"
+           href="{{ path('part_index') }}"><i class="fas fa-puzzle-piece"></i> Gestion des pièces détachées</a>
+    </li>
+
+
+
+    <div class="dropdown-divider"></div>
+    {#admin section#}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#pageSubmenu" id="navbarDropdown" role="button"
            data-toggle="collapse"
