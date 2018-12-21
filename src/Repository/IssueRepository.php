@@ -194,8 +194,7 @@ class IssueRepository extends ServiceEntityRepository
             ->where('i.dateMessage is null')
             ->andWhere('i.dateReady is not null')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function countNonNotifed()
@@ -208,10 +207,19 @@ class IssueRepository extends ServiceEntityRepository
             ->where('i.dateMessage is null')
             ->andWhere('i.dateReady is not null')
             ->getQuery()
-            ->getSingleScalarResult()
-            ;
+            ->getSingleScalarResult();
     }
 
+    public function getSymptoms()
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.symptoms', 's')
+            ->select('s.name, count(s.name)')
+            ->groupBy('s.name')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Issue
     {
