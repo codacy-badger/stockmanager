@@ -13,7 +13,8 @@
     </li>
     <li class="nav-item">
         <a class="nav-link {% block isActiveNotifications %}{% endblock %}"
-           href="{{ path('notification_index') }}"><i class="fas fa-envelope"></i> Notifications</a>
+           href="{{ path('notification_index') }}"><i class="fas fa-envelope"></i>
+            Notifications {{ render(controller('App\\Controller\\IssueController::countNonNotified')) }}</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% block isActiveDelivery %}{% endblock %}"

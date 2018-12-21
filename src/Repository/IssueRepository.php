@@ -137,15 +137,15 @@ class IssueRepository extends ServiceEntityRepository
     }
 
 
-    public function countNonNotified()
-    {
-        $qb = $this->createQueryBuilder('i');
-        $qb->select('i.user, count(i.id)')
-            ->andWhere('i.dateMessage is null')
-            ->groupBy('i.user');
-
-        return $qb->getQuery()->getResult();
-    }
+//    public function countNonNotified()
+//    {
+//        $qb = $this->createQueryBuilder('i');
+//        $qb->select('i.user, count(i.id)')
+//            ->andWhere('i.dateMessage is null')
+//            ->groupBy('i.user');
+//
+//        return $qb->getQuery()->getResult();
+//    }
 
 
     public function countEquipmentInProgress($equipment)
@@ -195,6 +195,20 @@ class IssueRepository extends ServiceEntityRepository
             ->andWhere('i.dateReady is not null')
             ->getQuery()
             ->getResult()
+            ;
+    }
+
+    public function countNonNotifed()
+    {
+
+        return $qr = $this->createQueryBuilder('i')
+            ->select('count(i)')
+//            ->leftJoin('i.user', 'u')
+//            ->addSelect('u')
+            ->where('i.dateMessage is null')
+            ->andWhere('i.dateReady is not null')
+            ->getQuery()
+            ->getSingleScalarResult()
             ;
     }
 

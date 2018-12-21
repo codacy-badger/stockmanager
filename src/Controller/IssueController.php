@@ -400,4 +400,17 @@ class IssueController extends AbstractController
 
     }
 
+    /**
+     * @Route("admin/issue/countNonNotified", name="issue_countNonNotified")
+     * @return Response
+     */
+    public function countNonNotified()
+    {
+        $number = $this->getDoctrine()->getRepository(Issue::class)->countNonNotifed();
+
+        return $this->render('admin/issue/_countNonNotifiedIssues.html.twig', [
+            'number' => $number
+        ]);
+    }
+
 }

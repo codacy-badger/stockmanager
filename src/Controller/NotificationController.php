@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Issue;
 use App\Entity\Operator;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -64,7 +63,7 @@ class NotificationController extends AbstractController
             $message = (new \Swift_Message('Equipements prêts, remplacement imminent'))
                 ->setFrom('send@exemple.com')
                 ->setTo($persons)
-                ->setCc($technicians)
+                ->setCc($emails)
             ;
 
             $myLogo = $message->embed(\Swift_Image::fromPath('img/om.png'));
