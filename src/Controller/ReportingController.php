@@ -33,24 +33,28 @@ class ReportingController extends AbstractController
         $symptoms = $this->getDoctrine()->getRepository(Issue::class)->getSymptoms();
 
         $pieChart = new PieChart();
+        $i = 0;
+        $table = [];
+
+        foreach ($symptoms as $symptom) {
+
+            if (!empty($symptom[$i]['name'])) {
+
+                $table = [$symptom[$i]['name'], intval([$symptom[$i][1]])];
+
+            }
+            $i++;
+
+        }
+
+        dump($table);
+
+
         $pieChart->getData()->setArrayToDataTable(
-            [
-
-                [$symptoms[0]['name'], $symptoms[0][1]],
-                [$symptoms[1]['name'], $symptoms[1][1]],
-                [$symptoms[2]['name'], $symptoms[2][1]],
-                [$symptoms[3]['name'], $symptoms[3][1]],
-                [$symptoms[4]['name'], $symptoms[4][1]],
-                [$symptoms[5]['name'], $symptoms[5][1]]
-
-
-            ]
+            $table
         );
 
 
-
-        return $this->render('admin/reporting/_pieSymptoms.html.twig', [
-            'piechart' => $pieChart
-        ]);
+        return $this->render('admin/reporting/_pieSymptoms.html.twig', ['piechart' => $pieChart]);
     }
 }
