@@ -186,7 +186,7 @@
     <table class="details">
         <tr>
             <th>Type de Materiel livré</th>
-            <th>Numéro de série</th>
+            <th>Numéro de série de l'équipement en panne</th>
         </tr>
         {% for user in operator.users %}
             {% for issue in user.issues %}
@@ -199,7 +199,7 @@
     </table>
     <table class="obs">
         <tr>
-            <th>Materiel remplacé</th>
+            <th>Materiel remplaçant</th>
         </tr>
         {% for user in operator.users %}
             {% for issue in user.issues %}

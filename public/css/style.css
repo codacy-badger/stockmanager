@@ -59,6 +59,11 @@ html {
     border-radius: 50%;
 }
 
+/*dashboard cards*/
+
+.dash, .card{
+    margin-top: 10px;
+}
 
 /*autocomplete*/
 
