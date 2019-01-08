@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Issue;
 use App\Entity\Operator;
-use CMEN\GoogleChartsBundle\GoogleCharts\Charts\ColumnChart;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,25 +32,24 @@ class ReportingController extends AbstractController
         $symptoms = $this->getDoctrine()->getRepository(Issue::class)->getSymptoms();
 
         $pieChart = new PieChart();
-        $i = 0;
         $table = [];
+        $i = 0;
 
-        foreach ($symptoms as $symptom) {
 
-            if (!empty($symptom[$i]['name'])) {
+        while ($i < 9) {
 
-                $table = [$symptom[$i]['name'], intval([$symptom[$i][1]])];
+            $adds = [
+                $symptoms[$i]['name'], (int)$symptoms[$i][1]
+            ];
 
-            }
+            $table[$i] = $adds;
+
             $i++;
 
         }
 
-        dump($table);
-
-
         $pieChart->getData()->setArrayToDataTable(
-            $table
+            $table, true
         );
 
 
