@@ -13,19 +13,19 @@
         </div>
         <div class="card-body">
 
-            <table class="table table-sm table-bordered">
+            <table class="table table-sm table-bordered d-block">
                 <thead>
                 <tr>
-                    <th>Id</th>
+                    <th class="d-none d-sm-table-cell">Id</th>
                     <th>Matériel</th>
-                    <th>Matériel de remplacement</th>
+                    <th class="d-none d-sm-table-cell">Matériel de remplacement</th>
                     <th><i class="fas fa-bus-alt"></i> Exploitant</th>
                     <th>Date Création</th>
                     {% if status == 'end' %}
                         <th>Date fin</th>
                     {% endif %}
-                    <th>Symptômes</th>
-                    <th>Description</th>
+                    <th class="d-none d-sm-table-cell">Symptômes</th>
+                    <th class="d-none d-sm-table-cell">Description</th>
                     <th>Statut</th>
                     {% if status != 'end' %}
                         <th>Action</th>
@@ -38,13 +38,13 @@
                     <tr>
 
                         {#id column#}
-                        <td>{{ issue.id }}</td>
+                        <td class="d-none d-sm-table-cell">{{ issue.id }}</td>
 
 
                         {#equipment column#}
                         <td>
                             <div class="d-flex">
-                                <img class="img-circle" data-toggle="tooltip" data-placement="top"
+                                <img class="img-circle d-none d-sm-block" data-toggle="tooltip" data-placement="top"
                                      title="{{ issue.equipment.brand.category.name }}" width="50"
                                      height="50"
                                      src="{{ asset(issue.equipment.brand.category.image.url) }}"
@@ -73,7 +73,7 @@
 
                         {#replacement equipment column#}
 
-                        <td>
+                        <td class="d-none d-sm-table-cell">
                             <div class="d-flex">
                                 <div>
                                     {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
@@ -117,7 +117,7 @@
                             <td>{{ issue.dateEnd | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
                         {% endif %}
                         {#symptom column#}
-                        <td>
+                        <td class="d-none d-sm-table-cell">
                             <ul>
                                 {% for symptom in issue.symptoms %}
                                     <li>{{ symptom.name }}</li>
@@ -126,7 +126,7 @@
                         </td>
 
                         {#descriptions column#}
-                        <td>{{ issue.description }}</td>
+                        <td class="d-none d-sm-table-cell">{{ issue.description }}</td>
 
                         {#Status column#}
                         <td>
