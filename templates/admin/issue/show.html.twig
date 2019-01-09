@@ -4,16 +4,11 @@
 
 {% block body %}
 
-
-    <card class="card">
-        <div class="card-header">
             <h4>
                 {% if status == 'new' %}Nouveaux tickets{% elseif status == 'check' %}Pris en compte{% elseif status == 'ready' %}Prêts{% else %}Traités{% endif %}
             </h4>
-        </div>
-        <div class="card-body">
 
-            <table class="table table-sm table-bordered d-block">
+            <table class="table table-sm table-bordered d-block table-striped">
                 <thead>
                 <tr>
                     <th class="d-none d-sm-table-cell">Id</th>
@@ -22,7 +17,7 @@
                     <th><i class="fas fa-bus-alt"></i> Exploitant</th>
                     <th>Date Création</th>
                     {% if status == 'end' %}
-                        <th>Date fin</th>
+                        <th class="d-none d-sm-block">Date fin</th>
                     {% endif %}
                     <th class="d-none d-sm-table-cell">Symptômes</th>
                     <th class="d-none d-sm-table-cell">Description</th>
@@ -50,7 +45,7 @@
                                      src="{{ asset(issue.equipment.brand.category.image.url) }}"
                                      alt="{{ issue.equipment.brand.category.image.alt }}">
                                 <div class="d-flex flex-column">
-                                    <div class="small">
+                                    <div class="small d-none d-sm-block">
                                         <b>Catégorie:</b> {{ issue.equipment.brand.category.name }}
                                     </div>
                                     <div class="small">
@@ -100,10 +95,10 @@
                                 <div>
                                     <span class="badge badge-secondary">{{ issue.user.operator.name }}</span>
                                 </div>
-                                <div class="small">
+                                <div class="small d-none d-sm-block">
                                     {{ issue.user.firstname }} {{ issue.user.lastname }}
                                 </div>
-                                <div class="small">
+                                <div class="small d-none d-sm-block">
                                     {{ issue.transportation.tradeName }}
                                 </div>
                             </div>
@@ -114,7 +109,7 @@
 
                         {#end date#}
                         {% if status == 'end' %}
-                            <td>{{ issue.dateEnd | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
+                            <td class="d-none d-sm-block">{{ issue.dateEnd | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
                         {% endif %}
                         {#symptom column#}
                         <td class="d-none d-sm-table-cell">
@@ -226,8 +221,8 @@
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </card>
+
+
 
 
 

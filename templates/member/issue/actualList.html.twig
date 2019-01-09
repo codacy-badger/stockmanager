@@ -5,20 +5,20 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card">
-        <h4 class="card-header"><i class="fas fa-wrench"></i> Pannes en cours</h4>
-        <div class="card-body">
+
+        <h4><i class="fas fa-wrench"></i> Pannes en cours</h4>
+
 
             <table class="table table-striped table-bordered table-sm">
                 <thead>
                 <tr>
-                    <th>Id</th>
+                    <th class="d-none d-sm-table-cell">Id</th>
                     <th><i class="fas fa-upload"></i> Matériel en panne</th>
-                    <th><i class="fas fa-download"></i> Matériel de remplacement</th>
-                    <th><i class="fas fa-id-card"></i> Utilisateur</th>
+                    <th class="d-none d-sm-table-cell"><i class="fas fa-download"></i> Matériel de remplacement</th>
+                    <th class="d-none d-sm-table-cell"><i class="fas fa-id-card"></i> Utilisateur</th>
                     <th><i class="fas fa-clock"></i> Date création</th>
-                    <th><i class="fas fa-briefcase-medical"></i> Symptômes</th>
-                    <th style="width: 16%"><i class="fas fa-pencil-alt"></i> Description</th>
+                    <th class="d-none d-sm-table-cell"><i class="fas fa-briefcase-medical"></i> Symptômes</th>
+                    <th class="d-none d-sm-table-cell" style="width: 16%"><i class="fas fa-pencil-alt"></i> Description</th>
                     <th><i class="fas fa-thermometer-half"></i> Statut</th>
 
 
@@ -27,12 +27,12 @@
                 <tbody>
                 {% for issue in issues %}
                     <tr>
-                        <td>{{ issue.id }}</td>
+                        <td class="d-none d-sm-table-cell">{{ issue.id }}</td>
 
                         {#equipment column#}
                         <td>
                             <div class="d-flex">
-                                <img class="img-circle" data-toggle="tooltip" data-placement="top"
+                                <img class="img-circle d-none d-sm-block" data-toggle="tooltip" data-placement="top"
                                      title="{{ issue.equipment.brand.category.name }}" width="50"
                                      height="50"
                                      src="{{ asset(issue.equipment.brand.category.image.url) }}"
@@ -41,7 +41,7 @@
                                     <div>
                                         <b>Catégorie:</b> {{ issue.equipment.brand.category.name }}
                                     </div>
-                                    <div>
+                                    <div class="d-none d-sm-block">
                                         <b>Modèle:</b> {{ issue.equipment.brand.name }}
                                     </div>
                                     <div>
@@ -59,7 +59,7 @@
                         </td>
 
                         {#replacement equipment column#}
-                        <td>
+                        <td class="d-none d-sm-table-cell">
                             <div class="d-flex">
                                 <div>
                                     {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
@@ -80,7 +80,7 @@
                         </td>
 
                         {#operator column#}
-                        <td>
+                        <td class="d-none d-sm-table-cell">
                             <div class="dflex flex-column">
                                 <div>
                                     <span class="badge badge-secondary">{{ issue.user.operator.name }}</span>
@@ -99,7 +99,7 @@
                         <td>{{ issue.dateRequest | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
 
                         {#symptom column#}
-                        <td>
+                        <td class="d-none d-sm-table-cell">
                             <ul>
                                 {% for symptom in issue.symptoms %}
                                     <li>{{ symptom.name }}</li>
@@ -108,7 +108,7 @@
                         </td>
 
                         {#descriptions column#}
-                        <td>{{ issue.description }}</td>
+                        <td class="d-none d-sm-table-cell">{{ issue.description }}</td>
 
                         {#Status column#}
                         <td>
@@ -135,7 +135,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </div>
+
+
 
 {% endblock %}
