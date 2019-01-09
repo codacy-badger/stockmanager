@@ -141,7 +141,7 @@ class MemberController extends AbstractController
         $sheet->setCellValue('G1', 'Réseau de transport');
         $sheet->setCellValue('H1', 'Date Création');
         $sheet->setCellValue('I1', 'Date Fin');
-        $sheet->setCellValue('J1', 'Symptomes');
+        $sheet->setCellValue('J1', 'Symptômes');
 
         //set table dynamic lines
         foreach ($issues as $issue) {
