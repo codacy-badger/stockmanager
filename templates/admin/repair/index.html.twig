@@ -3,85 +3,95 @@
 {% block title %}Réparations{% endblock %}
 {% block isActiveRepair %}active{% endblock %}
 {% block body %}
-    <div class="card">
-        <div class="card-header">
-            Equipements en pannes non traités
-        </div>
-        <div class="card-body">
-            <table class="table table-sm">
-                <thead>
-                <tr>
-                    <th>Equipement</th>
-                    <th>Provenance</th>
-                    <th>Date arrivée</th>
-                    <th>Symptomes client</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                </tr>
 
-                </thead>
-                <tbody>
-                {% for issue in issues %}
-                    <tr>
+    <h3>Equipements en pannes non traités</h3>
 
-                        {#equipment column#}
-                        <td>
-                            <div class="d-flex">
-                                <img class="img-circle" data-toggle="tooltip" data-placement="top"
-                                     title="{{ issue.equipment.brand.category.name }}" width="50"
-                                     height="50"
-                                     src="{{ asset(issue.equipment.brand.category.image.url) }}"
-                                     alt="{{ issue.equipment.brand.category.image.alt }}">
-                                <div class="d-flex flex-column">
-                                    <div class="small">
-                                        <b>Catégorie:</b> {{ issue.equipment.brand.category.name }}
-                                    </div>
-                                    <div class="small">
-                                        <b>Modèle:</b> {{ issue.equipment.brand.name }}
-                                    </div>
-                                    <div class="small">
-                                        <b>N° Serie:</b> {{ issue.equipment.serial }}
-                                    </div>
-                                    {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
-                                        <div>
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th>Equipement</th>
+            <th>Provenance</th>
+            <th>Date arrivée</th>
+            <th>Symptomes client</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for issue in issues %}
+            <tr>
+
+                {#equipment column#}
+                <td>
+                    <div class="d-flex">
+                        <img class="img-circle" data-toggle="tooltip" data-placement="top"
+                             title="{{ issue.equipment.brand.category.name }}" width="50"
+                             height="50"
+                             src="{{ asset(issue.equipment.brand.category.image.url) }}"
+                             alt="{{ issue.equipment.brand.category.image.alt }}">
+                        <div class="d-flex flex-column">
+                            <div class="small">
+                                <b>Catégorie:</b> {{ issue.equipment.brand.category.name }}
+                            </div>
+                            <div class="small">
+                                <b>Modèle:</b> {{ issue.equipment.brand.name }}
+                            </div>
+                            <div class="small">
+                                <b>N° Serie:</b> {{ issue.equipment.serial }}
+                            </div>
+                            {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
+                                <div>
                                         <span class="badge badge-info badge-pill">
                                          Contrat: {{ issue.equipment.contract.name }}
                                         </span>
-                                        </div>
-                                    {% endif %}
                                 </div>
-                            </div>
-                        </td>
+                            {% endif %}
+                        </div>
+                    </div>
+                </td>
 
-                        {#comming from column#}
-                        <td>
-                            <div class="dflex flex-column">
-                                <div>
-                                    <span class="badge badge-secondary">{{ issue.user.operator.name }}</span>
-                                </div>
-                                <div class="small">
-                                    {{ issue.user.firstname }} {{ issue.user.lastname }}
-                                </div>
-                                <div class="small">
-                                    {{ issue.transportation.tradeName }}
-                                </div>
-                            </div>
-                        </td>
+                {#comming from column#}
+                <td>
+                    <div class="dflex flex-column">
+                        <div>
+                            <span class="badge badge-secondary">{{ issue.user.operator.name }}</span>
+                        </div>
+                        <div class="small">
+                            {{ issue.user.firstname }} {{ issue.user.lastname }}
+                        </div>
+                        <div class="small">
+                            {{ issue.transportation.tradeName }}
+                        </div>
+                    </div>
+                </td>
 
-                        {#arrival date#}
+                {#arrival date#}
 
-                            <td>{{ issue.dateEnd | date("d/m/Y", "Europe/Paris") }}</td>
+                <td>{{ issue.dateEnd | date("d/m/Y", "Europe/Paris") }}</td>
+
+
+                {#symptom column#}
+                <td class="d-none d-sm-table-cell">
+                    <ul>
+                        {% for symptom in issue.symptoms %}
+                            <li>{{ symptom.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+
+                {#descriptions column#}
+                <td class="d-none d-sm-table-cell">{{ issue.description }}</td>
+
+                {#Actions#}
 
 
 
-                    </tr>
-                {% endfor %}
+            </tr>
+        {% endfor %}
 
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+        </tbody>
+    </table>
 
 
     {#{{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}#}

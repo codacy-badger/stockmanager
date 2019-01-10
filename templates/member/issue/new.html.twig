@@ -10,17 +10,15 @@
 
 {% block isActiveNew %}{% if isActiveNew %}active{% endif %}{% endblock %}
 {% block body %}
-    <div class="col-6 mx-auto mt-3">
-        <div class="card">
-            <h4 class="card-header"><i class="fas fa-briefcase-medical"></i> Déclarer une panne</h4>
-            <div class="card-body">
-                {{ include('member/issue/_form.html.twig') }}
-            </div>
+    <div class="col-md-6 mx-auto">
+        <h4><i class="fas fa-briefcase-medical"></i> Déclarer une panne</h4>
+        <div>
+            {{ include('member/issue/_form.html.twig') }}
         </div>
     </div>
+
 {% endblock %}
 {% block javascripts %}
-    {{ parent() }}
     <script>
         $('#issue_equipment').autocompleter({
             url_list: '/member/equipment_search',
