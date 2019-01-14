@@ -17,7 +17,7 @@
                     <th><i class="fas fa-bus-alt"></i> Exploitant</th>
                     <th>Date Création</th>
                     {% if status == 'end' %}
-                        <th class="d-none d-sm-block">Date fin</th>
+                        <th class="d-none d-sm-table-cell">Date fin</th>
                     {% endif %}
                     <th class="d-none d-sm-table-cell">Symptômes</th>
                     <th class="d-none d-sm-table-cell">Description</th>
@@ -109,7 +109,7 @@
 
                         {#end date#}
                         {% if status == 'end' %}
-                            <td class="d-none d-sm-block">{{ issue.dateEnd | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
+                            <td class="d-none d-sm-table-cell">{{ issue.dateEnd | date("d/m/Y H:i:s", "Europe/Paris") }}</td>
                         {% endif %}
                         {#symptom column#}
                         <td class="d-none d-sm-table-cell">

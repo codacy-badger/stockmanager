@@ -97,4 +97,42 @@ class RepairController extends AbstractController
 
         return $this->redirectToRoute('repair_index');
     }
+
+    /**
+     * @Route("/repair-item-issue-{id}", name="repair_item", methods="POST")
+     * @param Issue $issue
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
+     */
+    public function repairItem(Issue $issue, Request $request)
+    {
+        $repair = new Repair();
+        $contract = new Contract();
+
+        $form = $this->get('form.factory')->create(RepairType::class, $repair);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $repair->setStartDate(new \DateTime());
+
+            $issue->setRepair($repair);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($repair);
+            $em->flush();
+
+            $this->addFlash('success', 'La réparation a bien été enregistrée');
+            return $this->redirectToRoute('repair_index');
+
+
+        }
+
+        return $this->render('admin/repair/repairItem.html.twig', [
+            'form' => $form->createView(),
+            'issue' => $issue,
+            'contract' => $contract
+        ]);
+    }
 }

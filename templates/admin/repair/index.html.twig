@@ -84,7 +84,17 @@
                 <td class="d-none d-sm-table-cell">{{ issue.description }}</td>
 
                 {#Actions#}
+                <td>
 
+                    <form action="{{ path('repair_item', {'id': issue.id}) }}"
+                          method="post">
+                        <input type="hidden" name="token"
+                               value="{{ csrf_token('repair_token') }}"/>
+                        <button type="submit" class="btn btn-sm btn-primary"><i
+                                    class="fas fa-check-square"></i> Réparer
+                        </button>
+                    </form>
+                </td>
 
 
             </tr>
