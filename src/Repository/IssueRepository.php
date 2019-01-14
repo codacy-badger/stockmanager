@@ -42,6 +42,7 @@ class IssueRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->join('i.user', 'u', 'WITH', 'u.operator = :operator')
             ->andWhere('i.dateEnd IS NOT NULL')
+            ->orderBy('i.dateEnd', 'DESC')
             ->setParameter('operator', $operator)
             ->getQuery()
             ->getResult();
