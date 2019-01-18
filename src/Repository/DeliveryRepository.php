@@ -22,6 +22,7 @@ class DeliveryRepository extends ServiceEntityRepository
     public function findWithIssues(){
         return $this->createQueryBuilder('d')
             ->where('d.issues is not empty')
+            ->orderBy('d.dateCreation', 'DESC')
             ->getQuery()
             ->getResult()
             ;

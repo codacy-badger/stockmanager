@@ -131,7 +131,10 @@ class IssueRepository extends ServiceEntityRepository
     public function getEnd()
     {
         $qb = $this->createQueryBuilder('i');
-        $qb->andWhere('i.dateEnd IS NOT NULL');
+        $qb->andWhere('i.dateEnd IS NOT NULL')
+        ->orderBy('i.dateEnd', 'desc')
+        ;
+
 
         return $qb->getQuery()->getResult();
     }
