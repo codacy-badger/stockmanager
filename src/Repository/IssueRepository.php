@@ -111,11 +111,23 @@ class IssueRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function getNew()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->andWhere('i.dateChecked IS NULL')
+            ->orderBy('i.dateRequest', 'desc')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function getChecked()
     {
         $qb = $this->createQueryBuilder('i');
         $qb->andWhere('i.dateChecked IS NOT NULL');
-        $qb->andWhere('i.dateReady IS NULL');
+        $qb->andWhere('i.dateReady IS NULL')
+            ->orderBy('i.dateChecked', 'desc')
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -124,7 +136,9 @@ class IssueRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('i');
         $qb->andWhere('i.dateReady IS NOT NULL');
-        $qb->andWhere('i.dateEnd IS NULL');
+        $qb->andWhere('i.dateEnd IS NULL')
+            ->orderBy('i.dateReady', 'desc')
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -133,12 +147,12 @@ class IssueRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('i');
         $qb->andWhere('i.dateEnd IS NOT NULL')
-        ->orderBy('i.dateEnd', 'desc')
-        ;
+            ->orderBy('i.dateEnd', 'desc');
 
 
         return $qb->getQuery()->getResult();
     }
+
 
 
 //    public function countNonNotified()
@@ -221,8 +235,7 @@ class IssueRepository extends ServiceEntityRepository
             ->select('s.name, count(s.name)')
             ->groupBy('s.name')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
     /*
     public function findOneBySomeField($value): ?Issue

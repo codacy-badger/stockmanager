@@ -112,9 +112,7 @@ class IssueController extends AbstractController
         $contract = new Contract();
 
         if ($status == 'new') {
-            $issues = $this->getDoctrine()->getRepository(Issue::class)->findBy([
-                'dateChecked' => null
-            ]);
+            $issues = $this->getDoctrine()->getRepository(Issue::class)->getNew();
         } elseif ($status == 'check') {
             $issues = $this->getDoctrine()->getRepository(Issue::class)->getChecked();
         } elseif ($status == 'ready') {
@@ -130,6 +128,7 @@ class IssueController extends AbstractController
         ]);
     }
 
+    
 
     /**
      * show issue
