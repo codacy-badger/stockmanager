@@ -3,15 +3,21 @@
     active
 {% endblock %}
 {% block body %}
+    <div class="container-fluid">
 
-    <div class="dash d-flex justify-content-around flex-wrap">
 
+        <div class="row justify-content-around">
 
-        {{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}
+            {{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}
+            {{ render(controller('App\\Controller\\ReportingController::getIssuesByOperator', {})) }}
 
-        {{ render(controller('App\\Controller\\ReportingController::getIssuesByOperator', {})) }}
+        </div>
 
-        {{ render(controller('App\\Controller\\ReportingController::pieSymptoms', {})) }}
+        <div class="row justify-content-around">
+
+            {{ render(controller('App\\Controller\\ReportingController::pieSymptoms', {})) }}
+        </div>
+
 
     </div>
 {% endblock %}

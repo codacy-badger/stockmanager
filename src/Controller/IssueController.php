@@ -128,7 +128,7 @@ class IssueController extends AbstractController
         ]);
     }
 
-    
+
 
     /**
      * show issue
