@@ -110,6 +110,8 @@ class RepairController extends AbstractController
         $repair = new Repair();
         $contract = new Contract();
 
+       $historicIssues =  $this->getDoctrine()->getRepository(Issue::class)->findByEquipment($issue->getEquipment());
+
         $form = $this->get('form.factory')->create(RepairType::class, $repair);
         $form->handleRequest($request);
 
@@ -132,7 +134,8 @@ class RepairController extends AbstractController
         return $this->render('admin/repair/repairItem.html.twig', [
             'form' => $form->createView(),
             'issue' => $issue,
-            'contract' => $contract
+            'contract' => $contract,
+            'historicIssues' => $historicIssues
         ]);
     }
 }

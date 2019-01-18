@@ -3,6 +3,7 @@
 {% block title %}Réparation {% endblock %}
 
 {% block body %}
+
     <h4>Réparation</h4>
     <div class="row">
         <div class="col-md-4 bg-secondary text-white">
@@ -40,8 +41,6 @@
 
             <table class="table">
                 <tbody>
-
-
                 <tr>
                     <th>Date d'arrivée:</th>
                     <td>{{ issue.dateEnd | date('d/m/y') }}</td>
@@ -62,6 +61,8 @@
                 </tr>
                 </tbody>
             </table>
+
+
         </div>
 
 
@@ -76,10 +77,31 @@
             {{ form_row(form.parts, { 'attr': {'class': 'js_repair_parts'} }) }}
             {{ form_rest(form) }}
 
-
         </div>
         <button class="btn">{{ button_label|default('Save') }}</button>
         {{ form_end(form) }}
+    </div>
+
+    <h4>Historique des pannes</h4>
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Exploitant</th>
+                {#<th>Panne</th>#}
+            </tr>
+            </thead>
+            <tbody>
+            {% for issue in historicIssues %}
+                <tr>
+                    <td>{{ issue.dateRequest | date("d/m/Y", "Europe/Paris") }}</td>
+                    <td>{{ issue.user.operator.name }}</td>
+                    {#<td>{{ issue.dateRequest }}</td>#}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Contract;
+use App\Entity\Equipment;
 use App\Entity\Issue;
 use App\Entity\Location;
 use App\Entity\User;
@@ -431,5 +432,7 @@ class IssueController extends AbstractController
             'number' => $number
         ]);
     }
+
+
 
 }
