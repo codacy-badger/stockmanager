@@ -65,6 +65,10 @@ html {
     margin-top: 10px;
 }
 
+.mini-card{
+    height: 12em;
+}
+
 /*autocomplete*/
 
 .ui-autocomplete {
