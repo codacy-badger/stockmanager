@@ -38,12 +38,6 @@
 
     </div>
 
-    {#<ul class="navbar-nav mr-auto">#}
-    {#{% block navbar %}#}
-    {#{% endblock %}#}
-    {#</ul>#}
-
-
 
     {#user button to logout#}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -61,6 +55,7 @@
     {% endif %}
 </nav>
 
+{#end of navbar#}
 
 <div class="container-fluid">
 
