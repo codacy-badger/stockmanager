@@ -1,15 +1,16 @@
-<div class="card shadow" style="width: 15rem;">
+<div class="card mini-card shadow">
     <div class="card-header">
         <h5>En cours</h5>
     </div>
     <div class="card-body">
-        {% for operator in operators %}
         <div class="d-flex justify-content-around flex-wrap">
-            <h5><span class="badge badge-secondary">{{ operator.name }}
-                    {% set sum = 0 %}
-                    {% for user in operator.users %}
-                        {% set sum = sum + user.issues.count %}
-                    {% endfor %}
+            {% for operator in operators %}
+
+                <h5><span class="badge badge-secondary">{{ operator.name }}
+                        {% set sum = 0 %}
+                        {% for user in operator.users %}
+                            {% set sum = sum + user.issues.count %}
+                        {% endfor %}
                     <span class="badge badge-light">{{ sum }}</span>
                     </span></h5>
 

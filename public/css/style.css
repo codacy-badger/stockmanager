@@ -62,7 +62,13 @@ html {
 /*dashboard cards*/
 
 .dash, .card{
-    margin-top: 10px;
+    margin: 1px;
+}
+
+.mini-card{
+    width: 15em;
+    height: 12em;
+    margin: 1px;
 }
 
 /*autocomplete*/
