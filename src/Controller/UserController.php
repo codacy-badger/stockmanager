@@ -41,6 +41,7 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
+            $this->addFlash('success', 'L\' utilisateur à été créé avec succès');
             return $this->redirectToRoute('user_index');
         }
 
@@ -73,6 +74,7 @@ class UserController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'L\' utilisateur à été modifié avec succès');
             return $this->redirectToRoute('user_edit', ['id' => $user->getId()]);
         }
 
