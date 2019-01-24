@@ -1,11 +1,16 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}New Category{% endblock %}
+{% block title %}Nouvelle catégorie{% endblock %}
 
 {% block body %}
-    <h1>Create new Category</h1>
+    <div class="d-flex justify-content-center">
+        <div class="col-md-4">
 
-    {{ include('admin/category/_form.html.twig') }}
+            <h1>Nouvelle catégorie</h1>
 
-    <a href="{{ path('category_index') }}">back to list</a>
+            {{ include('admin/category/_form.html.twig') }}
+
+            <a class="btn btn-info mt-1" href="{{ path('category_index') }}"><i class="fas fa-undo-alt"></i> Retour à la liste</a>
+        </div>
+    </div>
 {% endblock %}
