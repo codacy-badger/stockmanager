@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Issue;
 use App\Entity\Operator;
+use App\Services\Statistics;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ReportingController extends AbstractController
@@ -55,4 +57,6 @@ class ReportingController extends AbstractController
 
         return $this->render('admin/reporting/_pieSymptoms.html.twig', ['piechart' => $pieChart]);
     }
+
+
 }
