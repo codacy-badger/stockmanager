@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Part index</h1>
 
-    <table class="table">
+    <table class="table table-sm table-striped">
         <thead>
             <tr>
                 <th>Id</th>
@@ -23,8 +23,7 @@
                 <td>{{ part.reference }}</td>
                 <td>{{ part.repairTime }}</td>
                 <td>
-                    <a href="{{ path('part_show', {'id': part.id}) }}">show</a>
-                    <a href="{{ path('part_edit', {'id': part.id}) }}">edit</a>
+                    <a class="btn btn-warning btn-sm" href="{{ path('part_edit', {'id': part.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +34,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('part_new') }}">Create new</a>
+    <a class="btn btn-primary" href="{{ path('part_new') }}">Créer</a>
 {% endblock %}

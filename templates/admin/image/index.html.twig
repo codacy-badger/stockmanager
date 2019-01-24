@@ -1,11 +1,11 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}Image index{% endblock %}
+{% block title %}Image{% endblock %}
 
 {% block body %}
-    <h1>Image index</h1>
+    <h1>Image</h1>
 
-    <table class="table">
+    <table class="table table-sm table-striped">
         <thead>
             <tr>
                 <th>Id</th>
@@ -21,8 +21,7 @@
                 <td>{{ image.url }}</td>
                 <td>{{ image.alt }}</td>
                 <td>
-                    <a href="{{ path('image_show', {'id': image.id}) }}">show</a>
-                    <a href="{{ path('image_edit', {'id': image.id}) }}">edit</a>
+                    <a class="btn btn-warning btn-sm" href="{{ path('image_edit', {'id': image.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +32,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('image_new') }}">Create new</a>
+    <a class="btn btn-primary" href="{{ path('image_new') }}"><i class="fas fa-plus-circle"></i> Créer</a>
 {% endblock %}

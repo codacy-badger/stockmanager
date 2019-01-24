@@ -50,15 +50,6 @@ class EquipmentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="equipment_show", methods="GET")
-     * @param Equipment $equipment
-     * @return Response
-     */
-    public function show(Equipment $equipment): Response
-    {
-        return $this->render('admin/equipment/show.html.twig', ['equipment' => $equipment]);
-    }
 
     /**
      * @Route("/{id}/edit", name="equipment_edit", methods="GET|POST")
