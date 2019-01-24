@@ -28,9 +28,15 @@ class Delivery
      */
     private $issues;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Equipment")
+     */
+    private $equipments;
+
     public function __construct()
     {
         $this->issues = new ArrayCollection();
+        $this->equipments = new ArrayCollection();
     }
 
     public function getDateCreation(): ?\DateTimeInterface
@@ -76,6 +82,32 @@ class Delivery
             if ($issue->getDelivery() === $this) {
                 $issue->setDelivery(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Equipment[]
+     */
+    public function getEquipments(): Collection
+    {
+        return $this->equipments;
+    }
+
+    public function addEquipment(Equipment $equipment): self
+    {
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments[] = $equipment;
+        }
+
+        return $this;
+    }
+
+    public function removeEquipment(Equipment $equipment): self
+    {
+        if ($this->equipments->contains($equipment)) {
+            $this->equipments->removeElement($equipment);
         }
 
         return $this;
