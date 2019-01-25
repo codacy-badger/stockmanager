@@ -205,6 +205,14 @@
             </tr>
         {% endfor %}
 
+
+        {% for equipment in delivery.equipments %}
+            <tr>
+                <td>{{ equipment.brand.category.name }} {{ equipment.brand.name }} {{ equipment.serial }}</td>
+            </tr>
+        {% endfor %}
+
+
     </table>
     <table class="obs">
         <tr>
@@ -229,6 +237,9 @@
     {% set count = 0 %}
 
     {% for issue in delivery.issues %}
+        {% set count = count + 1 %}
+    {% endfor %}
+    {% for eqt in delivery.equipments %}
         {% set count = count + 1 %}
     {% endfor %}
 
