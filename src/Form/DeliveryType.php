@@ -4,12 +4,9 @@ namespace App\Form;
 
 use App\Entity\Delivery;
 use App\Entity\Equipment;
-use PUGX\AutocompleterBundle\Form\Type\AutocompleteType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,7 +21,9 @@ class DeliveryType extends AbstractType
                     'multiple' => true
                 ]
             )
-        ->add('dateCreation', DateType::class)
+        ->add('dateCreation', DateType::class, [
+            'widget' =>'single_text'
+        ])
         ;
     }
 
