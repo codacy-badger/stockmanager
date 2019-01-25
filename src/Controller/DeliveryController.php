@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Delivery;
 use App\Entity\Operator;
+use App\Form\DeliveryType;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -65,48 +66,8 @@ class DeliveryController extends Controller
             $em->persist($delivery);
             $em->flush();
 
-
-            // Configure Dompdf according to your needs
-            $pdfOptions = new Options();
-            $pdfOptions->set('defaultFont', 'Arial');
-            $pdfOptions->set('isRemoteEnabled', TRUE);
-
-            // Instantiate Dompdf with our options
-            $dompdf = new Dompdf($pdfOptions);
-
-            $context = stream_context_create([
-                'ssl' => [
-                    'verify_peer' => FALSE,
-                    'verify_peer_name' => FALSE,
-                    'allow_self_signed' => TRUE
-                ]
-            ]);
-            $dompdf->setHttpContext($context);
-
-
-            //    $dompdf->setBasePath('/');
-
-            // Retrieve the HTML generated in our twig file
-            $html = $this->renderView('admin/delivery/pdf.html.twig', [
-                'title' => "Bon de livraison",
-                'operator' => $myOperator,
-                'delivery' => $delivery
-            ]);
-
-            // Load HTML to Dompdf
-            $dompdf->loadHtml($html);
-
-            // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-            $dompdf->setPaper('A4', 'portrait');
-
-            // Render the HTML as PDF
-            $dompdf->render();
-
-            // Output the generated PDF to Browser (inline view)
-            $dompdf->stream("mypdf.pdf", [
-                "Attachment" => false
-            ]);
-            exit;
+            $this->addFlash('success', 'Le bon de livraison a bien été généré');
+            return $this->redirectToRoute('notification_index');
         }
 
     }
@@ -166,6 +127,36 @@ class DeliveryController extends Controller
             ]);
             exit;
         }
+
     }
+
+    /**
+     * @Route("/edit/{id}", name="delivery_edit", methods="GET|POST")
+     * @param Request $request
+     * @param Delivery $delivery
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function edit(Request $request, Delivery $delivery)
+    {
+        $form = $this->createForm(DeliveryType::class, $delivery);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            $this->addFlash('success', 'Ajout bien effectué');
+            return $this->redirectToRoute('delivery_edit', ['id' => $delivery->getId()] );
+
+        }
+
+        return $this->render('admin/delivery/edit.html.twig', [
+            'form' => $form->createView(),
+            'delivery' => $delivery
+        ]);
+    }
+
 
 }
