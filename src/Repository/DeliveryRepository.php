@@ -19,6 +19,7 @@ class DeliveryRepository extends ServiceEntityRepository
         parent::__construct($registry, Delivery::class);
     }
 
+    //find deliveries that has issues
     public function findWithIssues(){
         return $this->createQueryBuilder('d')
             ->where('d.issues is not empty')
