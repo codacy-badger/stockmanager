@@ -45,18 +45,19 @@ class NotificationController extends AbstractController
         if ($this->isCsrfTokenValid('send-notification', $submitedToken)) {
 
 
-
             //get operator with only non notified issues from user repository
             $myOperator = $this->getDoctrine()->getRepository(Operator::class)->getOneOperatorWithNonNotifedIssues($operator);
 
+            //get all users from operator form mailing
+            $users = $this->getDoctrine()->getRepository(User::class)->getUsersByOperator($operator);
 
+            $destEmails = [];
             //get all destiation emails
-            foreach ($myOperator->getUsers() as $user) {
-                $destEmails[$user->getEmail()] = $user->getFirstname() . ' ' . $user->getLastname();
+            foreach ($users as $user) {
+                $destEmails[] = $user->getEmail();
 
             }
 
-            dump($destEmails);
 
             //get all technicians
             $technicians = $this->getDoctrine()->getRepository(User::class)->getTechnicians();
@@ -72,7 +73,7 @@ class NotificationController extends AbstractController
             $template = 'admin/notification/email.html.twig';
 
             //send email service
-            $mailer->sendEmail($ccEmails, $destEmails, $subject, $template, $operator);
+            $mailer->sendEmail($ccEmails, $destEmails, $subject, $template, $myOperator);
 
             //set the current date to dateMessage
             $date = new \DateTime();
@@ -87,6 +88,7 @@ class NotificationController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La notification a été envoyée');
+
         }
 
         return $this->redirectToRoute('notification_index');

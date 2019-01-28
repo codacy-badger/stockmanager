@@ -34,12 +34,15 @@
                 </td>
 
                 <td class="d-flex">
+
                     <form action="{{ path('delivery_generate', {'id': operator.id }) }}" method="post">
                         <input type="hidden" name="token" value="{{ csrf_token('delivery-generate') }}">
                         <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-truck"></i> Générer
                             bon de livraison
                         </button>
                     </form>
+
+
                     <form class="ml-1" action="{{ path('notification_send', {'id': operator.id }) }}"
                           method="post">
                         <input type="hidden" name="token" value="{{ csrf_token('send-notification') }}">
@@ -47,12 +50,16 @@
                             Envoyer
                         </button>
                     </form>
+
                 </td>
             </tr>
+
+
         {% endfor %}
 
         </tbody>
     </table>
+
 
 
 {% endblock %}
