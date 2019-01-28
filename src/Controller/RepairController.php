@@ -25,7 +25,7 @@ class RepairController extends AbstractController
         //        cerate new object contract to get the constant and send it into view
         $contract = new Contract();
 
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->getEnd();
+        $issues = $this->getDoctrine()->getRepository(Issue::class)->getNotRepaired();
 
         return $this->render('admin/repair/index.html.twig', [
             'issues' => $issues,
@@ -110,7 +110,7 @@ class RepairController extends AbstractController
         $repair = new Repair();
         $contract = new Contract();
 
-       $historicIssues =  $this->getDoctrine()->getRepository(Issue::class)->findByEquipment($issue->getEquipment());
+        $historicIssues = $this->getDoctrine()->getRepository(Issue::class)->findByEquipment($issue->getEquipment());
 
         $form = $this->get('form.factory')->create(RepairType::class, $repair);
         $form->handleRequest($request);
@@ -118,8 +118,10 @@ class RepairController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $repair->setStartDate(new \DateTime());
+            $repair->setTechnician($this->getUser());
 
             $issue->setRepair($repair);
+
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($repair);

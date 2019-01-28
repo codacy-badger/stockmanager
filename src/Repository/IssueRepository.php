@@ -181,6 +181,17 @@ class IssueRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getNotRepaired()
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.dateEnd IS NOT NULL')
+            ->andWhere('i.repair IS NULL')
+            ->orderBy('i.dateEnd', 'desc')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
 
 //    public function countNonNotified()

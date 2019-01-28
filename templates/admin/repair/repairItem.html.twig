@@ -86,7 +86,8 @@
                 {{ form_row(form.statsDownload) }}
                 {{ form_row(form.softUpload) }}
             </div>
-            <button class="btn btn-primary"><i class="fas fa-check"></i> {{ button_label|default('Enregistrer') }}</button>
+            <button class="btn btn-primary"><i class="fas fa-check"></i> {{ button_label|default('Enregistrer') }}
+            </button>
             {{ form_end(form) }}
 
         </div>
@@ -112,13 +113,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                {#{% for issue in historicIssues %}#}
-                {#<tr>#}
-                {#<td>{{ issue.dateRequest | date("d/m/Y", "Europe/Paris") }}</td>#}
-                {#<td>{{ issue.user.operator.name }}</td>#}
-                {#<td>{{ issue.dateRequest }}</td>#}
-                {#</tr>#}
-                {#{% endfor %}#}
+                <tr>
+                    <td class="d-flex flex-column">
+                        <div>
+                            Total: {{ historicIssues | length }}
+                        </div>
+                        <div>
+                            <table></table>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

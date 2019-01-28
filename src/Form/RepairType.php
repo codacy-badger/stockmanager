@@ -25,6 +25,7 @@ class RepairType extends AbstractType
                 'class' => Symptom::class,
                 'choice_label' => 'name',
                 'multiple' => true,
+                'required' => false
 
 
             ])
@@ -32,15 +33,27 @@ class RepairType extends AbstractType
                 'class' => Part::class,
                 'choice_label' => 'name',
                 'multiple' => true,
+                'required' => false
 
             ])
-            ->add('degradation', CheckboxType::class)
-            ->add('noBreakdown', CheckboxType::class)
-            ->add('timeToRepair', IntegerType::class)
-            ->add('softVersion', TextType::class)
-            ->add('statsDownload', CheckboxType::class)
-            ->add('softUpload', CheckboxType::class)
-        ;
+            ->add('degradation', CheckboxType::class, [
+                'required' => false
+            ])
+            ->add('noBreakdown', CheckboxType::class, [
+                'required' => false
+            ])
+            ->add('timeToRepair', IntegerType::class, [
+                'required' => false
+            ])
+            ->add('softVersion', TextType::class, [
+                'required' => false
+            ])
+            ->add('statsDownload', CheckboxType::class, [
+                'required' => false
+            ])
+            ->add('softUpload', CheckboxType::class, [
+                'required' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
