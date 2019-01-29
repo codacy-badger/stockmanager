@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Contract;
+use App\Entity\Equipment;
+use App\Entity\EquipmentStatus;
 use App\Entity\Issue;
 use App\Entity\Repair;
 use App\Form\RepairType;
 use App\Repository\RepairRepository;
 use App\Services\MTBFStatistics;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +21,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RepairController extends AbstractController
 {
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * @Route("/", name="repair_index", methods="GET")
      */
@@ -26,7 +37,7 @@ class RepairController extends AbstractController
         //        cerate new object contract to get the constant and send it into view
         $contract = new Contract();
 
-        $issues = $this->getDoctrine()->getRepository(Issue::class)->getNotRepaired();
+        $issues = $this->em->getRepository(Issue::class)->getNotRepaired();
 
         return $this->render('admin/repair/index.html.twig', [
             'issues' => $issues,
@@ -44,9 +55,9 @@ class RepairController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($repair);
-            $em->flush();
+
+            $this->em->persist($repair);
+            $this->em->flush();
 
             return $this->redirectToRoute('repair_index');
         }
@@ -74,7 +85,7 @@ class RepairController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('repair_edit', ['id' => $repair->getId()]);
         }
@@ -91,9 +102,9 @@ class RepairController extends AbstractController
     public function delete(Request $request, Repair $repair): Response
     {
         if ($this->isCsrfTokenValid('delete-repair', $request->request->get('_token'))) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($repair);
-            $em->flush();
+
+            $this->em->remove($repair);
+            $this->em->flush();
         }
 
         return $this->redirectToRoute('repair_index');
@@ -111,7 +122,7 @@ class RepairController extends AbstractController
         $repair = new Repair();
         $contract = new Contract();
 
-        $historicIssues = $this->getDoctrine()->getRepository(Issue::class)->findByEquipment($issue->getEquipment());
+        $historicIssues = $this->em->getRepository(Issue::class)->findByEquipment($issue->getEquipment());
 
 
         $now = new \DateTime();
@@ -126,15 +137,22 @@ class RepairController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $status = $this->em->getRepository(EquipmentStatus::class)->findOneBy([
+                'equipment' => $issue->getEquipment(),
+                'endFailure' => null
+            ]);
+
+
+            if (null !== $status) {
+                $status->setEndFailure(new \DateTime());
+            }
             $repair->setStartDate(new \DateTime());
             $repair->setTechnician($this->getUser());
 
             $issue->setRepair($repair);
 
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($repair);
-            $em->flush();
+            $this->em->persist($repair);
+            $this->em->flush();
 
             $this->addFlash('success', 'La réparation a bien été enregistrée');
             return $this->redirectToRoute('repair_index');

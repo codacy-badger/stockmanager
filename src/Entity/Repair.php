@@ -24,11 +24,6 @@ class Repair
     private $startDate;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $endDate;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
@@ -85,7 +80,6 @@ class Repair
     private $softVersion;
 
 
-
     public function __construct()
     {
         $this->symptoms = new ArrayCollection();
@@ -110,17 +104,6 @@ class Repair
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
-    {
-        return $this->endDate;
-    }
-
-    public function setEndDate(?\DateTimeInterface $endDate): self
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
 
     public function getDescription(): ?string
     {
