@@ -7,6 +7,7 @@ use App\Entity\Issue;
 use App\Entity\Repair;
 use App\Form\RepairType;
 use App\Repository\RepairRepository;
+use App\Services\MTBFStatistics;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,12 +106,20 @@ class RepairController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws \Exception
      */
-    public function repairItem(Issue $issue, Request $request)
+    public function repairItem(Issue $issue, Request $request, MTBFStatistics $mtbf)
     {
         $repair = new Repair();
         $contract = new Contract();
 
         $historicIssues = $this->getDoctrine()->getRepository(Issue::class)->findByEquipment($issue->getEquipment());
+
+
+        $now = new \DateTime();
+        $before = new \DateTime('2011-09-01');
+        $interval = $now->diff($before);
+
+        $mtbfResult = $mtbf->getMTBF($interval->days, $issue->getEquipment()->getBrand()->getCategory()->getHoursPerDay(), 1, count($historicIssues));
+
 
         $form = $this->get('form.factory')->create(RepairType::class, $repair);
         $form->handleRequest($request);
@@ -137,7 +146,8 @@ class RepairController extends AbstractController
             'form' => $form->createView(),
             'issue' => $issue,
             'contract' => $contract,
-            'historicIssues' => $historicIssues
+            'historicIssues' => $historicIssues,
+            'mtbf' => $mtbfResult
         ]);
     }
 }

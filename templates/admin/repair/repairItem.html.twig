@@ -122,6 +122,19 @@
                             <table></table>
                         </div>
                     </td>
+                    <td>
+                        {#symptomes#}
+                    </td>
+                    <td>
+                        {#pieces#}
+                    </td>
+                    <td>
+                        {#retours#}
+                    </td>
+                    <td>
+
+                        <span {% if mtbf < issue.equipment.brand.category.mtbf %}class="badge badge-danger" {% else %} class="badge badge-success"{% endif %}>{{ mtbf | round }}</span>
+                    </td>
                 </tr>
                 </tbody>
             </table>

@@ -20,6 +20,7 @@ class CategoryType extends AbstractType
                 'choice_label' => 'alt'
             ])
             ->add('hoursPerDay', IntegerType::class)
+            ->add('mtbf', IntegerType::class)
         ;
     }
 
