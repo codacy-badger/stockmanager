@@ -31,6 +31,12 @@ class EquipmentStatus
      */
     private $equipment;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Issue")
+     */
+    private $issue;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +74,18 @@ class EquipmentStatus
     public function setEquipment(?Equipment $equipment): self
     {
         $this->equipment = $equipment;
+
+        return $this;
+    }
+
+    public function getIssue(): ?Issue
+    {
+        return $this->issue;
+    }
+
+    public function setIssue(?Issue $issue): self
+    {
+        $this->issue = $issue;
 
         return $this;
     }

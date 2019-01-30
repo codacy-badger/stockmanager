@@ -19,6 +19,17 @@ class EquipmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Equipment::class);
     }
 
+
+    public function findWithIssue()
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.issues', 'i')
+            ->andWhere('i is not null')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     /**
      * @param $serial
      * @return mixed
@@ -29,8 +40,7 @@ class EquipmentRepository extends ServiceEntityRepository
             ->where('a.serial LIKE :string')
             ->setParameter('string', "%$serial%")
             ->orderBy('a.serial')
-            ->setMaxResults(5)
-        ;
+            ->setMaxResults(5);
 
         return $qb->getQuery()
             ->getResult();

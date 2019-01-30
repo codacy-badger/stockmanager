@@ -129,8 +129,15 @@ class RepairController extends AbstractController
         $before = new \DateTime('2011-09-01');
         $interval = $now->diff($before);
 
-        $mtbfResult = $mtbf->getMTBF($interval->days, $issue->getEquipment()->getBrand()->getCategory()->getHoursPerDay(), 1, count($historicIssues));
+        $hoursPerDay = $issue->getEquipment()->getBrand()->getCategory()->getHoursPerDay();
 
+        if (null !== $hoursPerDay) {
+
+            $mtbfResult = $mtbf->getMTBF($interval->days, $hoursPerDay, 1, count($historicIssues));
+
+        } else {
+            $mtbfResult = 'Non calculé';
+        }
 
         $form = $this->get('form.factory')->create(RepairType::class, $repair);
         $form->handleRequest($request);
