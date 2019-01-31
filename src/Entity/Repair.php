@@ -21,7 +21,7 @@ class Repair
     /**
      * @ORM\Column(type="datetime")
      */
-    private $startDate;
+    private $dateEnd;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -37,7 +37,6 @@ class Repair
      * @ORM\ManyToOne(targetEntity="App\Entity\Image")
      */
     private $image;
-
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Symptom")
@@ -62,12 +61,12 @@ class Repair
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $TimeToRepair;
+    private $timeToRepair;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $StatsDownload;
+    private $statsDownload;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -78,6 +77,18 @@ class Repair
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $softVersion;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Issue")
+     */
+    private $issue;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $unavailability;
+
+
 
 
     public function __construct()
@@ -92,14 +103,14 @@ class Repair
         return $this->id;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getDateEnd(): ?\DateTimeInterface
     {
-        return $this->startDate;
+        return $this->dateEnd;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setDateEnd(\DateTimeInterface $dateEnd): self
     {
-        $this->startDate = $startDate;
+        $this->dateEnd = $dateEnd;
 
         return $this;
     }
@@ -219,24 +230,24 @@ class Repair
 
     public function getTimeToRepair(): ?int
     {
-        return $this->TimeToRepair;
+        return $this->timeToRepair;
     }
 
-    public function setTimeToRepair(?int $TimeToRepair): self
+    public function setTimeToRepair(?int $timeToRepair): self
     {
-        $this->TimeToRepair = $TimeToRepair;
+        $this->timeToRepair = $timeToRepair;
 
         return $this;
     }
 
     public function getStatsDownload(): ?bool
     {
-        return $this->StatsDownload;
+        return $this->statsDownload;
     }
 
-    public function setStatsDownload(bool $StatsDownload): self
+    public function setStatsDownload(bool $statsDownload): self
     {
-        $this->StatsDownload = $StatsDownload;
+        $this->statsDownload = $statsDownload;
 
         return $this;
     }
@@ -261,6 +272,30 @@ class Repair
     public function setSoftVersion(?string $softVersion): self
     {
         $this->softVersion = $softVersion;
+
+        return $this;
+    }
+
+    public function getIssue(): ?Issue
+    {
+        return $this->issue;
+    }
+
+    public function setIssue(?Issue $issue): self
+    {
+        $this->issue = $issue;
+
+        return $this;
+    }
+
+    public function getUnavailability(): ?int
+    {
+        return $this->unavailability;
+    }
+
+    public function setUnavailability(?int $unavailability): self
+    {
+        $this->unavailability = $unavailability;
 
         return $this;
     }

@@ -74,6 +74,7 @@ class Issue
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Repair")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $repair;
 
@@ -99,6 +100,7 @@ class Issue
      * @ORM\ManyToOne(targetEntity="App\Entity\Delivery", inversedBy="issues")
      */
     private $delivery;
+
 
 
 
@@ -295,6 +297,8 @@ class Issue
 
         return $this;
     }
+
+
 
 
 }

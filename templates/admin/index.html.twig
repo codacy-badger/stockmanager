@@ -24,9 +24,14 @@
 
     {#repair section#}
 
+
     <li class="nav-item">
         <a class="nav-link {% block isActiveRepair %}{% endblock %}"
            href="{{ path('repair_index') }}"><i class="fas fa-wrench"></i> Réparations</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% block isActiveHistoricRepair %}{% endblock %}"
+           href="{{ path('repair_historic') }}"><i class="fas fa-history"></i> Historique des réparations</a>
     </li>
 
     <li class="nav-item">

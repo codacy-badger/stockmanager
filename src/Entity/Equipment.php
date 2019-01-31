@@ -40,15 +40,12 @@ class Equipment
      */
     private $issues;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\EquipmentStatus", mappedBy="equipment")
-     */
-    private $status;
+
 
     public function __construct()
     {
         $this->issues = new ArrayCollection();
-        $this->status = new ArrayCollection();
+
     }
 
 
@@ -124,34 +121,5 @@ class Equipment
         return $this;
     }
 
-    /**
-     * @return Collection|EquipmentStatus[]
-     */
-    public function getStatus(): Collection
-    {
-        return $this->status;
-    }
 
-    public function addStatus(EquipmentStatus $status): self
-    {
-        if (!$this->status->contains($status)) {
-            $this->status[] = $status;
-            $status->setEquipment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStatus(EquipmentStatus $status): self
-    {
-        if ($this->status->contains($status)) {
-            $this->status->removeElement($status);
-            // set the owning side to null (unless already changed)
-            if ($status->getEquipment() === $this) {
-                $status->setEquipment(null);
-            }
-        }
-
-        return $this;
-    }
 }

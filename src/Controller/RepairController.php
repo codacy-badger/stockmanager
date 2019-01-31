@@ -10,6 +10,8 @@ use App\Entity\Repair;
 use App\Form\RepairType;
 use App\Repository\RepairRepository;
 use App\Services\MTBFStatistics;
+use App\Services\MTTRStatistics;
+use App\Services\RateStatistics;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +36,7 @@ class RepairController extends AbstractController
      */
     public function index(RepairRepository $repairRepository): Response
     {
-        //        cerate new object contract to get the constant and send it into view
+        // create new object contract to get the constant and send it into view
         $contract = new Contract();
 
         $issues = $this->em->getRepository(Issue::class)->getNotRepaired();
@@ -42,6 +44,19 @@ class RepairController extends AbstractController
         return $this->render('admin/repair/index.html.twig', [
             'issues' => $issues,
             'contract' => $contract
+        ]);
+    }
+
+    /**
+     * @Route("/historic", name="repair_historic")
+     */
+    public function repairHistoric()
+    {
+        $repairs = $this->em->getRepository(Repair::class)->findByFinished();
+
+
+        return $this->render('admin/repair/historic.html.twig', [
+            'repairs' => $repairs
         ]);
     }
 
@@ -117,12 +132,25 @@ class RepairController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws \Exception
      */
-    public function repairItem(Issue $issue, Request $request, MTBFStatistics $mtbf)
+    public function repairItem(Issue $issue, Request $request, MTBFStatistics $mtbf, MTTRStatistics $mttr, RateStatistics $rate)
     {
         $repair = new Repair();
         $contract = new Contract();
 
+        //get all issues concerning the current equipment
         $historicIssues = $this->em->getRepository(Issue::class)->findByEquipment($issue->getEquipment());
+
+        //get all repairs concerning the current equipment
+        $oldRepairs = $this->em->getRepository(Repair::class)->findUnavailabilities($issue->getEquipment()->getId());
+
+        $sumUnaivalable = 0;
+
+        foreach ($oldRepairs as $oldRepair) {
+            $sumUnaivalable = $sumUnaivalable + $oldRepair->getUnavailability();
+        }
+
+        //get mttr
+        $mttrResult = $mttr->getMTBF($sumUnaivalable, count($historicIssues));
 
 
         $now = new \DateTime();
@@ -139,24 +167,40 @@ class RepairController extends AbstractController
             $mtbfResult = 'Non calculé';
         }
 
+        //get number of changed parts and symptoms
+
+        $numberOfParts = 0;
+        $numberOfSymptoms = 0;
+        foreach ($oldRepairs as $oldRepair) {
+            $numberOfParts = $numberOfParts + $oldRepair->getParts()->count();
+            $numberOfSymptoms = $numberOfSymptoms + $oldRepair->getSymptoms()->count();
+        }
+
+
+
+        // get availability rate
+        $rateResult = $rate->getRate($mtbfResult, $mttrResult);
+
+
         $form = $this->get('form.factory')->create(RepairType::class, $repair);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $status = $this->em->getRepository(EquipmentStatus::class)->findOneBy([
-                'equipment' => $issue->getEquipment(),
-                'endFailure' => null
-            ]);
+
+            //set the time to repair property
+            $diff = $repair->getDateEnd()->diff($issue->getDateRequest());
+            $hours = $diff->h;
+            $hours = $hours + ($diff->days * 24);
+            $repair->setUnavailability($hours);
 
 
-            if (null !== $status) {
-                $status->setEndFailure(new \DateTime());
-            }
-            $repair->setStartDate(new \DateTime());
+            // add technician
             $repair->setTechnician($this->getUser());
 
+
             $issue->setRepair($repair);
+            $repair->setIssue($issue);
 
             $this->em->persist($repair);
             $this->em->flush();
@@ -168,11 +212,18 @@ class RepairController extends AbstractController
         }
 
         return $this->render('admin/repair/repairItem.html.twig', [
-            'form' => $form->createView(),
-            'issue' => $issue,
-            'contract' => $contract,
-            'historicIssues' => $historicIssues,
-            'mtbf' => $mtbfResult
-        ]);
+                'form' => $form->createView(),
+                'issue' => $issue,
+                'contract' => $contract,
+                'historicIssues' => $historicIssues,
+                'mtbf' => $mtbfResult,
+                'mttr' => $mttrResult,
+                'rate' => $rateResult,
+                'numberOfParts' => $numberOfParts,
+                'numberOfSymptoms' => $numberOfSymptoms
+
+            ]
+
+        );
     }
 }

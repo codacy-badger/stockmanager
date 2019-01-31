@@ -42,6 +42,10 @@
             <table class="table">
                 <tbody>
                 <tr>
+                    <th>Date de début de panne:</th>
+                    <td>{{ issue.dateRequest | date('d/m/y') }}</td>
+                </tr>
+                <tr>
                     <th>Date d'arrivée:</th>
                     <td>{{ issue.dateEnd | date('d/m/y') }}</td>
                 </tr>
@@ -86,6 +90,7 @@
                 {{ form_row(form.statsDownload) }}
                 {{ form_row(form.softUpload) }}
             </div>
+            {{ form_row(form.dateEnd) }}
             <button class="btn btn-primary"><i class="fas fa-check"></i> {{ button_label|default('Enregistrer') }}
             </button>
             {{ form_end(form) }}
@@ -102,9 +107,8 @@
                 <thead>
                 <tr>
                     <th>Pannes</th>
-                    <th>Symptomes</th>
-                    <th>Pièces</th>
-                    <th>Retours</th>
+                    <th>Symptômes</th>
+                    <th>Pièces changés</th>
                     <th>MTBF</th>
                     <th>MTTR</th>
                     <th>Taux de disponibilité</th>
@@ -123,17 +127,20 @@
                         </div>
                     </td>
                     <td>
-                        {#symptomes#}
+                        {{ numberOfSymptoms }}
                     </td>
                     <td>
-                        {#pieces#}
+                        {{ numberOfParts }}
                     </td>
                     <td>
-                        {#retours#}
-                    </td>
-                    <td>
-
                         <span {% if mtbf < issue.equipment.brand.category.mtbf %}class="badge badge-danger" {% else %} class="badge badge-success"{% endif %}>{{ mtbf | round }}</span>
+                    </td>
+
+                    <td>
+                        {{ mttr }}
+                    </td>
+                    <td>
+                        {{ rate }}
                     </td>
                 </tr>
                 </tbody>
@@ -148,16 +155,40 @@
                 <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Exploitant</th>
-                    {#<th>Panne</th>#}
+                    <th>Technicien</th>
+                    <th>Provenance</th>
+                    <th>Symptômes</th>
+                    <th>pièces changés</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for issue in historicIssues %}
                     <tr>
                         <td>{{ issue.dateRequest | date("d/m/Y", "Europe/Paris") }}</td>
+                        <td>
+
+                            {% if issue.repair %}
+                            {{ issue.repair.technician.firstname }} {{ issue.repair.technician.lastname }}
+                            {% endif %}
+                        </td>
                         <td>{{ issue.user.operator.name }}</td>
-                        {#<td>{{ issue.dateRequest }}</td>#}
+                        <td>
+                            <ul>
+                                {% if issue.repair %}
+                                    {% for symptom in issue.repair.symptoms %}
+                                        <li>{{ symptom.name }}</li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </td>
+                        <td>
+                            {% if issue.repair %}
+                                {% for part in issue.repair.parts %}
+                                   <li><span class="badge badge-info">{{ part.name }}</span></li>
+                                {% endfor %}
+                            {% endif %}
+                            </ul>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Contract;
-use App\Entity\Equipment;
-use App\Entity\EquipmentStatus;
 use App\Entity\Issue;
 use App\Entity\Location;
 use App\Entity\User;
@@ -74,12 +72,8 @@ class IssueController extends AbstractController
 
             $issue->setUser($myUser);
 
-            $equipmentStatus = new EquipmentStatus();
-            $equipmentStatus->setEquipment($issue->getEquipment());
-            $equipmentStatus->setStartFailure(new \DateTime());
-
             //save into database
-            $this->em->persist($equipmentStatus);
+
             $this->em->persist($issue);
             $this->em->flush();
 
