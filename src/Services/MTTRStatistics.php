@@ -9,11 +9,27 @@
 namespace App\Services;
 
 
+use App\Entity\Statistics;
+
 class MTTRStatistics
 {
-    public function getMTBF(int $hoursRepair, int $numberFailure)
+
+
+    /**
+     * @var Statistics
+     */
+    private $statistics;
+
+    public function __construct(Statistics $statistics)
     {
-        return $hoursRepair / $numberFailure;
+
+        $this->statistics = $statistics;
+    }
+
+
+    public function getMTTR()
+    {
+        return $this->statistics->getHoursRepair() / $this->statistics->getFailures();
     }
 
 }

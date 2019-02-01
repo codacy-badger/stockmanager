@@ -7,6 +7,7 @@ use App\Entity\Equipment;
 use App\Entity\EquipmentStatus;
 use App\Entity\Issue;
 use App\Entity\Repair;
+use App\Entity\Statistics;
 use App\Form\RepairType;
 use App\Repository\RepairRepository;
 use App\Services\MTBFStatistics;
@@ -132,10 +133,11 @@ class RepairController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws \Exception
      */
-    public function repairItem(Issue $issue, Request $request, MTBFStatistics $mtbf, MTTRStatistics $mttr, RateStatistics $rate)
+    public function repairItem(Issue $issue, Request $request, RateStatistics $rate)
     {
         $repair = new Repair();
         $contract = new Contract();
+        $statistics = new Statistics();
 
         //get all issues concerning the current equipment
         $historicIssues = $this->em->getRepository(Issue::class)->findByEquipment($issue->getEquipment());
@@ -149,23 +151,28 @@ class RepairController extends AbstractController
             $sumUnaivalable = $sumUnaivalable + $oldRepair->getUnavailability();
         }
 
-        //get mttr
-        $mttrResult = $mttr->getMTBF($sumUnaivalable, count($historicIssues));
 
+        $hoursPerDay = $issue->getEquipment()->getBrand()->getCategory()->getHoursPerDay();
 
         $now = new \DateTime();
         $before = new \DateTime('2011-09-01');
         $interval = $now->diff($before);
 
-        $hoursPerDay = $issue->getEquipment()->getBrand()->getCategory()->getHoursPerDay();
 
-        if (null !== $hoursPerDay) {
+        $statistics->setDays($interval->days)
+            ->setHoursPerDay($hoursPerDay)
+            ->setNumber(1)
+            ->setFailures(count($historicIssues))
+            ->setHoursRepair($sumUnaivalable);
 
-            $mtbfResult = $mtbf->getMTBF($interval->days, $hoursPerDay, 1, count($historicIssues));
 
-        } else {
-            $mtbfResult = 'Non calculé';
-        }
+        //get mttr
+        $mttr = new MTTRStatistics($statistics);
+
+
+        //get mtbf
+        $mtbf = new MTBFStatistics($statistics);
+
 
         //get number of changed parts and symptoms
 
@@ -175,11 +182,6 @@ class RepairController extends AbstractController
             $numberOfParts = $numberOfParts + $oldRepair->getParts()->count();
             $numberOfSymptoms = $numberOfSymptoms + $oldRepair->getSymptoms()->count();
         }
-
-
-
-        // get availability rate
-        $rateResult = $rate->getRate($mtbfResult, $mttrResult);
 
 
         $form = $this->get('form.factory')->create(RepairType::class, $repair);
@@ -216,9 +218,9 @@ class RepairController extends AbstractController
                 'issue' => $issue,
                 'contract' => $contract,
                 'historicIssues' => $historicIssues,
-                'mtbf' => $mtbfResult,
-                'mttr' => $mttrResult,
-                'rate' => $rateResult,
+                'mttr' => $mttr->getMTTR(),
+                'mtbf' => $mtbf->getMTBF(),
+                'rate' => $rate->getRate($mtbf->getMTBF(), $mttr->getMTTR()),
                 'numberOfParts' => $numberOfParts,
                 'numberOfSymptoms' => $numberOfSymptoms
 
