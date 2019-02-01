@@ -1,0 +1,71 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Historique des réparations{% endblock %}
+{% block isActiveRepairHistoric %}active{% endblock %}
+{% block body %}
+    <h4>Historique des réparations</h4>
+    <table class="table table-sm table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Equipement</th>
+            <th>Technicien</th>
+            <th>Symptomes constatés</th>
+            <th>Travaux effectués</th>
+            <th>Temps de réparation</th>
+            <th>Temps d'indisponibilité</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for repair in repairs %}
+            <tr>
+                <td>
+                    <div class="d-flex flex-column">
+                        <div>
+                            id réparation: {{ repair.id }}
+                        </div>
+                        <div>
+                            id ticket: {{ repair.issue.id }}
+                        </div>
+                    </div>
+
+                </td>
+                <td>{{ repair.issue.equipment.serial }}</td>
+                <td>{{ repair.technician.firstname }} {{ repair.technician.lastname }}</td>
+                <td>
+                    <ul>
+                        {% for symptom in repair.symptoms %}
+                            <li>{{ symptom.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for part in repair.parts %}
+                            <li><span class="badge badge-info">{{ part.name }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    {{ repair.timeToRepair }} min
+                </td>
+                <td>
+                    <div class="d-flex flex-column">
+                        <div>
+                            Début d'indisponibilité: {{ repair.issue.dateRequest | date('d/m/y H:i', "Europe/Paris") }}
+                        </div>
+                        <div>
+                            Fin d'indisponibilité: {{ repair.dateEnd | date('d/m/y H:i', "Europe/Paris") }}
+                        </div>
+                        <div>
+                            temps d'indisponibilité: {{ repair.unavailability }} h
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

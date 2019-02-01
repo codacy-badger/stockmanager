@@ -1,0 +1,13 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Traitements de masse{% endblock %}
+
+{% block body %}
+    <h3>Traitements de masse</h3>
+
+    <p>Génération des début de dates d'indisponibilités</p>
+    <form action="{{ path('mass_availability') }}" method="post">
+        <input type="hidden" name="token" value="{{ csrf_token('mass-availability') }}" >
+        <button type="submit" class="btn btn-primary" >Générer</button>
+    </form>
+{% endblock %}

@@ -24,9 +24,14 @@
 
     {#repair section#}
 
+
     <li class="nav-item">
         <a class="nav-link {% block isActiveRepair %}{% endblock %}"
            href="{{ path('repair_index') }}"><i class="fas fa-wrench"></i> Réparations</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% block isActiveHistoricRepair %}{% endblock %}"
+           href="{{ path('repair_historic') }}"><i class="fas fa-history"></i> Historique des réparations</a>
     </li>
 
     <li class="nav-item">
@@ -61,6 +66,8 @@
             <div class="dropdown-divider"></div>
             <a class="nav-link" href="{{ path('user_index') }}">Utilisateurs</a>
             <a class="nav-link" href="{{ path('authorization_index') }}">Authorisations</a>
+            <div class="dropdown-divider"></div>
+            <a class="nav-link" href="{{ path('mass_processing') }}">Traitements de masse</a>
 
         </div>
     </li>

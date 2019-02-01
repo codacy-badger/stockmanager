@@ -28,6 +28,16 @@ class Category
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $hoursPerDay;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $mtbf;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +63,30 @@ class Category
     public function setImage(?Image $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getHoursPerDay(): ?int
+    {
+        return $this->hoursPerDay;
+    }
+
+    public function setHoursPerDay(?int $hoursPerDay): self
+    {
+        $this->hoursPerDay = $hoursPerDay;
+
+        return $this;
+    }
+
+    public function getMtbf(): ?int
+    {
+        return $this->mtbf;
+    }
+
+    public function setMtbf(?int $mtbf): self
+    {
+        $this->mtbf = $mtbf;
 
         return $this;
     }

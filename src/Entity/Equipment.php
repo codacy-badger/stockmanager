@@ -45,6 +45,7 @@ class Equipment
     public function __construct()
     {
         $this->issues = new ArrayCollection();
+
     }
 
 
@@ -119,4 +120,6 @@ class Equipment
 
         return $this;
     }
+
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Equipment;
 use App\Entity\Repair;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -17,6 +18,26 @@ class RepairRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Repair::class);
+    }
+
+
+    public function findByFinished()
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.dateEnd is not null')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findUnavailabilities($idEquipment)
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.issue', 'i')
+            ->leftJoin('i.equipment', 'e')
+            ->andWhere('e.id = :id')
+            ->setParameter('id', $idEquipment)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

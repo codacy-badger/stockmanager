@@ -5,11 +5,12 @@
 {% block body %}
     <h1>Modèle d'équipements</h1>
 
-    <table class="table">
+    <table class="table table-sm table-striped">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Nom</th>
+                <th>Catégorie</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -18,9 +19,9 @@
             <tr>
                 <td>{{ brand.id }}</td>
                 <td>{{ brand.name }}</td>
+                <td>{{ brand.category.name }}</td>
                 <td>
-                    <a href="{{ path('brand_show', {'id': brand.id}) }}">show</a>
-                    <a href="{{ path('brand_edit', {'id': brand.id}) }}">edit</a>
+                    <a class="btn btn-warning btn-sm" href="{{ path('brand_edit', {'id': brand.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +32,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('brand_new') }}">Créer</a>
+    <a class="btn btn-primary" href="{{ path('brand_new') }}"><i class="fas fa-plus-circle"></i> Créer</a>
 {% endblock %}

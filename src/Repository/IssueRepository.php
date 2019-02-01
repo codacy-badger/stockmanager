@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Equipment;
 use App\Entity\Issue;
 use App\Entity\Operator;
 use App\Entity\User;
@@ -23,9 +24,10 @@ class IssueRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Issue[] Returns an array of Issue objects
+     * Find all issues by user
+     * @param User $user
+     * @return mixed
      */
-
     public function findByUser(User $user)
     {
         return $this->createQueryBuilder('i')
@@ -37,6 +39,11 @@ class IssueRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Find all issues by operator and with end status
+     * @param Operator $operator
+     * @return mixed
+     */
     public function findByOperatorEnd(Operator $operator)
     {
         return $this->createQueryBuilder('i')
@@ -48,6 +55,11 @@ class IssueRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Find all issues by operator
+     * @param Operator $operator
+     * @return mixed
+     */
     public function findByOperator(Operator $operator)
     {
         return $this->createQueryBuilder('i')
@@ -56,6 +68,22 @@ class IssueRepository extends ServiceEntityRepository
             ->setParameter('operator', $operator)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Find all issues by equipment
+     * @param Equipment $equipment
+     * @return mixed
+     */
+    public function findByEquipment(Equipment $equipment)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.equipment = :equipment')
+            ->orderBy('i.dateRequest', 'desc')
+            ->setParameter('equipment', $equipment)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
 
@@ -151,6 +179,17 @@ class IssueRepository extends ServiceEntityRepository
 
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function getNotRepaired()
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.dateEnd IS NOT NULL')
+            ->andWhere('i.repair IS NULL')
+            ->orderBy('i.dateEnd', 'desc')
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
 

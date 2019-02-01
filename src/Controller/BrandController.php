@@ -50,15 +50,6 @@ class BrandController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="brand_show", methods="GET")
-     * @param Brand $brand
-     * @return Response
-     */
-    public function show(Brand $brand): Response
-    {
-        return $this->render('admin/brand/show.html.twig', ['brand' => $brand]);
-    }
 
     /**
      * Edit a brand

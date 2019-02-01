@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Contract;
 use App\Entity\Issue;
+use App\Entity\Location;
 use App\Entity\User;
 use App\Form\IssueEditType;
 use App\Form\IssueType;
 use App\Form\ReplaceType;
 use App\Repository\IssueRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +20,14 @@ use Symfony\Component\Security\Core\Security;
 
 class IssueController extends AbstractController
 {
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * @Route("admin/issue", name="issue_index", methods="GET")
      * @param IssueRepository $issueRepository
@@ -63,9 +73,9 @@ class IssueController extends AbstractController
             $issue->setUser($myUser);
 
             //save into database
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($issue);
-            $em->flush();
+
+            $this->em->persist($issue);
+            $this->em->flush();
 
             //get all technicians
             $technicians = $this->getDoctrine()->getRepository(User::class)->getTechnicians();
@@ -182,9 +192,9 @@ class IssueController extends AbstractController
     public function delete(Request $request, Issue $issue): Response
     {
         if ($this->isCsrfTokenValid('delete-issue', $request->request->get('_token'))) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($issue);
-            $em->flush();
+
+            $this->em->remove($issue);
+            $this->em->flush();
         }
 
         return $this->redirectToRoute('issue_index');
@@ -211,8 +221,8 @@ class IssueController extends AbstractController
             $issue->setDateChecked($dateTime);
             $issue->setTechnician($technician);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
+
+            $this->em->flush();
 
             $this->addFlash('success', "Demande validée");
 
@@ -243,7 +253,7 @@ class IssueController extends AbstractController
             $dateTime = new \DateTime();
             $issue->setDateReady($dateTime);
 
-            $this->getDoctrine()->getManager()->flush();
+            $this->em->flush();
 
             $this->addFlash('success', "Demande validée");
 
@@ -299,7 +309,7 @@ class IssueController extends AbstractController
             $dateTime = new \DateTime();
             $issue->setDateReady($dateTime);
 
-            $this->getDoctrine()->getManager()->flush();
+            $this->em->flush();
 
             $this->addFlash('success', "Demande validée");
 
@@ -330,9 +340,18 @@ class IssueController extends AbstractController
             } else {
                 $dateTime = new \DateTime();
 
+                $location = new Location();
+                $location
+                    ->setDate($dateTime)
+                    ->setEquipment($issue->getEquipmentReplace())
+                    ->setSite($issue->getUser()->getOperator()->getSite())
+                    ->setIsOk(true);
+
+
                 $issue->setDateEnd($dateTime);
 
-                $this->getDoctrine()->getManager()->flush();
+                $this->em->persist($location);
+                $this->em->flush();
 
                 $this->addFlash('success', 'Ticket cloturé');
             }
@@ -411,5 +430,7 @@ class IssueController extends AbstractController
             'number' => $number
         ]);
     }
+
+
 
 }

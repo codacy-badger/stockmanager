@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Operator;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -30,9 +31,26 @@ class UserRepository extends ServiceEntityRepository
             ->leftJoin('u.issues', 'i')
             ->addSelect('i')
             ->where('i.dateMessage is null')
-            ->andWhere('i.dateReady is not null')
+            ->andWhere('i.dateReady is not null');
 
-        ;
+
+        return $qr->getQuery()->getResult();
+    }
+
+    /**
+     * get the all users where issues has no notifications
+     * @return mixed
+     */
+    public function notSendedNotification(Operator $operator)
+    {
+        $qr = $this->createQueryBuilder('u');
+        $qr->select('u')
+            ->leftJoin('u.issues', 'i')
+            ->addSelect('i')
+            ->where('i.dateMessage is null')
+            ->andWhere('i.dateReady is not null')
+            ->andWhere('u.operator = :operator')
+            ->setParameter('operator', $operator);
 
 
         return $qr->getQuery()->getResult();
@@ -63,13 +81,23 @@ class UserRepository extends ServiceEntityRepository
 
     public function getTechnicians($role = 'ROLE_ADMIN')
     {
-        $qr= $this->createQueryBuilder('u');
+        $qr = $this->createQueryBuilder('u');
         $qr->leftJoin('u.authorization', 'a')
             ->addSelect('a')
             ->where('a.role = :role')
             ->setParameter('role', $role);
 
-            return $qr->getQuery()->getResult();
+        return $qr->getQuery()->getResult();
+    }
+
+
+    public function getUsersByOperator(Operator $operator)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.operator = :operator')
+            ->setParameter('operator', $operator)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

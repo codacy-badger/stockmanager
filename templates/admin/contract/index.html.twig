@@ -5,11 +5,11 @@
 {% block body %}
     <h1>Contrats</h1>
 
-    <table class="table">
+    <table class="table table-striped table-sm">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Nom</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,8 +19,7 @@
                 <td>{{ contract.id }}</td>
                 <td>{{ contract.name }}</td>
                 <td>
-                    <a href="{{ path('contract_show', {'id': contract.id}) }}">show</a>
-                    <a href="{{ path('contract_edit', {'id': contract.id}) }}">edit</a>
+                    <a class="btn btn-warning btn-sm" href="{{ path('contract_edit', {'id': contract.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +30,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('contract_new') }}">Créer</a>
+    <a class="btn btn-primary" href="{{ path('contract_new') }}"><i class="fas fa-plus-circle"></i> Créer</a>
 {% endblock %}

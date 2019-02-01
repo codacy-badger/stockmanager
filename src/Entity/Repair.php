@@ -21,12 +21,7 @@ class Repair
     /**
      * @ORM\Column(type="datetime")
      */
-    private $startDate;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $endDate;
+    private $dateEnd;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -48,10 +43,59 @@ class Repair
      */
     private $symptoms;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Part")
+     */
+    private $parts;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $degradation;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $noBreakdown;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $timeToRepair;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $statsDownload;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $SoftUpload;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $softVersion;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Issue")
+     */
+    private $issue;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $unavailability;
+
+
+
+
     public function __construct()
     {
         $this->symptoms = new ArrayCollection();
-        $this->startDate = new \DateTime();
+        $this->parts = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -59,29 +103,18 @@ class Repair
         return $this->id;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getDateEnd(): ?\DateTimeInterface
     {
-        return $this->startDate;
+        return $this->dateEnd;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setDateEnd(\DateTimeInterface $dateEnd): self
     {
-        $this->startDate = $startDate;
+        $this->dateEnd = $dateEnd;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
-    {
-        return $this->endDate;
-    }
-
-    public function setEndDate(?\DateTimeInterface $endDate): self
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
 
     public function getDescription(): ?string
     {
@@ -141,6 +174,128 @@ class Repair
         if ($this->symptoms->contains($symptom)) {
             $this->symptoms->removeElement($symptom);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Part[]
+     */
+    public function getParts(): Collection
+    {
+        return $this->parts;
+    }
+
+    public function addPart(Part $part): self
+    {
+        if (!$this->parts->contains($part)) {
+            $this->parts[] = $part;
+        }
+
+        return $this;
+    }
+
+    public function removePart(Part $part): self
+    {
+        if ($this->parts->contains($part)) {
+            $this->parts->removeElement($part);
+        }
+
+        return $this;
+    }
+
+    public function getDegradation(): ?bool
+    {
+        return $this->degradation;
+    }
+
+    public function setDegradation(?bool $degradation): self
+    {
+        $this->degradation = $degradation;
+
+        return $this;
+    }
+
+    public function getNoBreakdown(): ?bool
+    {
+        return $this->noBreakdown;
+    }
+
+    public function setNoBreakdown(?bool $noBreakdown): self
+    {
+        $this->noBreakdown = $noBreakdown;
+
+        return $this;
+    }
+
+    public function getTimeToRepair(): ?int
+    {
+        return $this->timeToRepair;
+    }
+
+    public function setTimeToRepair(?int $timeToRepair): self
+    {
+        $this->timeToRepair = $timeToRepair;
+
+        return $this;
+    }
+
+    public function getStatsDownload(): ?bool
+    {
+        return $this->statsDownload;
+    }
+
+    public function setStatsDownload(bool $statsDownload): self
+    {
+        $this->statsDownload = $statsDownload;
+
+        return $this;
+    }
+
+    public function getSoftUpload(): ?bool
+    {
+        return $this->SoftUpload;
+    }
+
+    public function setSoftUpload(?bool $SoftUpload): self
+    {
+        $this->SoftUpload = $SoftUpload;
+
+        return $this;
+    }
+
+    public function getSoftVersion(): ?string
+    {
+        return $this->softVersion;
+    }
+
+    public function setSoftVersion(?string $softVersion): self
+    {
+        $this->softVersion = $softVersion;
+
+        return $this;
+    }
+
+    public function getIssue(): ?Issue
+    {
+        return $this->issue;
+    }
+
+    public function setIssue(?Issue $issue): self
+    {
+        $this->issue = $issue;
+
+        return $this;
+    }
+
+    public function getUnavailability(): ?int
+    {
+        return $this->unavailability;
+    }
+
+    public function setUnavailability(?int $unavailability): self
+    {
+        $this->unavailability = $unavailability;
 
         return $this;
     }
