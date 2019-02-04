@@ -1,0 +1,21 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Modifier le groupe de pièce{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-center">
+
+        <div class="col-md-4">
+            <h1>Modifier le groupe de pièce</h1>
+
+
+            {{ include('admin/partGroup/_form.html.twig', {'button_label': 'Modifier'}) }}
+            <div class="d-flex mt-1 justify-content-between">
+
+                <a class="btn btn-info" href="{{ path('part-group_index') }}"><i class="fas fa-undo-alt"></i> Retour à la liste</a>
+
+                {{ include('admin/partGroup/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

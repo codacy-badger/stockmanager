@@ -1,11 +1,16 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}New Part{% endblock %}
+{% block title %}Nouvelle pièce{% endblock %}
 
 {% block body %}
-    <h1>Create new Part</h1>
+    <div class="d-flex justify-content-center">
+        <div class="col-md-4">
+            <h1>Créer une nouvelle pièce</h1>
 
-    {{ include('admin/part/_form.html.twig') }}
+            {{ include('admin/part/_form.html.twig') }}
 
-    <a href="{{ path('part_index') }}">back to list</a>
+            <a class="btn btn-info mt-1" href="{{ path('part_index') }}"><i class="fas fa-undo-alt"></i> Retour à la
+                liste</a>
+        </div>
+    </div>
 {% endblock %}

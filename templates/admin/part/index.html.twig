@@ -1,18 +1,19 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}Part index{% endblock %}
+{% block title %}Pièces détachées{% endblock %}
 
 {% block body %}
-    <h1>Part index</h1>
+    <h1>Pièces détachées</h1>
 
     <table class="table table-sm table-striped">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
-                <th>Reference</th>
-                <th>RepairTime</th>
-                <th>actions</th>
+                <th>Nom</th>
+                <th>Références</th>
+                <th>Temps théorique de réparation</th>
+                <th>Groupe de pièce</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -22,17 +23,19 @@
                 <td>{{ part.name }}</td>
                 <td>{{ part.reference }}</td>
                 <td>{{ part.repairTime }}</td>
+                <td>{{ part.partGroup.name }}</td>
                 <td>
-                    <a class="btn btn-warning btn-sm" href="{{ path('part_edit', {'id': part.id}) }}">Modifier</a>
+                    <a class="btn btn-warning btn-sm" href="{{ path('part_edit', {'id': part.id}) }}"><i
+                                class="fas fa-edit"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="6">Pas d'enregistrements</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a class="btn btn-primary" href="{{ path('part_new') }}">Créer</a>
+    <a class="btn btn-primary" href="{{ path('part_new') }}"><i class="fas fa-plus-circle"></i> Créer</a>
 {% endblock %}
