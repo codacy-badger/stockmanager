@@ -31,6 +31,11 @@ class Part
      */
     private $repairTime;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\PartGroup", inversedBy="parts")
+     */
+    private $partGroup;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +73,18 @@ class Part
     public function setRepairTime(?int $repairTime): self
     {
         $this->repairTime = $repairTime;
+
+        return $this;
+    }
+
+    public function getPartGroup(): ?PartGroup
+    {
+        return $this->partGroup;
+    }
+
+    public function setPartGroup(?PartGroup $partGroup): self
+    {
+        $this->partGroup = $partGroup;
 
         return $this;
     }

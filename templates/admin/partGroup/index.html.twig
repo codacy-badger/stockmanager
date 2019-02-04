@@ -1,0 +1,40 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Groupes de pièces{% endblock %}
+
+{% block body %}
+    <h1>Groupes de pièces</h1>
+
+    <table class="table table-sm table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Catégorie d'équipement</th>
+            <th>Actions</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for partGroup in partGroups %}
+            <tr>
+                <td>{{ partGroup.id }}</td>
+                <td>{{ partGroup.name }}</td>
+                <td>{{ partGroup.category.name }}</td>
+
+                <td>
+                    <a class="btn btn-warning btn-sm" href="{{ path('part-group_edit', {'id': partGroup.id }) }}"><i
+                                class="fas fa-edit"></i> Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Pas d'enregistrements</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('part-group_new') }}"><i class="fas fa-plus-circle"></i> Créer un nouveau
+        groupe</a>
+{% endblock %}

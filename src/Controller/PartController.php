@@ -74,6 +74,7 @@ class PartController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'La pièce a bien été modifiée');
             return $this->redirectToRoute('part_edit', ['id' => $part->getId()]);
         }
 
@@ -95,6 +96,8 @@ class PartController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->remove($part);
             $em->flush();
+
+            $this->addFlash('success', 'La pièce a bien été supprimée');
         }
 
         return $this->redirectToRoute('part_index');

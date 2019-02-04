@@ -27,7 +27,7 @@
 
     <li class="nav-item">
         <a class="nav-link {% block isActiveRepair %}{% endblock %}"
-           href="{{ path('repair_index') }}"><i class="fas fa-wrench"></i> Réparations</a>
+           href="{{ path('repair_index') }}"><i class="fas fa-wrench"></i> Réparations à traiter</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% block isActiveHistoricRepair %}{% endblock %}"
@@ -58,6 +58,7 @@
             <div class="dropdown-divider"></div>
             <a class="nav-link" href="{{ path('symptom_index') }}">Symptomes</a>
             <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
+            <a class="nav-link" href="{{ path('part-group_index') }}">Groupes de pièces</a>
             <a class="nav-link" href="{{ path('software_index') }}">Logiciels</a>
             <div class="dropdown-divider"></div>
             <a class="nav-link" href="{{ path('operator_index') }}">Exploitants</a>
