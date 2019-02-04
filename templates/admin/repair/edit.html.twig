@@ -1,13 +1,43 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}Edit Repair{% endblock %}
+{% block title %}Modifier la réparation{% endblock %}
 
 {% block body %}
-    <h1>Edit Repair</h1>
 
-    {{ include('admin/repair/_form.html.twig', {'button_label': 'Update'}) }}
+    <h1>Modifier la réparation</h1>
+<div class="row">
 
-    <a href="{{ path('repair_index') }}">back to list</a>
+    {{ include('admin/repair/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-    {{ include('admin/repair/_delete_form.html.twig') }}
+
+</div>
+    <div class="d-flex mt-1 justify-content-between">
+        <a class="btn btn-info" href="{{ path('repair_historic') }}">Retour à la liste</a>
+
+        {{ include('admin/repair/_delete_form.html.twig') }}
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.js_repair_symptoms').select2();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.js_repair_parts').select2();
+        });
+    </script>
 {% endblock %}

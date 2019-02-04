@@ -1,0 +1,27 @@
+<div class="col-md-4">
+    {{ form_start(form) }}
+    <h4>Constatations</h4>
+    {{ form_row(form.symptoms, { 'attr': {'class': 'js_repair_symptoms'} }) }}
+    {{ form_row(form.description) }}
+    <div class="d-flex justify-content-around">
+
+        {{ form_row(form.degradation) }}
+        {{ form_row(form.noBreakdown) }}
+    </div>
+</div>
+<div class="col-md-4">
+    <h4>Actions</h4>
+    {{ form_row(form.parts, { 'attr': {'class': 'js_repair_parts'} }) }}
+    {{ form_row(form.timeToRepair) }}
+    {{ form_row(form.softVersion) }}
+    <div class="d-flex justify-content-around">
+
+        {{ form_row(form.statsDownload) }}
+        {{ form_row(form.softUpload) }}
+    </div>
+    {{ form_row(form.dateEnd) }}
+    <button class="btn btn-primary"><i class="fas fa-check"></i> {{ button_label|default('Enregistrer') }}
+    </button>
+    {{ form_end(form) }}
+
+</div>

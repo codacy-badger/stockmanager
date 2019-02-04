@@ -101,8 +101,17 @@ class RepairController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            //set the time to repair property
+            $diff = $repair->getDateEnd()->diff($repair->getIssue()->getDateRequest());
+            $hours = $diff->h;
+            $hours = $hours + ($diff->days * 24);
+            $repair->setUnavailability($hours);
+
+
             $this->em->flush();
 
+            $this->addFlash('success', 'La modification a bien été effectuée');
             return $this->redirectToRoute('repair_edit', ['id' => $repair->getId()]);
         }
 
@@ -121,6 +130,8 @@ class RepairController extends AbstractController
 
             $this->em->remove($repair);
             $this->em->flush();
+
+            $this->addFlash('success', 'La suppression a bien été effectuée');
         }
 
         return $this->redirectToRoute('repair_index');

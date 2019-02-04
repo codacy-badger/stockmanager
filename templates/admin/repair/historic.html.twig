@@ -14,6 +14,7 @@
             <th>Travaux effectués</th>
             <th>Temps de réparation</th>
             <th>Temps d'indisponibilité</th>
+            <th>Actions</th>
 
         </tr>
         </thead>
@@ -62,6 +63,10 @@
                             temps d'indisponibilité: {{ repair.unavailability }} h
                         </div>
                     </div>
+                </td>
+                <td>
+                    <a class="btn btn-warning" href="{{ path('repair_edit', {'id' : repair.id }) }}"><i
+                                class="fas fa-edit"></i> Modifier</a>
                 </td>
             </tr>
 
