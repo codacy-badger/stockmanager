@@ -9,6 +9,7 @@
     <table class="table table-sm">
         <thead>
         <tr>
+            <th>Id ticket</th>
             <th>Equipement</th>
             <th>Provenance</th>
             <th>Date arrivée</th>
@@ -21,8 +22,12 @@
         <tbody>
         {% for issue in issues %}
             <tr>
+                <td>
+                    {{ issue.id }}
+                </td>
 
                 {#equipment column#}
+
                 <td>
                     <div class="d-flex">
                         <img class="img-circle" data-toggle="tooltip" data-placement="top"

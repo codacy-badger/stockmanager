@@ -1,11 +1,17 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}Nouveau réseau de transport{% endblock %}
+{% block title %}Ajouter réseau de transport{% endblock %}
 
 {% block body %}
-    <h1>nouveau réseau de transport</h1>
+    <div class="d-flex justify-content-center">
 
-    {{ include('admin/transportation/_form.html.twig') }}
+        <div class="col-md-4">
 
-    <a href="{{ path('transportation_index') }}">back to list</a>
+            <h1>Ajouter un réseau de transport</h1>
+
+            {{ include('admin/transportation/_form.html.twig') }}
+
+            <a class="btn btn-info mt-3" href="{{ path('transportation_index') }}">Retour</a>
+        </div>
+    </div>
 {% endblock %}

@@ -5,16 +5,16 @@
 {% block body %}
     <h1>Dépots</h1>
 
-    <table class="table">
+    <table class="table table-sm table-striped">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Adress</th>
-                <th>Postal</th>
-                <th>City</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Adress</th>
+            <th>Postal</th>
+            <th>City</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for site in sites %}
@@ -25,17 +25,16 @@
                 <td>{{ site.postal }}</td>
                 <td>{{ site.city }}</td>
                 <td>
-                    <a href="{{ path('site_show', {'id': site.id}) }}">show</a>
-                    <a href="{{ path('site_edit', {'id': site.id}) }}">edit</a>
+                    <a class="btn btn-warning" href="{{ path('site_edit', {'id': site.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Pas d'enregistrements</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('site_new') }}">Create new</a>
+    <a class="btn btn-primary" href="{{ path('site_new') }}">Ajouter</a>
 {% endblock %}

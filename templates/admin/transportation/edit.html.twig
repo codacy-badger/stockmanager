@@ -3,11 +3,19 @@
 {% block title %}Modifier un réseau{% endblock %}
 
 {% block body %}
-    <h1>Modifier un réseau de transport</h1>
+    <div class="d-flex justify-content-center">
 
-    {{ include('admin/transportation/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        <div class="col-md-4">
 
-    <a href="{{ path('transportation_index') }}">retour à la liste</a>
+            <h1>Modifier un réseau de transport</h1>
 
-    {{ include('admin/transportation/_delete_form.html.twig') }}
+            {{ include('admin/transportation/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+            <div class="d-flex mt-3 justify-content-between">
+                <a class="btn btn-info" href="{{ path('transportation_index') }}">retour à la liste</a>
+
+                {{ include('admin/transportation/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

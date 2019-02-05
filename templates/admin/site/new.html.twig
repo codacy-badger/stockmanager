@@ -1,11 +1,18 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}New Site{% endblock %}
+{% block title %}Ajouter un nouveau dépot{% endblock %}
 
 {% block body %}
-    <h1>Create new Site</h1>
 
-    {{ include('admin/site/_form.html.twig') }}
+    <div class="d-flex justify-content-center">
 
-    <a href="{{ path('site_index') }}">back to list</a>
+        <div class="col-md-4">
+
+            <h1>Ajouter un nouveau dépot</h1>
+
+            {{ include('admin/site/_form.html.twig') }}
+
+            <a class="btn btn-info mt-3" href=" {{ path('site_index') }}">Retour</a>
+        </div>
+    </div>
 {% endblock %}

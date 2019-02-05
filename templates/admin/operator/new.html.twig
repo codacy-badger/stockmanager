@@ -3,9 +3,15 @@
 {% block title %}Créer un nouvel exploitant{% endblock %}
 
 {% block body %}
-    <h1>Créer un nouvel exploitant</h1>
+    <div class="d-flex justify-content-center">
 
-    {{ include('admin/operator/_form.html.twig') }}
+        <div class="col-md-4">
 
-    <a href="{{ path('operator_index') }}">back to list</a>
+            <h1>Créer un nouvel exploitant</h1>
+
+            {{ include('admin/operator/_form.html.twig') }}
+
+            <a class="btn btn-info mt-3" href="{{ path('operator_index') }}">Retour</a>
+        </div>
+    </div>
 {% endblock %}
