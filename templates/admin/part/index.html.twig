@@ -1,5 +1,5 @@
 {% extends 'admin/index.html.twig' %}
-
+{% block isActivePart %}active{% endblock %}
 {% block title %}Pièces détachées{% endblock %}
 
 {% block body %}
@@ -7,14 +7,14 @@
 
     <table class="table table-sm table-striped">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Références</th>
-                <th>Temps théorique de réparation</th>
-                <th>Groupe de pièce</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Références</th>
+            <th>Temps théorique de réparation</th>
+            <th>Groupe de pièce</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for part in parts %}

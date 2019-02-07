@@ -20,6 +20,10 @@
         <a class="nav-link {% block isActiveDelivery %}{% endblock %}"
            href="{{ path('delivery_index') }}"><i class="fas fa-truck"></i> Bons de livraisons</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {% block isActiveLocation %}{% endblock %}"
+           href="{{ path('location_search') }}"><i class="fas fa-map-marked-alt"></i> Localisation</a>
+    </li>
     <div class="dropdown-divider"></div>
 
     {#repair section#}

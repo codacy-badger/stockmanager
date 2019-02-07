@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,18 @@ class Site
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Operator", mappedBy="site")
+     * @var ArrayCollection
+     */
+    private $operator;
+
+
+    public function __construct()
+    {
+        $this->operator = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,15 +104,35 @@ class Site
         return $this;
     }
 
-    public function getOperator(): ?Operator
+    /**
+     * @return Collection|Operator[]
+     */
+    public function getOperator(): Collection
     {
         return $this->operator;
     }
 
-    public function setOperator(?Operator $operator): self
+    public function addOperator(Operator $operator): self
     {
-        $this->operator = $operator;
+        if (!$this->operator->contains($operator)) {
+            $this->operator[] = $operator;
+            $operator->setSite($this);
+        }
 
         return $this;
     }
+
+    public function removeOperator(Operator $operator): self
+    {
+        if ($this->operator->contains($operator)) {
+            $this->operator->removeElement($operator);
+            // set the owning side to null (unless already changed)
+            if ($operator->getSite() === $this) {
+                $operator->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
