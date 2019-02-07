@@ -36,7 +36,7 @@ class Operator
     private $users;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Site")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="operator")
      */
     private $site;
 

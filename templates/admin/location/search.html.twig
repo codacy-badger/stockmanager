@@ -1,0 +1,27 @@
+{% extends 'admin/index.html.twig' %}
+
+
+
+{% block title %}
+    Localisation
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-info">{{ button_label|default('Valider') }}</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        $('#location_equipment').autocompleter({
+            url_list: '/member/equipment_search',
+            url_get: '/member/equipment_get'
+        });
+    </script>
+{% endblock %}
