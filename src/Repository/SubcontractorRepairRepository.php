@@ -19,6 +19,19 @@ class SubcontractorRepairRepository extends ServiceEntityRepository
         parent::__construct($registry, SubcontractorRepair::class);
     }
 
+
+
+    public function countNotEnded()
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('count(s.id)');
+        $qb->where('s.dateReturn IS NULL');
+
+
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
 //    /**
 //     * @return SubcontractorRepair[] Returns an array of SubcontractorRepair objects
 //     */

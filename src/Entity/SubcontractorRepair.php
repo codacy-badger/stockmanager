@@ -24,12 +24,23 @@ class SubcontractorRepair
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $dateExit;
+    private $dateReturn;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Repair", inversedBy="subcontractorRepair", cascade={"persist", "remove"})
      */
     private $repair;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $dateDispatch;
+
+
+    public function __construct()
+    {
+        $this->setDateEntry(new \DateTime());
+    }
 
     public function getId(): ?int
     {
@@ -48,14 +59,14 @@ class SubcontractorRepair
         return $this;
     }
 
-    public function getDateExit(): ?\DateTimeInterface
+    public function getDateReturn(): ?\DateTimeInterface
     {
-        return $this->dateExit;
+        return $this->dateReturn;
     }
 
-    public function setDateExit(?\DateTimeInterface $dateExit): self
+    public function setDateReturn(?\DateTimeInterface $dateReturn): self
     {
-        $this->dateExit = $dateExit;
+        $this->dateReturn = $dateReturn;
 
         return $this;
     }
@@ -68,6 +79,18 @@ class SubcontractorRepair
     public function setRepair(?Repair $repair): self
     {
         $this->repair = $repair;
+
+        return $this;
+    }
+
+    public function getDateDispatch(): ?\DateTimeInterface
+    {
+        return $this->dateDispatch;
+    }
+
+    public function setDateDispatch(?\DateTimeInterface $dateDispatch): self
+    {
+        $this->dateDispatch = $dateDispatch;
 
         return $this;
     }

@@ -88,10 +88,16 @@ class Repair
      */
     private $unavailability;
 
+
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\SubcontractorRepair", mappedBy="repair", cascade={"persist", "remove"})
      */
     private $subcontractorRepair;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isGoingToSubcontractor;
 
 
 
@@ -319,6 +325,18 @@ class Repair
         if ($newRepair !== $subcontractorRepair->getRepair()) {
             $subcontractorRepair->setRepair($newRepair);
         }
+
+        return $this;
+    }
+
+    public function getIsGoingToSubcontractor(): ?bool
+    {
+        return $this->isGoingToSubcontractor;
+    }
+
+    public function setIsGoingToSubcontractor(?bool $isGoingToSubcontractor): self
+    {
+        $this->isGoingToSubcontractor = $isGoingToSubcontractor;
 
         return $this;
     }

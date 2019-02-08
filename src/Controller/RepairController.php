@@ -8,8 +8,10 @@ use App\Entity\EquipmentStatus;
 use App\Entity\Issue;
 use App\Entity\Repair;
 use App\Entity\Statistics;
+use App\Entity\SubcontractorRepair;
 use App\Form\RepairType;
 use App\Repository\RepairRepository;
+use App\Services\DateDiffHour;
 use App\Services\MTBFStatistics;
 use App\Services\MTTRStatistics;
 use App\Services\RateStatistics;
@@ -95,17 +97,15 @@ class RepairController extends AbstractController
     /**
      * @Route("/{id}/edit", name="repair_edit", methods="GET|POST")
      */
-    public function edit(Request $request, Repair $repair): Response
+    public function edit(Request $request, Repair $repair, DateDiffHour $dateDiffHour): Response
     {
         $form = $this->createForm(RepairType::class, $repair);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            //set the time to repair property
-            $diff = $repair->getDateEnd()->diff($repair->getIssue()->getDateRequest());
-            $hours = $diff->h;
-            $hours = $hours + ($diff->days * 24);
+            $hours = $dateDiffHour->getDiff($repair->getDateEnd(), $repair->getIssue()->getDateRequest());
+
             $repair->setUnavailability($hours);
 
 
@@ -144,7 +144,7 @@ class RepairController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws \Exception
      */
-    public function repairItem(Issue $issue, Request $request, RateStatistics $rate)
+    public function repairItem(Issue $issue, Request $request, RateStatistics $rate, DateDiffHour $dateDiffHour)
     {
         $repair = new Repair();
         $contract = new Contract();
@@ -201,12 +201,21 @@ class RepairController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            //set the time to repair property
-            $diff = $repair->getDateEnd()->diff($issue->getDateRequest());
-            $hours = $diff->h;
-            $hours = $hours + ($diff->days * 24);
-            $repair->setUnavailability($hours);
+            // if equipment is send to subcontractor then record it to this entity
+            if (null == !$repair->getIsGoingToSubcontractor()) {
+                $subcontracterRepair = new SubcontractorRepair();
+                $subcontracterRepair->setRepair($repair);
 
+                $this->em->persist($subcontracterRepair);
+
+            } else {
+                //get number of hours to repair
+
+                $hours = $dateDiffHour->getDiff($repair->getDateEnd(), $issue->getDateRequest());
+
+                $repair->setUnavailability($hours);
+
+            }
 
             // add technician
             $repair->setTechnician($this->getUser());
@@ -239,4 +248,22 @@ class RepairController extends AbstractController
 
         );
     }
+
+
+    /**
+     * @Route("/count", name="repair_count")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function countInProcessed()
+    {
+
+        $count = $this->em->getRepository(Issue::class)->countNotRepaired();
+
+        return $this->render('admin/repair/_count.html.twig', [
+            'count' => $count,
+        ]);
+    }
+
+
+
 }
