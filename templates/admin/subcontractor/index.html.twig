@@ -1,0 +1,71 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Sous-traitant{% endblock %}
+
+{% block isActiveSubcontractor %}active{% endblock %}
+
+{% block body %}
+    <h1>Sous-traitant</h1>
+
+    <table class="table table-sm table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Equipement</th>
+            <th>Réparation SO</th>
+            <th>Date enregistrement</th>
+            <th>Date Envoi</th>
+            <th>Date retour</th>
+
+
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for subcontractor in subcontractors %}
+            <tr>
+                <td>{{ subcontractor.id }}</td>
+                <td>
+                    <div class="d-flex flex-column">
+                        <div>Catégorie: {{ subcontractor.repair.issue.equipment.brand.category.name }}</div>
+                        <div>Modèle: {{ subcontractor.repair.issue.equipment.brand.name }}</div>
+                        <div>N°s: {{ subcontractor.repair.issue.equipment.serial }}</div>
+                    </div>
+
+                </td>
+
+                <td>
+                    <ul>
+
+                        <li>id: {{ subcontractor.repair.id }}</li>
+
+                        <li>Symptômes:
+                            <ul>
+                                {% for symptom in subcontractor.repair.symptoms %}
+
+                                    <li class="badge badge-warning">{{ symptom.name }}</li>
+
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+                <td>{{ subcontractor.dateEntry | date('d/m/y' ,'Europe/Paris') }}</td>
+                <td>{% if subcontractor.dateDispatch %}{{ subcontractor.dateDispatch | date('d/m/y' ,'Europe/Paris') }}{% else %}n/a{% endif %}</td>
+                <td>{% if subcontractor.dateReturn %}{{ subcontractor.dateReturn | date('d/m/y' ,'Europe/Paris') }}{% else %}n/a{% endif %}</td>
+
+
+                <td>
+                    <a class="btn btn-warning btn-sm" href="{{ path('subcontractor_edit', {'id': subcontractor.id} ) }}" >Modifier</a>
+                </td>
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Pas d'enregistrement</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -276,6 +276,20 @@ class IssueRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
+    public function countNotRepaired()
+    {
+        return $this->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->andWhere('i.dateEnd IS NOT NULL')
+            ->andWhere('i.repair IS NULL')
+
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Issue
     {

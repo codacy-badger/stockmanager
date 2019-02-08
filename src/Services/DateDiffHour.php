@@ -12,8 +12,18 @@ namespace App\Services;
 class DateDiffHour
 {
 
-    public function __construct(){
+    /**
+     * Return hours difference between two dates
+     * @param \DateTime $dateEnd
+     * @param \DateTime $dateStart
+     */
+    public function getDiff(\DateTimeInterface $dateEnd, \DateTimeInterface $dateStart): int
+    {
+        $diff = $dateEnd->diff($dateStart);
+        $hours = $diff->h;
+        $hours = $hours + ($diff->days * 24);
 
+        return $hours;
     }
 
 }

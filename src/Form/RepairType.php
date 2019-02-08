@@ -56,6 +56,9 @@ class RepairType extends AbstractType
             ->add('softUpload', CheckboxType::class, [
                 'required' => false
             ])
+            ->add('isGoingToSubcontractor', CheckboxType::class, [
+                'required' => false
+            ])
             ->add('dateEnd', DateTimeType::class, [
                 'widget' => 'single_text',
                 'required' => true
