@@ -67,7 +67,6 @@ class LocationController extends AbstractController
             ]);
 
 
-            dump($result);
 
             return $this->render('admin/location/index.html.twig', [
                 'form' => $form->createView(),
