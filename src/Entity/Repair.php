@@ -88,6 +88,11 @@ class Repair
      */
     private $unavailability;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\SubcontractorRepair", mappedBy="repair", cascade={"persist", "remove"})
+     */
+    private $subcontractorRepair;
+
 
 
 
@@ -296,6 +301,24 @@ class Repair
     public function setUnavailability(?int $unavailability): self
     {
         $this->unavailability = $unavailability;
+
+        return $this;
+    }
+
+    public function getSubcontractorRepair(): ?SubcontractorRepair
+    {
+        return $this->subcontractorRepair;
+    }
+
+    public function setSubcontractorRepair(?SubcontractorRepair $subcontractorRepair): self
+    {
+        $this->subcontractorRepair = $subcontractorRepair;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newRepair = $subcontractorRepair === null ? null : $this;
+        if ($newRepair !== $subcontractorRepair->getRepair()) {
+            $subcontractorRepair->setRepair($newRepair);
+        }
 
         return $this;
     }
