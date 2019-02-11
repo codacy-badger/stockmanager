@@ -4,16 +4,30 @@ namespace App\Controller;
 
 use App\Entity\Issue;
 use App\Entity\Operator;
+use App\Entity\Repair;
 use App\Entity\Symptom;
 use App\Services\PieChartGenerator;
 use App\Services\Statistics;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ReportingController extends AbstractController
 {
+
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    public function __construct(EntityManagerInterface $em){
+
+        $this->em = $em;
+    }
+
     /**
      * @Route("admin/reporting/get-opened-issues-by-operator", name="reporting_getIssueByOperator")
      */
@@ -41,6 +55,24 @@ class ReportingController extends AbstractController
 
         return $this->render('admin/reporting/_pieSymptoms.html.twig', ['piechart' => $pieChart]);
     }
+
+
+    /**
+     * @Route("admin/reporting/", name="reporting_index")
+     */
+    public function index()
+    {
+        $countRealIssues = $this->em->getRepository(Repair::class)->countRealIssues();
+        $countFakeIssues = $this->em->getRepository(Repair::class)->countFakeIssues();
+
+        return $this->render('admin/reporting/index.html.twig', [
+            'countRealIssues' => $countRealIssues,
+            'countFakeIssues' => $countFakeIssues
+        ]);
+
+    }
+
+
 
 
 }

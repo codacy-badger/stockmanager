@@ -41,6 +41,26 @@ class RepairRepository extends ServiceEntityRepository
     }
 
 
+    public function countRealIssues()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->andWhere('r.noBreakdown = false')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countFakeIssues()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->andWhere('r.noBreakdown = true')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+
 //    /**
 //     * @return Repair[] Returns an array of Repair objects
 //     */
