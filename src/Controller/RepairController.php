@@ -104,6 +104,22 @@ class RepairController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
+            // if equipment is send to subcontractor then record it to this entity
+            if (null == !$repair->getIsGoingToSubcontractor()) {
+
+                if (null === $repair->getSubcontractorRepair()) {
+
+                    $subcontracterRepair = new SubcontractorRepair();
+                }
+                
+                $subcontracterRepair->setRepair($repair);
+
+                $this->em->persist($subcontracterRepair);
+
+            }
+
+
             $hours = $dateDiffHour->getDiff($repair->getDateEnd(), $repair->getIssue()->getDateRequest());
 
             $repair->setUnavailability($hours);
@@ -158,6 +174,7 @@ class RepairController extends AbstractController
 
         $sumUnaivalable = 0;
 
+        /** @var Repair $oldRepair */
         foreach ($oldRepairs as $oldRepair) {
             $sumUnaivalable = $sumUnaivalable + $oldRepair->getUnavailability();
         }
@@ -189,6 +206,8 @@ class RepairController extends AbstractController
 
         $numberOfParts = 0;
         $numberOfSymptoms = 0;
+
+        /** @var Repair $oldRepair */
         foreach ($oldRepairs as $oldRepair) {
             $numberOfParts = $numberOfParts + $oldRepair->getParts()->count();
             $numberOfSymptoms = $numberOfSymptoms + $oldRepair->getSymptoms()->count();
@@ -263,7 +282,6 @@ class RepairController extends AbstractController
             'count' => $count,
         ]);
     }
-
 
 
 }
