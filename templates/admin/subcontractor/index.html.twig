@@ -26,12 +26,31 @@
             <tr>
                 <td>{{ subcontractor.id }}</td>
                 <td>
-                    <div class="d-flex flex-column">
-                        <div>Catégorie: {{ subcontractor.repair.issue.equipment.brand.category.name }}</div>
-                        <div>Modèle: {{ subcontractor.repair.issue.equipment.brand.name }}</div>
-                        <div>N°s: {{ subcontractor.repair.issue.equipment.serial }}</div>
+                    <div class="d-flex">
+                        <img class="img-circle" data-toggle="tooltip" data-placement="top"
+                             title="{{ subcontractor.repair.issue.equipment.brand.category.name }}" width="50"
+                             height="50"
+                             src="{{ asset(subcontractor.repair.issue.equipment.brand.category.image.url) }}"
+                             alt="{{ subcontractor.repair.issue.equipment.brand.category.image.alt }}">
+                        <div class="d-flex flex-column">
+                            <div class="small">
+                                <b>Catégorie:</b> {{ subcontractor.repair.issue.equipment.brand.category.name }}
+                            </div>
+                            <div class="small">
+                                <b>Modèle:</b> {{ subcontractor.repair.issue.equipment.brand.name }}
+                            </div>
+                            <div class="small">
+                                <b>N° Serie:</b> {{ subcontractor.repair.issue.equipment.serial }}
+                            </div>
+                            {% if subcontractor.repair.issue.equipment.contract.id == out_sismo_contract %}
+                                <div>
+                                        <span class="badge badge-info badge-pill">
+                                         Contrat: {{ subcontractor.repair.issue.equipment.contract.name }}
+                                        </span>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
-
                 </td>
 
                 <td>

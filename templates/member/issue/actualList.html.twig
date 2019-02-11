@@ -47,7 +47,7 @@
                                     <div>
                                         <b>N° Serie:</b> {{ issue.equipment.serial }}
                                     </div>
-                                    {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
+                                    {% if issue.equipment.contract.id == out_sismo_contract %}
                                         <div>
                                         <span class="badge badge-info badge-pill">
                                          Contrat: {{ issue.equipment.contract.name }}
@@ -62,7 +62,7 @@
                         <td class="d-none d-sm-table-cell">
                             <div class="d-flex">
                                 <div>
-                                    {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
+                                    {% if issue.equipment.contract.id == out_sismo_contract %}
                                         Pas de matériel de remplacement pour les équipements hors contrat SISMO
                                     {% else %}
                                         <b>N° Serie:</b>

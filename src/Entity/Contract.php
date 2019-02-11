@@ -15,6 +15,7 @@ class Contract
 
     const CONTRAT_HORS_SISMO = 5;
 
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -26,6 +27,7 @@ class Contract
      * @ORM\Column(type="string", length=255)
      */
     private $name;
+
 
     public function getId(): ?int
     {

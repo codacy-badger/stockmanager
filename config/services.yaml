@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'fr'
+    out_sismo_contract: 5
 
 services:
     # default configuration for services in *this* file

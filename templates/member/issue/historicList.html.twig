@@ -45,7 +45,7 @@
                                     <div>
                                         <b>N° Serie:</b> {{ issue.equipment.serial }}
                                     </div>
-                                    {% if issue.equipment.contract.id == constant('CONTRAT_HORS_SISMO', contract) %}
+                                    {% if issue.equipment.contract.id == out_sismo_contract %}
                                         <div>
                                         <span class="badge badge-info badge-pill">
                                          Contrat: {{ issue.equipment.contract.name }}
