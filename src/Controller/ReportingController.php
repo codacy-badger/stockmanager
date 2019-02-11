@@ -2,16 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Issue;
 use App\Entity\Operator;
 use App\Entity\Repair;
-use App\Entity\Symptom;
+use App\Entity\Statistics;
 use App\Services\PieChartGenerator;
-use App\Services\Statistics;
-use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ReportingController extends AbstractController
@@ -23,7 +21,8 @@ class ReportingController extends AbstractController
      */
     private $em;
 
-    public function __construct(EntityManagerInterface $em){
+    public function __construct(EntityManagerInterface $em)
+    {
 
         $this->em = $em;
     }
@@ -65,14 +64,28 @@ class ReportingController extends AbstractController
         $countRealIssues = $this->em->getRepository(Repair::class)->countRealIssues();
         $countFakeIssues = $this->em->getRepository(Repair::class)->countFakeIssues();
 
+        $categories = $this->em->getRepository(Category::class)->findAll();
+
+        $now = new \DateTime();
+        $currentDate = new \DateTime();
+        $oldDate = $currentDate->sub(new \DateInterval('P30D'));
+
+        foreach ($categories as $category) {
+
+            $unavailbility[] = $this->em->getRepository(Repair::class)->getUnavaillabilityByCategoryByPeriod($category, $oldDate, $now);
+        }
+
+
+        dump($unavailbility);
+
+
         return $this->render('admin/reporting/index.html.twig', [
             'countRealIssues' => $countRealIssues,
-            'countFakeIssues' => $countFakeIssues
+            'countFakeIssues' => $countFakeIssues,
+            'unavaibilityArray' => $unavailbility
         ]);
 
     }
-
-
 
 
 }

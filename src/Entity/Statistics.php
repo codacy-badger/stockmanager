@@ -11,7 +11,7 @@ class Statistics
 {
 
 
-    const DELFAULT_HOURSPERDAY = 8;
+    const DEFAULT_HOURSPERDAY = 8;
 
     /**
      * @ORM\Id()
@@ -67,7 +67,7 @@ class Statistics
         return $this->hoursPerDay;
     }
 
-    public function setHoursPerDay(int $hoursPerDay = self::DELFAULT_HOURSPERDAY): self
+    public function setHoursPerDay(int $hoursPerDay = self::DEFAULT_HOURSPERDAY): self
     {
         $this->hoursPerDay = $hoursPerDay;
 
