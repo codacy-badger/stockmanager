@@ -1,0 +1,24 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Reporting{% endblock %}
+
+{% block body %}
+
+    <table class="table table-sm table-stripped">
+
+        <thead>
+        <tr>
+            <th>Nombre de pannes réelles</th>
+            <th>Nombre de fausses pannes</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ countRealIssues }}</td>
+            <td>{{ countFakeIssues }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

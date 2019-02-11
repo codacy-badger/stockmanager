@@ -19,6 +19,7 @@
 
 {% endblock %}
 {% block javascripts %}
+    {{ parent() }}
     <script>
         $('#issue_equipment').autocompleter({
             url_list: '/member/equipment_search',
