@@ -26,6 +26,7 @@ class RepairRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.dateEnd is not null')
+            ->orderBy('r.dateEnd', 'desc')
             ->getQuery()
             ->getResult();
     }
