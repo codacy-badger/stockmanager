@@ -18,6 +18,7 @@
                 <th>Societe</th>
                 <th>Type d'équipement</th>
                 <th>Numéro de série</th>
+                <th>Etat</th>
                 <th>Pièce 1</th>
                 <th>Pièce 2</th>
             </tr>
@@ -54,6 +55,13 @@
                             {{ location.equipment.serial }}
                         {% else %}
                             n/a
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if location.isOk == true %}
+                          <span class="badge badge-success">ok</span>
+                        {% else %}
+                            <span class="badge badge-danger">ko</span>
                         {% endif %}
                     </td>
                     <td>
