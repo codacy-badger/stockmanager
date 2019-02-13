@@ -18,6 +18,8 @@
                 <th>Societe</th>
                 <th>Type d'équipement</th>
                 <th>Numéro de série</th>
+                <th>Pièce 1</th>
+                <th>Pièce 2</th>
             </tr>
             </thead>
             <tbody>
@@ -33,14 +35,40 @@
                         {{ location.date | date('d/m/y', 'Europe/Paris') }}
                     </td>
                     <td>
-                        {{ location.site.operator.first.name }}
+                        {% if location.site %}
+                            {{ location.site.operator.first.name }}
+                        {% else %}
+                            n/a
+                        {% endif %}
                     </td>
 
                     <td>
-                        {{ location.equipment.brand.category.name }}
+                        {% if location.equipment %}
+                            {{ location.equipment.brand.category.name }}
+                        {% else %}
+                            n/a
+                        {% endif %}
                     </td>
                     <td>
-                        {{ location.equipment.serial }}
+                        {% if location.equipment %}
+                            {{ location.equipment.serial }}
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if location.part1 %}
+                            {{ location.part1.name }}
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if location.part2 %}
+                            {{ location.part2.name }}
+                        {% else %}
+                            n/a
+                        {% endif %}
                     </td>
 
                 </tr>
