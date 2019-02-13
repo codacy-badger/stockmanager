@@ -36,6 +36,16 @@ class Location
      */
     private $isOk;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Part")
+     */
+    private $part1;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Part")
+     */
+    private $part2;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +95,30 @@ class Location
     public function setIsOk(?bool $isOk): self
     {
         $this->isOk = $isOk;
+
+        return $this;
+    }
+
+    public function getPart1(): ?Part
+    {
+        return $this->part1;
+    }
+
+    public function setPart1(?Part $part1): self
+    {
+        $this->part1 = $part1;
+
+        return $this;
+    }
+
+    public function getPart2(): ?Part
+    {
+        return $this->part2;
+    }
+
+    public function setPart2(?Part $part2): self
+    {
+        $this->part2 = $part2;
 
         return $this;
     }
