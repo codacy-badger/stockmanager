@@ -62,10 +62,12 @@ class LocationController extends AbstractController
 
 
             $result = $this->em->getRepository(Location::class)->findBy([
-                'equipment' => $location->getEquipment()
+                'equipment' => $location->getEquipment(),
 
+
+            ], [
+                'date' => 'DESC'
             ]);
-
 
 
             return $this->render('admin/location/index.html.twig', [

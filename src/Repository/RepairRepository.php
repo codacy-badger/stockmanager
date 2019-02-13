@@ -60,6 +60,19 @@ class RepairRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function countIssuesByDate(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->andWhere('r.noBreakdown = false')
+            ->andWhere('r.dateEnd >= :startDate ')
+            ->andWhere('r.dateEnd =< :endDate ')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 
     public function getUnavaillabilityByCategoryByPeriod(Category $category, \DateTime $startDate, \DateTime $endDate)
     {
@@ -71,6 +84,8 @@ class RepairRepository extends ServiceEntityRepository
             ->andWhere('b.category = :category')
             ->andWhere('r.dateEnd >= :startDate')
             ->andWhere('r.dateEnd <= :endDate')
+            ->andWhere('r.noBreakdown is null')
+            ->andWhere('r.degradation is null')
             ->setParameter('category', $category)
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)

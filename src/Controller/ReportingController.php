@@ -63,6 +63,7 @@ class ReportingController extends AbstractController
     {
         $countRealIssues = $this->em->getRepository(Repair::class)->countRealIssues();
         $countFakeIssues = $this->em->getRepository(Repair::class)->countFakeIssues();
+        $countCurrentMonthIssues = $this->em->getRepository(Repair::class)->findAll();
 
         $categories = $this->em->getRepository(Category::class)->findAll();
 
@@ -72,11 +73,10 @@ class ReportingController extends AbstractController
 
         foreach ($categories as $category) {
 
-            $unavailbility[] = $this->em->getRepository(Repair::class)->getUnavaillabilityByCategoryByPeriod($category, $oldDate, $now);
+            $unavailbility[$category->getId()] = $this->em->getRepository(Repair::class)->getUnavaillabilityByCategoryByPeriod($category, $oldDate, $now);
+
+//            $numberIssue[$category->getId()] = $this->em->getRepository(Repair::class)->
         }
-
-
-        dump($unavailbility);
 
 
         return $this->render('admin/reporting/index.html.twig', [
