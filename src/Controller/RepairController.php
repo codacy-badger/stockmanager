@@ -6,6 +6,7 @@ use App\Entity\Contract;
 use App\Entity\Equipment;
 use App\Entity\EquipmentStatus;
 use App\Entity\Issue;
+use App\Entity\Location;
 use App\Entity\Repair;
 use App\Entity\Statistics;
 use App\Entity\SubcontractorRepair;
@@ -233,6 +234,16 @@ class RepairController extends AbstractController
                 $hours = $dateDiffHour->getDiff($repair->getDateEnd(), $issue->getDateRequest());
 
                 $repair->setUnavailability($hours);
+
+                // Enregistrer la nouvelle localisation de l'équipement après réparation
+                $location = new Location();
+                $location->setEquipment($issue->getEquipment())
+                ->setIsOk(true)
+                    ->setSite($location::SITEOISE)
+                    ->setDate($repair->getDateEnd())
+
+                ;
+
 
             }
 

@@ -11,7 +11,7 @@ namespace App\Services;
 
 class RateStatistics
 {
-    public function getRate(float $mtbf, float $mttr)
+    public function getRate(float $mtbf = 1, float $mttr = 0)
     {
         return $mtbf / ($mtbf + $mttr);
     }

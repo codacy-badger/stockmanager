@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Location
 {
+
+    const SITEOISE = 4;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

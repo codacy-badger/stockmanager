@@ -27,6 +27,11 @@ class MTBFStatistics
      */
     public function getMTBF()
     {
+
+        if($this->statistics->getFailures() == 0){
+            return 1;
+        }
+
         return $this->statistics->getDays() * $this->statistics->getHoursPerDay() * $this->statistics->getNumber() / $this->statistics->getFailures();
 
     }

@@ -29,6 +29,11 @@ class MTTRStatistics
 
     public function getMTTR()
     {
+        if($this->statistics->getFailures() == 0)
+        {
+            return 0;
+        }
+
         return $this->statistics->getHoursRepair() / $this->statistics->getFailures();
     }
 
