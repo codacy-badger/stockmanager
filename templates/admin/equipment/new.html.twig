@@ -1,11 +1,15 @@
 {% extends 'admin/index.html.twig' %}
 
-{% block title %}New Equipment{% endblock %}
+{% block title %}Créer un nouvel équipement{% endblock %}
 
 {% block body %}
-    <h1>Create new Equipment</h1>
+    <div class="d-flex justify-content-center">
+        <div class="col-md-6">
+            <h1>Créer un nouvel équipement</h1>
 
-    {{ include('admin/equipment/_form.html.twig') }}
+            {{ include('admin/equipment/_form.html.twig') }}
 
-    <a href="{{ path('equipment_index') }}">back to list</a>
+            <a class="btn btn-info" href="{{ path('equipment_index') }}">Retour</a>
+        </div>
+    </div>
 {% endblock %}

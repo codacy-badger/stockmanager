@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Equipment;
+use App\Entity\Location;
+use App\Entity\Site;
 use App\Form\EquipmentType;
 use App\Repository\EquipmentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +18,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class EquipmentController extends AbstractController
 {
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
+
     /**
      * @Route("/", name="equipment_index", methods="GET")
      * @param EquipmentRepository $equipmentRepository
@@ -37,9 +52,22 @@ class EquipmentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($equipment);
-            $em->flush();
+
+
+            $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id'=> Site::SITEOISE]);
+
+            $location = new Location();
+            $location
+                ->setSite($homeSite)
+                ->setEquipment($equipment)
+                ->setIsOk(true)
+                ->setDate(new \DateTime())
+            ;
+
+            $this->em->persist($equipment);
+            $this->em->persist($location);
+
+            $this->em->flush();
 
             return $this->redirectToRoute('equipment_index');
         }
@@ -91,6 +119,16 @@ class EquipmentController extends AbstractController
         return $this->redirectToRoute('equipment_index');
     }
 
+
+    /**
+     * Permet d'avoir toutes les informations sur un équipement
+     * @Route("/show/{id}", name="equipment_show", methods="GET")
+     * @param Equipment $equipment
+     */
+    public function show(Equipment $equipment)
+    {
+
+    }
 
 
 }
