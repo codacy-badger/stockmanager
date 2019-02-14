@@ -50,4 +50,23 @@ class MassProcessingController extends AbstractController
 
         return $this->redirectToRoute('mass_processing');
     }
+
+
+    /**
+     * @Route("/admin/mass-processing/availability", name="mass_availability", methods={"POST"})
+     */
+    public function setLocation(Request $request, AvailabilityProcessor $availabilityProcessor)
+    {
+
+        $submitedToken = $request->request->get('token');
+
+        if ($this->isCsrfTokenValid('mass-availability', $submitedToken)) {
+
+            $availabilityProcessor->generateAvailability();
+            $this->addFlash('info', 'Génération des dates de débuts d\'invalidités effectué');
+        }
+
+
+        return $this->redirectToRoute('mass_processing');
+    }
 }

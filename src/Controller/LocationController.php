@@ -8,6 +8,7 @@ use App\Entity\Issue;
 use App\Entity\Location;
 use App\Entity\Repair;
 use App\Entity\Statistics;
+use App\Form\LocationEditFormType;
 use App\Form\LocationType;
 use App\Form\RepairType;
 use App\Services\DateDiffHour;
@@ -44,11 +45,8 @@ class LocationController extends AbstractController
     public function index()
     {
 
-        $locations = $this->em->getRepository(Location::class)->findAll();
+        return $this->render('admin/location/home.html.twig', [
 
-
-        return $this->render('admin/location/index.html.twig', [
-            'locations' => $locations,
         ]);
     }
 
@@ -63,11 +61,11 @@ class LocationController extends AbstractController
 
         $location = new Location();
 
-        $form = $this->createForm(LocationType::class, $location);
+        $formSearch = $this->createForm(LocationType::class, $location);
 
-        $form->handleRequest($request);
+        $formSearch->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
 
 
             $contract = new Contract();
@@ -101,13 +99,10 @@ class LocationController extends AbstractController
                 ->setHoursRepair($sumUnaivalable);
 
 
-
-
-                //get mttr
-                $mttr = new MTTRStatistics($statistics);
-                //get mtbf
-                $mtbf = new MTBFStatistics($statistics);
-
+            //get mttr
+            $mttr = new MTTRStatistics($statistics);
+            //get mtbf
+            $mtbf = new MTBFStatistics($statistics);
 
 
             //get number of changed parts and symptoms
@@ -139,20 +134,49 @@ class LocationController extends AbstractController
                 'rate' => $rate->getRate($mtbf->getMTBF(), $mttr->getMTTR()),
                 'numberOfParts' => $numberOfParts,
                 'numberOfSymptoms' => $numberOfSymptoms,
-                'form' => $form->createView(),
+                'form' => $formSearch->createView(),
                 'locations' => $result,
-                'location'=> $location
+                'location' => $location
             ]);
 
 
         }
 
         return $this->render('admin/location/search.html.twig', [
-            'form' => $form->createView(),
+            'form' => $formSearch->createView(),
 
         ]);
 
 
+    }
+
+    /**
+     * @Route("/add", name="location_add")
+     * @param Request $request
+     */
+    public function addLocation(Request $request)
+    {
+
+        $location = new Location();
+
+        $form = $this->createForm(LocationEditFormType::class, $location);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->em->persist($location);
+            $this->em->flush();
+
+            $this->addFlash('success', "La nouvelle localisation a bien été enregistrée.");
+            $this->redirectToRoute('location_index');
+
+
+        }
+
+        return $this->render('admin/location/add.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
 

@@ -40,6 +40,9 @@ class AvailabilityProcessor
             }
         }
 
-        return ;
+        return;
     }
+
+
+
 }

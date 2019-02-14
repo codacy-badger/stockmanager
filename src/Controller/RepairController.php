@@ -8,6 +8,7 @@ use App\Entity\EquipmentStatus;
 use App\Entity\Issue;
 use App\Entity\Location;
 use App\Entity\Repair;
+use App\Entity\Site;
 use App\Entity\Statistics;
 use App\Entity\SubcontractorRepair;
 use App\Form\RepairType;
@@ -113,7 +114,7 @@ class RepairController extends AbstractController
 
                     $subcontracterRepair = new SubcontractorRepair();
                 }
-                
+
                 $subcontracterRepair->setRepair($repair);
 
                 $this->em->persist($subcontracterRepair);
@@ -237,12 +238,14 @@ class RepairController extends AbstractController
 
                 // Enregistrer la nouvelle localisation de l'équipement après réparation
                 $location = new Location();
-                $location->setEquipment($issue->getEquipment())
-                ->setIsOk(true)
-                    ->setSite($location::SITEOISE)
-                    ->setDate($repair->getDateEnd())
 
-                ;
+                $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
+
+                $location
+                    ->setEquipment($issue->getEquipment())
+                    ->setIsOk(true)
+                    ->setSite($homeSite)
+                    ->setDate($repair->getDateEnd());
 
 
             }
@@ -255,10 +258,11 @@ class RepairController extends AbstractController
             $repair->setIssue($issue);
 
             $this->em->persist($repair);
+            $this->em->persist($location);
             $this->em->flush();
 
             $this->addFlash('success', 'La réparation a bien été enregistrée');
-            return $this->redirectToRoute('repair_index');
+            return $this->redirectToRoute('repair_historic');
 
 
         }

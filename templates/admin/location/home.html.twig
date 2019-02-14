@@ -1,0 +1,36 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}
+    Localisation
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-6">
+
+            {{ render(controller('App\\Controller\\LocationController::search', {})) }}
+        </div>
+        {#<div class="col-md-6">#}
+
+            {#{{ render(controller('App\\Controller\\LocationController::addLocation', {})) }}#}
+        {#</div>#}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        $('#location_equipment').autocompleter({
+            url_list: '/member/equipment_search',
+            url_get: '/member/equipment_get'
+        });
+    </script>
+    <script>
+
+        $('#location_edit_form_equipment').autocompleter({
+            url_list: '/member/equipment_search',
+            url_get: '/member/equipment_get'
+        });
+    </script>
+{% endblock %}

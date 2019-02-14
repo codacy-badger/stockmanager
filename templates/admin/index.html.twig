@@ -24,6 +24,10 @@
         <a class="nav-link {% block isActiveLocation %}{% endblock %}"
            href="{{ path('location_search') }}"><i class="fas fa-map-marked-alt"></i> Localisation</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {% block isActiveLocationAdd %}{% endblock %}"
+           href="{{ path('location_add') }}"><i class="fas fa-map-marked-alt"></i> Ajout Localisation</a>
+    </li>
     <div class="dropdown-divider"></div>
 
     {#repair section#}

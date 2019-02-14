@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Site
 {
+
+    const VIX = 17;
+    const SITEOISE = 4;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

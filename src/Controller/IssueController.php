@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contract;
 use App\Entity\Issue;
 use App\Entity\Location;
+use App\Entity\Site;
 use App\Entity\User;
 use App\Form\IssueEditType;
 use App\Form\IssueType;
@@ -340,6 +341,7 @@ class IssueController extends AbstractController
             } else {
                 $dateTime = new \DateTime();
 
+//                Ajout de l'équipement ok chez l'exploitant
                 $location = new Location();
                 $location
                     ->setDate($dateTime)
@@ -348,9 +350,20 @@ class IssueController extends AbstractController
                     ->setIsOk(true);
 
 
+                $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
+
+//                Ajout de la localisation de l'équipement en panne à site Oise
+                $homeLocation = new Location();
+                $homeLocation
+                    ->setDate($dateTime)
+                    ->setEquipment($issue->getEquipment())
+                    ->setSite($homeSite)
+                    ->setIsOk(false);
+
                 $issue->setDateEnd($dateTime);
 
                 $this->em->persist($location);
+                $this->em->persist($homeLocation);
                 $this->em->flush();
 
                 $this->addFlash('success', 'Ticket cloturé');

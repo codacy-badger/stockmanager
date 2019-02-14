@@ -46,4 +46,13 @@ class EquipmentRepository extends ServiceEntityRepository
             ->getResult();
 
     }
+
+
+    public function findArrived(){
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.issues', 'i')
+            ->andWhere('i.dateEnd is not null')
+            ->getQuery()
+            ->getResult();
+    }
 }

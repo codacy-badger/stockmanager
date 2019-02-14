@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Location;
 use App\Entity\SubcontractorRepair;
 use App\Form\SubcontractorType;
 use App\Services\DateDiffHour;
@@ -62,15 +63,27 @@ class SubcontractorController extends AbstractController
 
             if (null == !$subcontractorRepair->getDateReturn()) {
 
-                //total time to repair
+                //calcul le temps d'indisponibilité
                 $hours = $dateDiffHour->getDiff($subcontractorRepair->getDateReturn(), $subcontractorRepair->getRepair()->getIssue()->getDateRequest());
 
-                //put total hours into repair
+                //ajoute le nombre total d'heures d' indisponibilité
                 $subcontractorRepair->getRepair()->setUnavailability($hours);
 
-                //set date real date end repair to repair entity
+                //ajoute la vraie date de réparation à l'entité
                 $subcontractorRepair->getRepair()->setDateEnd($subcontractorRepair->getDateReturn());
 
+
+            }
+
+            //si la date d'envoi a été renseigné alors on enregistre la nouvelle localisation de l'équipement chez le sous traitant
+            if (null == !$subcontractorRepair->getDateDispatch()) {
+
+                $location = new Location();
+                $location
+                    ->setIsOk(false)
+                    ->setDate($subcontractorRepair->getDateDispatch())
+                    ->setEquipment($subcontractorRepair->getRepair()->getIssue()->getEquipment())
+                    ->setSite('null');
 
             }
 
