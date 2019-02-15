@@ -122,54 +122,7 @@
         </div>
     </section>
 
-    <section class="mt-1">
-        <h4>Historique des pannes</h4>
-        <div class="row">
-            <table class="table table-sm table-striped">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Technicien</th>
-                    <th>Provenance</th>
-                    <th>Symptômes</th>
-                    <th>pièces changés</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for issue in historicIssues %}
-                    <tr>
-                        <td>{{ issue.dateRequest | date("d/m/Y", "Europe/Paris") }}</td>
-                        <td>
-
-                            {% if issue.repair %}
-                            {{ issue.repair.technician.firstname }} {{ issue.repair.technician.lastname }}
-                            {% endif %}
-                        </td>
-                        <td>{{ issue.user.operator.name }}</td>
-                        <td>
-                            <ul>
-                                {% if issue.repair %}
-                                    {% for symptom in issue.repair.symptoms %}
-                                        <li>{{ symptom.name }}</li>
-                                    {% endfor %}
-                                {% endif %}
-                            </ul>
-                        </td>
-                        <td>
-                            {% if issue.repair %}
-                                {% for part in issue.repair.parts %}
-                                   <li><span class="badge badge-info">{{ part.name }}</span></li>
-                                {% endfor %}
-                            {% endif %}
-                            </ul>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-    </section>
+  {{ render(controller('App\\Controller\\EquipmentController::show', {'id': issue.equipment.id , 'dontShowBootstrap': true})) }}
 
 
 {% endblock %}

@@ -1,14 +1,57 @@
-{% extends 'admin/index.html.twig' %}
+    <section class="mt-1">
+        <div class="row">
+            <h4>Historique des pannes pour: {{ equipment.brand.category.name }} {{ equipment.brand.name }} {{ equipment.serial }}</h4>
+            <table class="table table-sm table-striped">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Technicien</th>
+                    <th>Provenance</th>
+                    <th>Symptômes</th>
+                    <th>pièces changés</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for myIssue in historicIssues %}
+                    <tr>
+                        <td>{{ myIssue.dateRequest | date("d/m/Y", "Europe/Paris") }}</td>
+                        <td>
 
+                            {% if myIssue.repair %}
+                                {{ myIssue.repair.technician.firstname }} {{ myIssue.repair.technician.lastname }}
+                            {% endif %}
+                        </td>
+                        <td>{{ myIssue.user.operator.name }}</td>
+                        <td>
+                            <ul>
+                                {% if myIssue.repair %}
+                                    {% for symptom in myIssue.repair.symptoms %}
+                                        <li>{{ symptom.name }}</li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </td>
+                        <td>
+                            {% if myIssue.repair %}
+                                {% for part in myIssue.repair.parts %}
+                                    <li><span class="badge badge-info">{{ part.name }}</span></li>
+                                {% endfor %}
+                            {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">pas d'enregistrements</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-{% block isActiveLocation %}
-    active
-{% endblock %}
+    </section>
 
-{% block title %}Localisation{% endblock %}
-
-{% block body %}
-
+    {#//-----------------------#}
     <section class="mt-1">
         <div class="row mt-auto">
             <h4>Historique Localisation</h4>
@@ -19,12 +62,10 @@
                     <th>Date</th>
                     <th>Societe</th>
                     <th>Type d'équipement</th>
-                    <th>Modèle</th>
                     <th>Numéro de série</th>
                     <th>Etat</th>
                     <th>Pièce 1</th>
                     <th>Pièce 2</th>
-                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,13 +91,6 @@
                         <td>
                             {% if location.equipment %}
                                 {{ location.equipment.brand.category.name }}
-                            {% else %}
-                                n/a
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if location.equipment %}
-                                {{ location.equipment.brand.name }}
                             {% else %}
                                 n/a
                             {% endif %}
@@ -89,14 +123,6 @@
                                 n/a
                             {% endif %}
                         </td>
-                        <td>
-                            {% if location.equipment %}
-                                <a class="btn btn-info btn-sm"
-                                   href="{{ path('equipment_show', {'id': location.equipment.id }) }}">Voir</a>
-                            {% else %}
-                                n/a
-                            {% endif %}
-                        </td>
 
                     </tr>
 
@@ -106,7 +132,7 @@
             </table>
         </div>
     </section>
-{% endblock %}
+
 
 
 

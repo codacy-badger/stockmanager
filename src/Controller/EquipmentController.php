@@ -124,10 +124,12 @@ class EquipmentController extends AbstractController
 
     /**
      * Permet d'avoir toutes les informations sur un équipement
-     * @Route("/show/{id}", name="equipment_show", methods={"GET|POST"})
+     * @Route("/show/{id}/{dontShowBootstrap}", name="equipment_show", methods={"GET|POST"})
      * @param Equipment $equipment
+     * @param null $dontShowBootstrap
+     * @return Response
      */
-    public function show(Equipment $equipment)
+    public function show(Equipment $equipment, $dontShowBootstrap = null)
     {
         //get all issues concerning the current equipment
         $historicIssues = $this->em->getRepository(Issue::class)->findByEquipment($equipment);
@@ -142,8 +144,15 @@ class EquipmentController extends AbstractController
             'date' => 'DESC'
         ]);
 
+        // vérifie si la demande provient de la page de réparation ou non
+        if (null !== $dontShowBootstrap) {
 
-        return $this->render('admin/equipment/show.html.twig', [
+            $viewPath = 'admin/equipment/_show.html.twig';
+        } else {
+            $viewPath = 'admin/equipment/show.html.twig';
+        }
+
+        return $this->render($viewPath, [
 
             'historicIssues' => $historicIssues,
             'locations' => $locations,
