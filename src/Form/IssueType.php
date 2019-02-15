@@ -25,7 +25,8 @@ class IssueType extends AbstractType
             ->add('equipment', AutocompleteType::class, [
                 'class' => 'App\Entity\Equipment',
                 'label' => 'Serial number',
-                'translation_domain' => 'messages'
+                'translation_domain' => 'messages',
+                ''
 
             ])
             ->add('symptoms', EntityType::class, [

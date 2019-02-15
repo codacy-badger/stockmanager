@@ -221,6 +221,17 @@ class RepairController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // Enregistrer la nouvelle localisation de l'équipement après réparation
+            $location = new Location();
+
+            //réccupérer le site SITEOISE
+            $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
+
+            $location
+                ->setEquipment($issue->getEquipment())
+                ->setSite($homeSite)
+                ->setDate($repair->getDateEnd());
+
 
             // if equipment is send to subcontractor then record it to this entity
             if (null == !$repair->getIsGoingToSubcontractor()) {
@@ -229,6 +240,11 @@ class RepairController extends AbstractController
 
                 $this->em->persist($subcontracterRepair);
 
+
+                $location->setIsOk(false);
+
+
+
             } else {
                 //get number of hours to repair
 
@@ -236,29 +252,22 @@ class RepairController extends AbstractController
 
                 $repair->setUnavailability($hours);
 
-                // Enregistrer la nouvelle localisation de l'équipement après réparation
-                $location = new Location();
-
-                $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
-
-                $location
-                    ->setEquipment($issue->getEquipment())
-                    ->setIsOk(true)
-                    ->setSite($homeSite)
-                    ->setDate($repair->getDateEnd());
-
+                $location->setIsOk(true);
 
             }
+
+
+
 
             // add technician
             $repair->setTechnician($this->getUser());
 
-
+            $this->em->persist($location);
             $issue->setRepair($repair);
             $repair->setIssue($issue);
 
             $this->em->persist($repair);
-            $this->em->persist($location);
+
             $this->em->flush();
 
             $this->addFlash('success', 'La réparation a bien été enregistrée');
