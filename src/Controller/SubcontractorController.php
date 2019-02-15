@@ -73,13 +73,23 @@ class SubcontractorController extends AbstractController
                 //ajoute la vraie date de réparation à l'entité
                 $subcontractorRepair->getRepair()->setDateEnd($subcontractorRepair->getDateReturn());
 
+                //réccupérer le site SITEOISE
+                $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
+
+                $location = new Location();
+                $location
+                    ->setIsOk(true)
+                    ->setDate($subcontractorRepair->getDateDispatch())
+                    ->setEquipment($subcontractorRepair->getRepair()->getIssue()->getEquipment())
+                    ->setSite($homeSite);
+
 
             }
 
             //si la date d'envoi a été renseigné alors on enregistre la nouvelle localisation de l'équipement chez le sous traitant
             if (null == !$subcontractorRepair->getDateDispatch()) {
 
-                //réccupérer le site SITEOISE
+                //réccupérer le site VIX
                 $vixSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::VIX]);
 
                 $location = new Location();
