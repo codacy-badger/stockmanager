@@ -221,17 +221,6 @@ class RepairController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Enregistrer la nouvelle localisation de l'équipement après réparation
-            $location = new Location();
-
-            //réccupérer le site SITEOISE
-            $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
-
-            $location
-                ->setEquipment($issue->getEquipment())
-                ->setSite($homeSite)
-                ->setDate($repair->getDateEnd());
-
 
             // if equipment is send to subcontractor then record it to this entity
             if (null == !$repair->getIsGoingToSubcontractor()) {
@@ -241,28 +230,35 @@ class RepairController extends AbstractController
                 $this->em->persist($subcontracterRepair);
 
 
-                $location->setIsOk(false);
-
-
-
             } else {
-                //get number of hours to repair
 
+                //cas ou l'quipement est réparé par siteoise
+                //get number of hours to repair
                 $hours = $dateDiffHour->getDiff($repair->getDateEnd(), $issue->getDateRequest());
 
                 $repair->setUnavailability($hours);
 
-                $location->setIsOk(true);
 
+                //réccupérer le site SITEOISE
+                $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
+
+
+                $location = new Location();
+
+                $location
+                    ->setEquipment($issue->getEquipment())
+                    ->setSite($homeSite)
+                    ->setDate($repair->getDateEnd())
+                    ->setIsOk(true);
+
+                $this->em->persist($location);
             }
-
-
 
 
             // add technician
             $repair->setTechnician($this->getUser());
 
-            $this->em->persist($location);
+
             $issue->setRepair($repair);
             $repair->setIssue($issue);
 
