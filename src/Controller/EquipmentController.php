@@ -141,7 +141,8 @@ class EquipmentController extends AbstractController
         $locations = $this->em->getRepository(Location::class)->findBy([
             'equipment' => $equipment,
         ], [
-            'date' => 'DESC'
+            'date' => 'DESC',
+            'id' => 'DESC'
         ]);
 
         // vérifie si la demande provient de la page de réparation ou non
