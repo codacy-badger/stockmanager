@@ -3,17 +3,11 @@
 namespace App\Controller;
 
 
-use App\Entity\Contract;
-use App\Entity\Issue;
+use App\Entity\Equipment;
 use App\Entity\Location;
-use App\Entity\Repair;
-use App\Entity\Statistics;
+use App\Entity\Search;
 use App\Form\LocationEditFormType;
-use App\Form\LocationType;
-use App\Form\RepairType;
-use App\Services\DateDiffHour;
-use App\Services\MTBFStatistics;
-use App\Services\MTTRStatistics;
+use App\Form\SearchType;
 use App\Services\RateStatistics;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,102 +53,57 @@ class LocationController extends AbstractController
     public function search(Request $request, RateStatistics $rate)
     {
 
-        $location = new Location();
+        $search = new Search();
 
-        $formSearch = $this->createForm(LocationType::class, $location);
+        $formSearch = $this->createForm(SearchType::class, $search);
 
         $formSearch->handleRequest($request);
 
         if ($formSearch->isSubmitted() && $formSearch->isValid()) {
 
 
-            $contract = new Contract();
-            $statistics = new Statistics();
 
-            //get all issues concerning the current equipment
-            $historicIssues = $this->em->getRepository(Issue::class)->findByEquipment($location->getEquipment());
+            $result = $this->em->getRepository(Location::class)->search(
+                $search->getEquipment(),
+                $search->getSite(),
+                $search->getBrand(),
+                $search->getCategory(),
+                $search->getContract()
 
-            //get all repairs concerning the current equipment
-            $oldRepairs = $this->em->getRepository(Repair::class)->findUnavailabilities($location->getEquipment()->getId());
+            );
 
-            $sumUnaivalable = 0;
 
-            /** @var Repair $oldRepair */
-            foreach ($oldRepairs as $oldRepair) {
-                $sumUnaivalable = $sumUnaivalable + $oldRepair->getUnavailability();
+            if (null === $search->getEquipment()) {
+                $issues = null;
+            } else {
+                $issues = $search->getEquipment()->getIssues();
+                return $this->render('admin/equipment/show.html.twig', [
+                    'historicIssues' => $issues,
+                    'locations' => $result
+                ]);
             }
 
-
-            $hoursPerDay = $location->getEquipment()->getBrand()->getCategory()->getHoursPerDay();
-
-            $now = new \DateTime();
-            $before = new \DateTime('2011-09-01');
-            $interval = $now->diff($before);
-
-
-            $statistics->setDays($interval->days)
-                ->setHoursPerDay($hoursPerDay)
-                ->setNumber(1)
-                ->setFailures(count($historicIssues))
-                ->setHoursRepair($sumUnaivalable);
-
-
-            //get mttr
-            $mttr = new MTTRStatistics($statistics);
-            //get mtbf
-            $mtbf = new MTBFStatistics($statistics);
-
-
-            //get number of changed parts and symptoms
-
-            $numberOfParts = 0;
-            $numberOfSymptoms = 0;
-
-            /** @var Repair $oldRepair */
-            foreach ($oldRepairs as $oldRepair) {
-                $numberOfParts = $numberOfParts + $oldRepair->getParts()->count();
-                $numberOfSymptoms = $numberOfSymptoms + $oldRepair->getSymptoms()->count();
-            }
-
-
-            $result = $this->em->getRepository(Location::class)->findBy([
-                'equipment' => $location->getEquipment(),
-
-
-            ], [
-                'date' => 'DESC'
-            ]);
 
             return $this->render('admin/location/index.html.twig', [
-
-                'contract' => $contract,
-                'historicIssues' => $historicIssues,
-                'mttr' => $mttr->getMTTR(),
-                'mtbf' => $mtbf->getMTBF(),
-                'rate' => $rate->getRate($mtbf->getMTBF(), $mttr->getMTTR()),
-                'numberOfParts' => $numberOfParts,
-                'numberOfSymptoms' => $numberOfSymptoms,
-                'form' => $formSearch->createView(),
-                'locations' => $result,
-                'location' => $location
+                'historicIssues' => $issues,
+                'locations' => $result
             ]);
 
 
         }
 
         return $this->render('admin/location/search.html.twig', [
-            'form' => $formSearch->createView(),
-
+            'form' => $formSearch->createView()
         ]);
 
 
     }
 
     /**
-     * @Route("/add", name="location_add")
+     * @Route("/add/{id}", name="location_add", methods={"GET|POST"})
      * @param Request $request
      */
-    public function addLocation(Request $request)
+    public function addLocation(Request $request, Equipment $equipment)
     {
 
         $location = new Location();
@@ -164,12 +113,14 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $location->setEquipment($equipment);
             $this->em->persist($location);
             $this->em->flush();
 
             $this->addFlash('success', "La nouvelle localisation a bien été enregistrée.");
-            $this->redirectToRoute('location_index');
+            $this->render('admin/location/home.html.twig', [
+                'id' => $equipment->getId(),
+            ]);
 
 
         }

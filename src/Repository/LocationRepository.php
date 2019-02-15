@@ -2,7 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Brand;
+use App\Entity\Category;
+use App\Entity\Contract;
+use App\Entity\Equipment;
 use App\Entity\Location;
+use App\Entity\Operator;
+use App\Entity\Site;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,5 +25,65 @@ class LocationRepository extends ServiceEntityRepository
         parent::__construct($registry, Location::class);
     }
 
+
+    public function search(
+        Equipment $equipment = null,
+        Site $site = null,
+        Brand $brand = null,
+        Category $category = null,
+        Contract $contract = null
+
+        )
+    {
+
+
+        $statement = $this->createQueryBuilder('l')
+            ->leftJoin('l.equipment', 'e')
+            ->leftJoin('e.brand', 'b')
+
+
+
+
+
+        ;
+
+        if (null !== $equipment) {
+            $statement->andWhere('l.equipment = :equipment');
+            $statement->setParameter('equipment', $equipment);
+        }
+        if (null !== $site) {
+
+            $statement->andWhere('l.site = :site');
+            $statement->setParameter('site', $site);
+        }
+
+        if (null !== $brand) {
+
+            $statement->andWhere('e.brand = :brand');
+            $statement->setParameter('brand', $brand);
+        }
+
+        if (null !== $category) {
+
+            $statement->andWhere('b.category = :category');
+            $statement->setParameter('category', $category);
+        }
+
+        if (null !== $contract) {
+
+            $statement->andWhere('e.contract = :contract');
+            $statement->setParameter('contract', $contract);
+        }
+
+
+
+
+
+        $statement->orderBy('l.date', 'desc');
+
+
+        return $statement->getQuery()->getResult();
+
+    }
 
 }

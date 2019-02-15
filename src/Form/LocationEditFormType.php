@@ -22,12 +22,6 @@ class LocationEditFormType extends AbstractType
             ])
             ->add('isOk', CheckboxType::class)
 
-            ->add('equipment', AutocompleteType::class, [
-                'class' => 'App\Entity\Equipment',
-                'label' => 'Serial number',
-                'translation_domain' => 'messages',
-                'required' => false
-            ])
             ->add('site', EntityType::class, [
                 'class' => Site::class,
                 'choice_label' => 'name'

@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Equipment;
+use App\Entity\Issue;
 use App\Entity\Location;
+use App\Entity\Repair;
 use App\Entity\Site;
 use App\Form\EquipmentType;
+use App\Form\LocationType;
 use App\Repository\EquipmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,15 +57,14 @@ class EquipmentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id'=> Site::SITEOISE]);
+            $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
 
             $location = new Location();
             $location
                 ->setSite($homeSite)
                 ->setEquipment($equipment)
                 ->setIsOk(true)
-                ->setDate(new \DateTime())
-            ;
+                ->setDate(new \DateTime());
 
             $this->em->persist($equipment);
             $this->em->persist($location);
@@ -122,11 +124,32 @@ class EquipmentController extends AbstractController
 
     /**
      * Permet d'avoir toutes les informations sur un équipement
-     * @Route("/show/{id}", name="equipment_show", methods="GET")
+     * @Route("/show/{id}", name="equipment_show", methods={"GET|POST"})
      * @param Equipment $equipment
      */
     public function show(Equipment $equipment)
     {
+        //get all issues concerning the current equipment
+        $historicIssues = $this->em->getRepository(Issue::class)->findByEquipment($equipment);
+
+        //get all repairs concerning the current equipment
+        $oldRepairs = $this->em->getRepository(Repair::class)->findUnavailabilities($equipment->getId());
+
+        //get all locations
+        $locations = $this->em->getRepository(Location::class)->findBy([
+            'equipment' => $equipment,
+        ], [
+            'date' => 'DESC'
+        ]);
+
+
+        return $this->render('admin/equipment/show.html.twig', [
+
+            'historicIssues' => $historicIssues,
+            'locations' => $locations,
+            'equipment' => $equipment,
+
+        ]);
 
     }
 

@@ -7,13 +7,9 @@
 {% block body %}
     <div class="row">
         <div class="col-md-6">
-
-            {{ render(controller('App\\Controller\\LocationController::search', {})) }}
+            {{ render(controller('App\\Controller\\Equipment::show', {'id': equipment.id})) }}
         </div>
-        {#<div class="col-md-6">#}
 
-            {#{{ render(controller('App\\Controller\\LocationController::addLocation', {})) }}#}
-        {#</div>#}
     </div>
 {% endblock %}
 
