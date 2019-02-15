@@ -62,7 +62,8 @@ class SubcontractorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            if (null == !$subcontractorRepair->getDateReturn()) {
+            if (null !== $subcontractorRepair->getDateReturn()) {
+
 
                 //calcul le temps d'indisponibilité
                 $hours = $dateDiffHour->getDiff($subcontractorRepair->getDateReturn(), $subcontractorRepair->getRepair()->getIssue()->getDateRequest());
@@ -83,6 +84,7 @@ class SubcontractorController extends AbstractController
                     ->setEquipment($subcontractorRepair->getRepair()->getIssue()->getEquipment())
                     ->setSite($homeSite);
 
+                $this->em->persist($location);
 
             }
 
@@ -99,6 +101,7 @@ class SubcontractorController extends AbstractController
                     ->setEquipment($subcontractorRepair->getRepair()->getIssue()->getEquipment())
                     ->setSite($vixSite);
 
+                $this->em->persist($location);
             }
 
 
