@@ -79,7 +79,7 @@ class SubcontractorController extends AbstractController
                 $location = new Location();
                 $location
                     ->setIsOk(true)
-                    ->setDate($subcontractorRepair->getDateDispatch())
+                    ->setDate($subcontractorRepair->getDateReturn())
                     ->setEquipment($subcontractorRepair->getRepair()->getIssue()->getEquipment())
                     ->setSite($homeSite);
 
