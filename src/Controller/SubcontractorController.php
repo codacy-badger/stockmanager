@@ -38,8 +38,12 @@ class SubcontractorController extends AbstractController
     {
 
         $subcontractors = $this->em->getRepository(SubcontractorRepair::class)->findBy([
-            'dateReturn' => null
-        ]);
+            'dateReturn' => null],
+            [
+                'id' => 'DESC'
+
+            ]
+        );
 
 
         return $this->render('admin/subcontractor/index.html.twig', [
