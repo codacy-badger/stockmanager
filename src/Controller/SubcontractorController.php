@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Location;
+use App\Entity\Site;
 use App\Entity\SubcontractorRepair;
 use App\Form\SubcontractorType;
 use App\Services\DateDiffHour;
@@ -78,12 +79,15 @@ class SubcontractorController extends AbstractController
             //si la date d'envoi a été renseigné alors on enregistre la nouvelle localisation de l'équipement chez le sous traitant
             if (null == !$subcontractorRepair->getDateDispatch()) {
 
+                //réccupérer le site SITEOISE
+                $vixSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::VIX]);
+
                 $location = new Location();
                 $location
                     ->setIsOk(false)
                     ->setDate($subcontractorRepair->getDateDispatch())
                     ->setEquipment($subcontractorRepair->getRepair()->getIssue()->getEquipment())
-                    ->setSite('null');
+                    ->setSite($vixSite);
 
             }
 
