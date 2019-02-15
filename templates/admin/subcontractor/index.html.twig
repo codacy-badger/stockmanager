@@ -40,7 +40,7 @@
                                 <b>Modèle:</b> {{ subcontractor.repair.issue.equipment.brand.name }}
                             </div>
                             <div class="small">
-                                <b>N° Serie:</b> {{ subcontractor.repair.issue.equipment.serial }}
+                                <b>N° Serie:</b> <a href="{{ path('equipment_show', {'id': subcontractor.repair.issue.equipment.id}) }}" target="_blank">{{ subcontractor.repair.issue.equipment.serial }}</a>
                             </div>
                             {% if subcontractor.repair.issue.equipment.contract.id == out_sismo_contract %}
                                 <div>

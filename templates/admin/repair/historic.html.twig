@@ -32,7 +32,7 @@
                     </div>
 
                 </td>
-                <td>{{ repair.issue.equipment.serial }}</td>
+                <td><b>N° Serie:</b> <a href="{{ path('equipment_show', {'id': repair.issue.equipment.id}) }}" target="_blank">{{ repair.issue.equipment.serial }}</a></td>
                 <td>{{ repair.technician.firstname }} {{ repair.technician.lastname }}</td>
                 <td>
                     <ul>
