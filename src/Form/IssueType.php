@@ -26,7 +26,6 @@ class IssueType extends AbstractType
                 'class' => 'App\Entity\Equipment',
                 'label' => 'Serial number',
                 'translation_domain' => 'messages',
-                ''
 
             ])
             ->add('symptoms', EntityType::class, [
