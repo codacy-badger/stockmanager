@@ -79,14 +79,16 @@ class LocationController extends AbstractController
                 $issues = $search->getEquipment()->getIssues();
                 return $this->render('admin/equipment/show.html.twig', [
                     'historicIssues' => $issues,
-                    'locations' => $result
+                    'locations' => $result,
+                    'equipment' => $search->getEquipment(),
                 ]);
             }
 
 
             return $this->render('admin/location/index.html.twig', [
                 'historicIssues' => $issues,
-                'locations' => $result
+                'locations' => $result,
+
             ]);
 
 
