@@ -52,7 +52,9 @@ class NotificationController extends AbstractController
             $users = $this->getDoctrine()->getRepository(User::class)->getUsersByOperator($operator);
 
             $destEmails = [];
+
             //get all destiation emails
+            /** @var User $user */
             foreach ($users as $user) {
                 $destEmails[] = $user->getEmail();
 
