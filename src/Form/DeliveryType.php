@@ -18,7 +18,8 @@ class DeliveryType extends AbstractType
             ->add('equipments', EntityType::class, [
                     'class' => Equipment::class,
                     'choice_label' => 'serial',
-                    'multiple' => true
+                    'multiple' => true,
+                    'required' => false,
                 ]
             )
         ->add('dateCreation', DateType::class, [
