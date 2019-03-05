@@ -20,7 +20,9 @@ class LocationEditFormType extends AbstractType
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('isOk', CheckboxType::class)
+            ->add('isOk', CheckboxType::class,[
+                'required' => false
+            ])
 
             ->add('site', EntityType::class, [
                 'class' => Site::class,

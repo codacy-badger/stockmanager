@@ -50,7 +50,7 @@ class LocationController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function search(Request $request, RateStatistics $rate)
+    public function search(Request $request, RateStatistics $rate, Equipment $equipement = null)
     {
 
         $search = new Search();
@@ -60,7 +60,6 @@ class LocationController extends AbstractController
         $formSearch->handleRequest($request);
 
         if ($formSearch->isSubmitted() && $formSearch->isValid()) {
-
 
 
             $result = $this->em->getRepository(Location::class)->search(
@@ -120,8 +119,8 @@ class LocationController extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', "La nouvelle localisation a bien été enregistrée.");
-            $this->render('admin/location/home.html.twig', [
-                'id' => $equipment->getId(),
+            return $this->redirectToRoute('location_show', [
+                'id' => $equipment->getId()
             ]);
 
 
@@ -129,6 +128,23 @@ class LocationController extends AbstractController
 
         return $this->render('admin/location/add.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/show/{id}", name="location_show", methods={"GET|POST"})
+     * @param Equipment $equipement
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showLocations(Equipment $equipement)
+    {
+
+        $searchLocations = $this->em->getRepository(Location::class)->search($equipement);
+
+        return $this->render('admin/equipment/show.html.twig', [
+            'historicIssues' => $equipement->getIssues(),
+            'locations' => $searchLocations,
+            'equipment' => $equipement,
         ]);
     }
 
