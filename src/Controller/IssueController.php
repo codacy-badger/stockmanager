@@ -171,7 +171,7 @@ class IssueController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Le numéro de série a été modifié.');
+            $this->addFlash('success', 'Les modification ont bien été apportées');
 
             return $this->redirectToRoute('issue_edit', [
                 'id' => $issue->getId()

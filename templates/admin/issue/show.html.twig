@@ -72,18 +72,24 @@
                     <div class="d-flex">
                         <div>
                             {% if issue.equipment.contract.id == out_sismo_contract %}
-                                Pas de matériel de remplacement pour les équipements hors contrat SISMO
-                            {% else %}
-                                <b>N° Serie:</b>
+                            Pas de matériel de remplacement pour les équipements hors contrat SISMO
+                            {% if issue.equipmentReplace is not null %}
+                            <span class="badge badge-warning">
+                                Exception, le materiel sera bien remplacé par:
+                                {{ issue.equipmentReplace.serial }}
 
-                                {% if issue.equipmentReplace is not null %}
-
-                                    {{ issue.equipmentReplace.serial }}
-
-                                {% else %}
-                                    Pas encore assigné
                                 {% endif %}
-                            {% endif %}
+                                {% else %}
+                                    <b>N° Serie:</b>
+
+                                    {% if issue.equipmentReplace is not null %}
+
+                                        {{ issue.equipmentReplace.serial }}
+
+                                    {% else %}
+                                        Pas encore assigné
+                                    {% endif %}
+                                {% endif %}
                         </div>
                     </div>
                 </td>

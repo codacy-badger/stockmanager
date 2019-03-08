@@ -66,6 +66,13 @@
                     <div>
                         {% if issue.equipment.contract.id == out_sismo_contract %}
                             Pas de matériel de remplacement pour les équipements hors contrat SISMO
+
+                            {% if issue.equipmentReplace is not null %}
+                                <span class="badge badge-warning">
+                                Exception, le materiel sera bien remplacé par:
+                                {{ issue.equipmentReplace.serial }}
+
+                            {% endif %}
                         {% else %}
                             <b>N° Serie:</b>
 
@@ -140,7 +147,6 @@
                                 class="fas fa-hourglass-end"></i> Traité</span>
                 {% endif %}
             </td>
-
 
 
         </tr>
