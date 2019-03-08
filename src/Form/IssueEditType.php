@@ -20,13 +20,13 @@ class IssueEditType extends AbstractType
             ->add('equipment', AutocompleteType::class, [
                 'class' => 'App\Entity\Equipment',
                 'label' => 'Numéro de série du materiel en panne',
-                'validation_groups' => false
+
 
             ])
             ->add('equipmentReplace', AutocompleteType::class, [
                 'class' => 'App\Entity\Equipment',
                 'label' => 'Numéro de série du materiel remplaçant',
-                'validation_groups' => false
+
 
             ])
             ->add('dateRequest', DateType::class)
@@ -40,6 +40,7 @@ class IssueEditType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Issue::class,
+            'validation_groups' => false
 
         ]);
     }
