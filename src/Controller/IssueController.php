@@ -171,8 +171,8 @@ class IssueController extends AbstractController
 
             $this->addFlash('success', 'Le numéro de série a été modifié.');
 
-            return $this->redirectToRoute('issue_showByStatus', [
-                'status' => 'ready'
+            return $this->redirectToRoute('issue_edit', [
+                'id' => $issue->getId()
             ]);
         }
 
