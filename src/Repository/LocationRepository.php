@@ -33,19 +33,13 @@ class LocationRepository extends ServiceEntityRepository
         Category $category = null,
         Contract $contract = null
 
-        )
+    )
     {
 
 
         $statement = $this->createQueryBuilder('l')
             ->leftJoin('l.equipment', 'e')
-            ->leftJoin('e.brand', 'b')
-
-
-
-
-
-        ;
+            ->leftJoin('e.brand', 'b');
 
         if (null !== $equipment) {
             $statement->andWhere('l.equipment = :equipment');
@@ -76,10 +70,8 @@ class LocationRepository extends ServiceEntityRepository
         }
 
 
-
-
-
-        $statement->orderBy('l.date', 'desc');
+        $statement->addOrderBy('l.date', 'desc')
+            ->addOrderBy('l.id', 'desc');
 
 
         return $statement->getQuery()->getResult();
