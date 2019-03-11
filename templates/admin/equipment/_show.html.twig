@@ -4,6 +4,7 @@
             <table class="table table-sm table-striped">
                 <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Date</th>
                     <th>Technicien</th>
                     <th>Provenance</th>
@@ -14,6 +15,7 @@
                 <tbody>
                 {% for myIssue in historicIssues %}
                     <tr>
+                        <td>{{ myIssue.id }}</td>
                         <td>{{ myIssue.dateRequest | date("d/m/Y", "Europe/Paris") }}</td>
                         <td>
 
