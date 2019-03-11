@@ -1,139 +1,148 @@
-    <section class="mt-1">
-        <div class="row">
-            <h4>Historique des pannes pour: {{ equipment.brand.category.name }} {{ equipment.brand.name }} {{ equipment.serial }}</h4>
-            <table class="table table-sm table-striped">
-                <thead>
+<section class="mt-1">
+    <div class="row">
+        <h4>Historique des pannes
+            pour: {{ equipment.brand.category.name }} {{ equipment.brand.name }} {{ equipment.serial }}</h4>
+        <table class="table table-sm table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Technicien</th>
+                <th>Provenance</th>
+                <th>Symptômes</th>
+                <th>pièces changés</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for myIssue in historicIssues %}
                 <tr>
-                    <th>Id</th>
-                    <th>Date</th>
-                    <th>Technicien</th>
-                    <th>Provenance</th>
-                    <th>Symptômes</th>
-                    <th>pièces changés</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for myIssue in historicIssues %}
-                    <tr>
-                        <td>{{ myIssue.id }}</td>
-                        <td>{{ myIssue.dateRequest | date("d/m/Y", "Europe/Paris") }}</td>
-                        <td>
+                    <td>
+                        {{ myIssue.id }}
+                        {% if myIssue.dateEnd is null %}
+                            <span class="badge badge-danger">Panne en cours</span>
+                        {% else %}
+                            <span class="badge badge-success">Panne terminée</span>
+                        {% endif %}
 
+                    </td>
+                    <td>{{ myIssue.dateRequest | date("d/m/Y", "Europe/Paris") }}</td>
+                    <td>
+
+                        {% if myIssue.repair %}
+                            {{ myIssue.repair.technician.firstname }} {{ myIssue.repair.technician.lastname }}
+                        {% endif %}
+                    </td>
+                    <td>{{ myIssue.user.operator.name }}</td>
+                    <td>
+                        <ul>
                             {% if myIssue.repair %}
-                                {{ myIssue.repair.technician.firstname }} {{ myIssue.repair.technician.lastname }}
-                            {% endif %}
-                        </td>
-                        <td>{{ myIssue.user.operator.name }}</td>
-                        <td>
-                            <ul>
-                                {% if myIssue.repair %}
-                                    {% for symptom in myIssue.repair.symptoms %}
-                                        <li>{{ symptom.name }}</li>
-                                    {% endfor %}
-                                {% endif %}
-                            </ul>
-                        </td>
-                        <td>
-                            {% if myIssue.repair %}
-                                {% for part in myIssue.repair.parts %}
-                                    <li><span class="badge badge-info">{{ part.name }}</span></li>
+                                {% for symptom in myIssue.repair.symptoms %}
+                                    <li>{{ symptom.name }}</li>
                                 {% endfor %}
                             {% endif %}
-                            </ul>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="5">pas d'enregistrements</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-    </section>
-
-    {#//-----------------------#}
-    <section class="mt-1">
-        <div class="row mt-auto">
-            <h4>Historique Localisation</h4>
-            <table class="table table-striped table-sm">
-                <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Date</th>
-                    <th>Societe</th>
-                    <th>Type d'équipement</th>
-                    <th>Numéro de série</th>
-                    <th>Etat</th>
-                    <th>Pièce 1</th>
-                    <th>Pièce 2</th>
+                        </ul>
+                    </td>
+                    <td>
+                        {% if myIssue.repair %}
+                            {% for part in myIssue.repair.parts %}
+                                <li><span class="badge badge-info">{{ part.name }}</span></li>
+                            {% endfor %}
+                        {% endif %}
+                        </ul>
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
+            {% else %}
+                <tr>
+                    <td colspan="5">pas d'enregistrements</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+{#//-----------------------#}
+<section class="mt-1">
+    <div class="row mt-auto">
+        <h4>Historique Localisation</h4>
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Date</th>
+                <th>Societe</th>
+                <th>Type d'équipement</th>
+                <th>Numéro de série</th>
+                <th>Etat</th>
+                <th>Pièce 1</th>
+                <th>Pièce 2</th>
+            </tr>
+            </thead>
+            <tbody>
 
 
-                {% for location in locations %}
+            {% for location in locations %}
 
-                    <tr>
-                        <td>
-                            {{ location.id }}
-                        </td>
-                        <td>
-                            {{ location.date | date('d/m/y', 'Europe/Paris') }}
-                        </td>
-                        <td>
-                            {% if location.site %}
-                                {{ location.site.operator.first.name }}
-                            {% else %}
-                                n/a
-                            {% endif %}
-                        </td>
+                <tr>
+                    <td>
+                        {{ location.id }}
+                    </td>
+                    <td>
+                        {{ location.date | date('d/m/y', 'Europe/Paris') }}
+                    </td>
+                    <td>
+                        {% if location.site %}
+                            {{ location.site.operator.first.name }}
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </td>
 
-                        <td>
-                            {% if location.equipment %}
-                                {{ location.equipment.brand.category.name }}
-                            {% else %}
-                                n/a
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if location.equipment %}
-                                {{ location.equipment.serial }}
-                            {% else %}
-                                n/a
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if location.isOk == true %}
-                                <span class="badge badge-success">ok</span>
-                            {% else %}
-                                <span class="badge badge-danger">ko</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if location.part1 %}
-                                {{ location.part1.name }}
-                            {% else %}
-                                n/a
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if location.part2 %}
-                                {{ location.part2.name }}
-                            {% else %}
-                                n/a
-                            {% endif %}
-                        </td>
+                    <td>
+                        {% if location.equipment %}
+                            {{ location.equipment.brand.category.name }}
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if location.equipment %}
+                            {{ location.equipment.serial }}
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if location.isOk == true %}
+                            <span class="badge badge-success">ok</span>
+                        {% else %}
+                            <span class="badge badge-danger">ko</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if location.part1 %}
+                            {{ location.part1.name }}
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if location.part2 %}
+                            {{ location.part2.name }}
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </td>
 
-                    </tr>
+                </tr>
 
 
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
 
 
 
