@@ -26,6 +26,7 @@ class IssueEditType extends AbstractType
             ->add('equipmentReplace', AutocompleteType::class, [
                 'class' => 'App\Entity\Equipment',
                 'label' => 'Numéro de série du materiel remplaçant',
+                'required' => false
 
 
             ])
