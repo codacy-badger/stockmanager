@@ -3,10 +3,47 @@
 
 
 {% block body %}
+    <div class="row my-2">
+        <div class="col-4">
 
-    <h4>
-        {% if status == 'new' %}Nouveaux tickets{% elseif status == 'check' %}Pris en compte{% elseif status == 'ready' %}Prêts{% else %}Arrivés{% endif %}
-    </h4>
+            {% if status != 'new' %}
+                <a class="btn btn-info" href="
+        {% if status == 'check' %}
+
+            {{ path('issue_showByStatus', {'status': 'new'}) }}
+        {% elseif status == 'ready' %}
+            {{ path('issue_showByStatus', {'status': 'check'}) }}
+        {% else %}
+            {{ path('issue_showByStatus', {'status': 'ready'}) }}
+    {% endif %}
+
+
+"><i class="fas fa-arrow-alt-circle-left"></i> Retour</a>
+            {% endif %}
+        </div>
+        <div class="col-4  d-flex justify-content-center">
+            <h4>
+                {% if status == 'new' %}Nouveaux tickets{% elseif status == 'check' %}Pris en compte{% elseif status == 'ready' %}Prêts{% else %}Arrivés{% endif %}
+            </h4>
+        </div>
+        <div class="col-4 d-flex justify-content-end">
+
+            {% if status != 'end' %}
+                <a class="btn btn-info" href="
+    {% if status == 'new' %}
+
+            {{ path('issue_showByStatus', {'status': 'check'}) }}
+        {% elseif status == 'check' %}
+            {{ path('issue_showByStatus', {'status': 'ready'}) }}
+        {% else %}
+            {{ path('issue_showByStatus', {'status': 'end'}) }}
+    {% endif %}
+
+
+">Suivant <i class="fas fa-arrow-alt-circle-right"></i></a>
+            {% endif %}
+        </div>
+    </div>
 
     <table class="table table-sm table-bordered table-striped">
         <thead>
