@@ -20,28 +20,34 @@
         <tbody>
 
         {% for operator in operators %}
+            {% set showGenerateButton = false %}
             <tr>
                 <td>{{ operator.name }}</td>
                 <td>
                     {#count the numr of issues#}
                     {% set count = 0 %}
                     {% for user in operator.users %}
+
                         {% for issue in user.issues %}
                             {% set count = count + 1 %}
+                            {% if issue.delivery is null %}
+                                {% set showGenerateButton = true %}
+                            {% endif %}
+
                         {% endfor %}
                     {% endfor %}
                     {{ count }}
                 </td>
 
                 <td class="d-flex">
-
-                    <form action="{{ path('delivery_generate', {'id': operator.id }) }}" method="post">
-                        <input type="hidden" name="token" value="{{ csrf_token('delivery-generate') }}">
-                        <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-truck"></i> Générer
-                            bon de livraison
-                        </button>
-                    </form>
-
+                    {% if showGenerateButton %}
+                        <form action="{{ path('delivery_generate', {'id': operator.id }) }}" method="post">
+                            <input type="hidden" name="token" value="{{ csrf_token('delivery-generate') }}">
+                            <button type="submit" class="btn btn-info btn-sm"><i class="fas fa-truck"></i> Générer
+                                bon de livraison
+                            </button>
+                        </form>
+                    {% endif %}
 
                     <form class="ml-1" action="{{ path('notification_send', {'id': operator.id }) }}"
                           method="post">

@@ -46,6 +46,7 @@ class DeliveryController extends Controller
 
 
             //get user with only non notified issues from user repository
+            /** @var Operator $myOperator */
             $myOperator = $this->getDoctrine()->getRepository(Operator::class)->getOneOperatorWithNonNotifedIssues($operator);
 
 
@@ -55,8 +56,11 @@ class DeliveryController extends Controller
 
             $delivery->setDateCreation($date);
 
+
+
             foreach ($myOperator->getUsers() as $user) {
                 foreach ($user->getIssues() as $issue) {
+
                     $delivery->addIssue($issue);
                     $issue->setDelivery($delivery);
                 }
@@ -66,7 +70,9 @@ class DeliveryController extends Controller
             $em->persist($delivery);
             $em->flush();
 
+
             $this->addFlash('success', 'Le bon de livraison a bien été généré');
+
             return $this->redirectToRoute('notification_index');
         }
 
@@ -148,7 +154,7 @@ class DeliveryController extends Controller
             $em->flush();
 
             $this->addFlash('success', 'Ajout bien effectué');
-            return $this->redirectToRoute('delivery_edit', ['id' => $delivery->getId()] );
+            return $this->redirectToRoute('delivery_edit', ['id' => $delivery->getId()]);
 
         }
 
