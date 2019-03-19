@@ -36,6 +36,11 @@ class SubcontractorRepair
      */
     private $dateDispatch;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $rma;
+
 
     public function __construct()
     {
@@ -91,6 +96,18 @@ class SubcontractorRepair
     public function setDateDispatch(?\DateTimeInterface $dateDispatch): self
     {
         $this->dateDispatch = $dateDispatch;
+
+        return $this;
+    }
+
+    public function getRma(): ?string
+    {
+        return $this->rma;
+    }
+
+    public function setRma(?string $rma): self
+    {
+        $this->rma = $rma;
 
         return $this;
     }

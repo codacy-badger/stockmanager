@@ -11,6 +11,7 @@
         <thead>
         <tr>
             <th>Id</th>
+            <th>RMA</th>
             <th>Equipement</th>
             <th>Réparation SO</th>
             <th>Date enregistrement</th>
@@ -25,6 +26,10 @@
         {% for subcontractor in subcontractors %}
             <tr>
                 <td>{{ subcontractor.id }}</td>
+
+                <td>
+                    {{ subcontractor.rma }}
+                </td>
                 <td>
                     <div class="d-flex">
                         <img class="img-circle" data-toggle="tooltip" data-placement="top"
