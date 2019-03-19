@@ -1,0 +1,39 @@
+{% extends 'admin/index.html.twig' %}
+
+
+{% block title %}
+    reporting
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+
+        <table class="table table-bordered table-striped table-sm">
+            <thead>
+            <tr>
+                <th>Tickets traités</th>
+                <th>Tickets ouverts</th>
+                <th>Réparations traités</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ issueEnd }}</td>
+                <td>{{ issueStart }}</td>
+                <td>{{ repaired }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <table class="table">
+
+
+
+        </table>
+    </div>
+
+{% endblock %}
+
+
+

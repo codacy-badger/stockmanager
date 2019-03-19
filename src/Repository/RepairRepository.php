@@ -91,11 +91,19 @@ class RepairRepository extends ServiceEntityRepository
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getSingleScalarResult();
+    }
 
 
-
-            ;
+    public function countRepaired(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->andWhere('r.dateEnd BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
 

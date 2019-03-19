@@ -82,8 +82,7 @@ class IssueRepository extends ServiceEntityRepository
             ->orderBy('i.dateRequest', 'desc')
             ->setParameter('equipment', $equipment)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
 
@@ -143,8 +142,7 @@ class IssueRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('i');
         $qb->andWhere('i.dateChecked IS NULL')
-            ->orderBy('i.dateRequest', 'desc')
-        ;
+            ->orderBy('i.dateRequest', 'desc');
 
         return $qb->getQuery()->getResult();
     }
@@ -154,8 +152,7 @@ class IssueRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('i');
         $qb->andWhere('i.dateChecked IS NOT NULL');
         $qb->andWhere('i.dateReady IS NULL')
-            ->orderBy('i.dateChecked', 'desc')
-        ;
+            ->orderBy('i.dateChecked', 'desc');
 
         return $qb->getQuery()->getResult();
     }
@@ -165,8 +162,7 @@ class IssueRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('i');
         $qb->andWhere('i.dateReady IS NOT NULL');
         $qb->andWhere('i.dateEnd IS NULL')
-            ->orderBy('i.dateReady', 'desc')
-        ;
+            ->orderBy('i.dateReady', 'desc');
 
         return $qb->getQuery()->getResult();
     }
@@ -188,8 +184,7 @@ class IssueRepository extends ServiceEntityRepository
             ->andWhere('i.repair IS NULL')
             ->orderBy('i.dateEnd', 'desc')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
 
@@ -284,10 +279,8 @@ class IssueRepository extends ServiceEntityRepository
             ->select('count(i.id)')
             ->andWhere('i.dateEnd IS NOT NULL')
             ->andWhere('i.repair IS NULL')
-
             ->getQuery()
-            ->getSingleScalarResult()
-            ;
+            ->getSingleScalarResult();
     }
 
     /*
@@ -301,4 +294,68 @@ class IssueRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * Count closed issues filtered by date
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countResolvedIssues(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->andWhere('i.dateEnd BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+    }
+
+    /**
+     * Count open issues filtered by date
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countOpenedIssues(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+    }
+
+
+
+
+
+    /**
+     * Renvoi tous les Issues en fonction d'une periode
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return mixed
+     */
+    public function getOperatorIssuesByPeriod(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('i')
+
+            ->andWhere('i.dateEnd BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
 }

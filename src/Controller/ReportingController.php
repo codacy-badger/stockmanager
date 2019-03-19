@@ -10,7 +10,10 @@ use App\Entity\Statistics;
 use App\Services\PieChartGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ReportingController extends AbstractController
 {
@@ -83,6 +86,88 @@ class ReportingController extends AbstractController
             'countRealIssues' => $countRealIssues,
             'countFakeIssues' => $countFakeIssues,
             'unavaibilityArray' => $unavailbility
+        ]);
+
+    }
+
+    /**
+     * Formulaire de reporting
+     * 
+     * @Route("admin/reporting/report", name="reporting_report")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function report(Request $request)
+    {
+
+        $defaultData = null;
+
+        $form = $this->createFormBuilder($defaultData)
+            ->add('startDate', DateType::class, [
+                'widget' => 'single_text',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                ]
+            ])
+            ->add('endDate', DateType::class, [
+                'widget' => 'single_text',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                ]
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $data = $form->getData();
+
+//            Compte le nombre de ticket fermés
+            $issueEnd = $this->em->getRepository(Issue::class)->countResolvedIssues(
+                $data['startDate'],
+                $data['endDate']
+            );
+
+//            Compte le nombre de tickets ouverts
+            $issueStart = $this->em->getRepository(Issue::class)->countOpenedIssues(
+                $data['startDate'],
+                $data['endDate']
+            );
+
+//            Compte le nombre de réparations traités
+            $repairs = $this->em->getRepository(Repair::class)->countRepaired(
+                $data['startDate'],
+                $data['endDate']
+            );
+
+
+//            Réccupération de touts les issues correspondants à la periode souhaitée
+            $issues = $this->em->getRepository(Issue::class)->getOperatorIssuesByPeriod(
+                $data['startDate'],
+                $data['endDate']
+            );
+
+
+
+
+            return $this->render('admin/reporting/report.html.twig', [
+                'issueEnd' => $issueEnd,
+                'issueStart' => $issueStart,
+                'issues' => $issues,
+                'repaired' => $repairs
+            ]);
+
+
+        }
+
+
+        return $this->render('admin/reporting/form.html.twig', [
+            'form' => $form->createView(),
+
         ]);
 
     }

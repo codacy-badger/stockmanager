@@ -7,13 +7,12 @@
     <table class="table table-sm table-bordered table-striped">
         <thead>
         <tr>
-            <th>id</th>
+            <th>infos</th>
             <th>Equipement</th>
-            <th>Technicien</th>
             <th>Symptomes constatés</th>
+            <th>Commentaires</th>
             <th>Travaux effectués</th>
-            <th>Temps de réparation</th>
-            <th>Temps d'indisponibilité</th>
+            <th>Temps d'indisponibilité (h)</th>
             <th>Actions</th>
 
         </tr>
@@ -24,16 +23,43 @@
                 <td>
                     <div class="d-flex flex-column">
                         <div>
-                            id réparation: {{ repair.id }}
+                            id: {{ repair.id }}
                         </div>
                         <div>
-                            id ticket: {{ repair.issue.id }}
+                            date: {{ repair.dateEnd | date('d/m/Y' , "Europe/Paris") }}
                         </div>
                     </div>
 
                 </td>
-                <td><b>N° Serie:</b> <a href="{{ path('equipment_show', {'id': repair.issue.equipment.id}) }}" target="_blank">{{ repair.issue.equipment.serial }}</a></td>
-                <td>{{ repair.technician.firstname }} {{ repair.technician.lastname }}</td>
+                <td>
+                    <div class="d-flex">
+                        <img class="img-circle" data-toggle="tooltip" data-placement="top"
+                             title="{{ repair.issue.equipment.brand.category.name }}" width="50"
+                             height="50"
+                             src="{{ asset(repair.issue.equipment.brand.category.image.url) }}"
+                             alt="{{ repair.issue.equipment.brand.category.image.alt }}">
+                        <div class="d-flex flex-column">
+                            <div class="small">
+                                <b>Catégorie:</b> {{ repair.issue.equipment.brand.category.name }}
+                            </div>
+                            <div class="small">
+                                <b>Modèle:</b> {{ repair.issue.equipment.brand.name }}
+                            </div>
+                            <div class="small">
+                                <b>N° Serie:</b> <a
+                                        href="{{ path('equipment_show', {'id': repair.issue.equipment.id}) }}"
+                                        target="_blank">{{ repair.issue.equipment.serial }}</a>
+                            </div>
+                            {% if repair.issue.equipment.contract.id == out_sismo_contract %}
+                                <div>
+                                        <span class="badge badge-info badge-pill">
+                                         Contrat: {{ repair.issue.equipment.contract.name }}
+                                        </span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </td>
                 <td>
                     <ul>
                         {% for symptom in repair.symptoms %}
@@ -42,6 +68,13 @@
                     </ul>
                 </td>
                 <td>
+                    {{ repair.description }}
+                </td>
+                <td>
+                    {% if repair.isGoingToSubcontractor %}
+                        <span class="badge badge-warning" data-toggle="tooltip" data-placement="top"
+                              title="Début {{ repair.subcontractorRepair.dateEntry | date('d/m/Y', "Europe/Paris") }}, Retour {{ repair.subcontractorRepair.dateReturn | date('d/m/Y', "Europe/Paris") }}">Parti chez le sous traitant</span>
+                    {% endif %}
                     <ul>
                         {% for part in repair.parts %}
                             <li><span class="badge badge-info">{{ part.name }}</span></li>
@@ -49,20 +82,13 @@
                     </ul>
                 </td>
                 <td>
-                    {{ repair.timeToRepair }} min
-                </td>
-                <td>
-                    <div class="d-flex flex-column">
-                        <div>
-                            Début d'indisponibilité: {{ repair.issue.dateRequest | date('d/m/y H:i', "Europe/Paris") }}
-                        </div>
-                        <div>
-                            Fin d'indisponibilité: {{ repair.dateEnd | date('d/m/Y H:i', "Europe/Paris") }}
-                        </div>
-                        <div>
-                            temps d'indisponibilité: {{ repair.unavailability }} h
-                        </div>
-                    </div>
+                    <span class="badge {% if repair.unavailability > 72 %}badge-danger{% else %}badge-success{% endif %}"
+                          data-toggle="tooltip" data-html="true" title="
+
+                        Début : {{ repair.issue.dateRequest | date('d/m/y H:i', "Europe/Paris") }},
+                        Fin : {{ repair.dateEnd | date('d/m/Y H:i', "Europe/Paris") }}">{{ repair.unavailability }}</span>
+
+
                 </td>
                 <td>
                     <a class="btn btn-warning" href="{{ path('repair_edit', {'id' : repair.id }) }}"><i
@@ -77,4 +103,14 @@
         {% endfor %}
         </tbody>
     </table>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 {% endblock %}
