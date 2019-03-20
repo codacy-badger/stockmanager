@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Category;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,6 +23,8 @@ class CategoryType extends AbstractType
             ])
             ->add('hoursPerDay', IntegerType::class)
             ->add('mtbf', IntegerType::class)
+            ->add('isContractual', CheckboxType::class)
+            ->add('contractualQuantity', IntegerType::class)
         ;
     }
 

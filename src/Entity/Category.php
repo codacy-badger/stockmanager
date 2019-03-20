@@ -45,6 +45,16 @@ class Category
      */
     private $partGroups;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $contractualQuantity;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isContractual;
+
     public function __construct()
     {
         $this->partGroups = new ArrayCollection();
@@ -130,6 +140,30 @@ class Category
                 $partGroup->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getContractualQuantity(): ?int
+    {
+        return $this->contractualQuantity;
+    }
+
+    public function setContractualQuantity(?int $contractualQuantity): self
+    {
+        $this->contractualQuantity = $contractualQuantity;
+
+        return $this;
+    }
+
+    public function getIsContractual(): ?bool
+    {
+        return $this->isContractual;
+    }
+
+    public function setIsContractual(bool $isContractual): self
+    {
+        $this->isContractual = $isContractual;
 
         return $this;
     }

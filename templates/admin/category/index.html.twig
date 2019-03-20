@@ -12,6 +12,8 @@
             <th>Nom</th>
             <th>Temps de fonctionnement par jour (h)</th>
             <th>Mtbf</th>
+            <th>Pris en compte taux dispo</th>
+            <th>Quantitée contractuelle</th>
             <th>Image</th>
             <th>actions</th>
         </tr>
@@ -23,6 +25,8 @@
                 <td>{{ category.name }}</td>
                 <td>{{ category.hoursPerDay }}</td>
                 <td>{{ category.mtbf }}</td>
+                <td>{% if category.isContractual %}oui{% else %}non{% endif %}</td>
+                <td>{{ category.contractualQuantity }}</td>
                 <td><img src="{{ asset(category.image.url) }}" alt="{{ category.image.alt }}" style="width:30px;"></td>
                 <td>
                     <a class="btn btn-warning btn-sm" href="{{ path('category_edit', {'id': category.id}) }}"><i class="fas fa-edit"></i> Modifier</a>

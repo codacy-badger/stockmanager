@@ -8,6 +8,7 @@ use App\Entity\Operator;
 use App\Entity\Repair;
 use App\Entity\Statistics;
 use App\Services\PieChartGenerator;
+use App\Services\ReportGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -98,7 +99,7 @@ class ReportingController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function report(Request $request)
+    public function report(Request $request, ReportGenerator $reportGenerator)
     {
 
         $defaultData = null;
@@ -150,6 +151,10 @@ class ReportingController extends AbstractController
                 $data['startDate'],
                 $data['endDate']
             );
+
+
+            //affichage du rapport global
+            $report = $reportGenerator->generate();
 
 
 
