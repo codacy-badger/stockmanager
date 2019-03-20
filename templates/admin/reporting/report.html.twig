@@ -26,10 +26,37 @@
         </table>
     </div>
     <div class="row">
-        <table class="table">
+        <table class="table table-bordered table-striped table-sm">
+            <thead>
+            <tr>
+                <th>Catégorie</th>
+                <th>Date début</th>
+                <th>Date fin</th>
+                <th>Nombre d'équipements en panne</th>
+                <th>Nombre fausses pannes</th>
+                <th>Temps de réparation</th>
+                <th>MTBF</th>
+                <th>MTTR</th>
+                <th>Taux</th>
 
 
-
+            </tr>
+            </thead>
+            <tbody>
+            {% for availability in availabilities %}
+                <tr>
+                    <td>{{ availability.category.name }}</td>
+                    <td>{{ availability.startDate | date('d/m/Y', "Europe/Paris") }}</td>
+                    <td>{{ availability.endDate | date('d/m/Y', "Europe/Paris") }}</td>
+                    <td>{{ availability.issueQuantity }}</td>
+                    <td>{{ availability.fakeIssueQuantity }}</td>
+                    <td>{{ availability.repairTime }}</td>
+                    <td>{{ availability.mtbf }}</td>
+                    <td>{{ availability.mttr }}</td>
+                    <td>{{ availability.rate }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
         </table>
     </div>
 

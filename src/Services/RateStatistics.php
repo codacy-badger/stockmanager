@@ -13,6 +13,7 @@ class RateStatistics
 {
     public function getRate(float $mtbf = 1, float $mttr = 0)
     {
+
         return $mtbf / ($mtbf + $mttr);
     }
 }

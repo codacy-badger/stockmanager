@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Brand;
 use App\Entity\Equipment;
 use App\Entity\Issue;
 use App\Entity\Operator;
@@ -66,6 +67,26 @@ class IssueRepository extends ServiceEntityRepository
             ->join('i.user', 'u', 'WITH', 'u.operator = :operator')
             ->andWhere('i.dateEnd IS NULL')
             ->setParameter('operator', $operator)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * Find finished issues by brand by date
+     * @param Brand $brand
+     * @return mixed
+     */
+    public function findByBrand(Brand $brand, \DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('i')
+            ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false')
+            ->andWhere('i.dateEnd IS NOT NULL')
+            ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('brand', $brand)
             ->getQuery()
             ->getResult();
     }
@@ -335,8 +356,28 @@ class IssueRepository extends ServiceEntityRepository
 
     }
 
-
-
+    /**
+     * Count fake issues by date
+     *
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countFakeIssues(Brand $brand, \DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = true')
+            ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
+            ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
+            ->andWhere('i.dateEnd IS NOT NULL')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('brand', $brand)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
 
     /**
@@ -348,14 +389,12 @@ class IssueRepository extends ServiceEntityRepository
     public function getOperatorIssuesByPeriod(\DateTime $startDate, \DateTime $endDate)
     {
         return $this->createQueryBuilder('i')
-
             ->andWhere('i.dateEnd BETWEEN :startDate AND :endDate')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
             ->getQuery()
             ->getResult();
     }
-
 
 
 }

@@ -24,9 +24,11 @@ class Brand
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="brands")
      */
     private $category;
+
+
 
     public function getId(): ?int
     {
@@ -56,4 +58,6 @@ class Brand
 
         return $this;
     }
+
+
 }

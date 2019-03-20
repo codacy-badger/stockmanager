@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Issue;
 use App\Entity\Operator;
 use App\Entity\Repair;
+use App\Entity\Report;
 use App\Entity\Statistics;
 use App\Services\PieChartGenerator;
 use App\Services\ReportGenerator;
@@ -153,17 +154,20 @@ class ReportingController extends AbstractController
             );
 
 
-            //affichage du rapport global
-            $report = $reportGenerator->generate();
+            //generation du tableau de dispo
+            $reportGenerator->generate($data['startDate'], $data['endDate']);
 
 
+//            réccupération du tableau
+            $availabilites = $this->em->getRepository(Report::class)->findAll();
 
 
             return $this->render('admin/reporting/report.html.twig', [
                 'issueEnd' => $issueEnd,
                 'issueStart' => $issueStart,
                 'issues' => $issues,
-                'repaired' => $repairs
+                'repaired' => $repairs,
+                'availabilities' => $availabilites,
             ]);
 
 

@@ -55,9 +55,21 @@ class Category
      */
     private $isContractual;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Brand", mappedBy="category")
+     */
+    private $brands;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="category", cascade={"persist", "remove"})
+     */
+    private $report;
+
     public function __construct()
     {
         $this->partGroups = new ArrayCollection();
+        $this->brands = new ArrayCollection();
+        $this->report = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -167,4 +179,68 @@ class Category
 
         return $this;
     }
+
+    /**
+     * @return Collection|Brand[]
+     */
+    public function getBrands(): Collection
+    {
+        return $this->brands;
+    }
+
+    public function addBrand(Brand $brand): self
+    {
+        if (!$this->brands->contains($brand)) {
+            $this->brands[] = $brand;
+            $brand->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrand(Brand $brand): self
+    {
+        if ($this->brands->contains($brand)) {
+            $this->brands->removeElement($brand);
+            // set the owning side to null (unless already changed)
+            if ($brand->getCategory() === $this) {
+                $brand->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Report[]
+     */
+    public function getReport(): Collection
+    {
+        return $this->report;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->report->contains($report)) {
+            $this->report[] = $report;
+            $report->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->report->contains($report)) {
+            $this->report->removeElement($report);
+            // set the owning side to null (unless already changed)
+            if ($report->getCategory() === $this) {
+                $report->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }
