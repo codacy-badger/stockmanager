@@ -78,13 +78,13 @@ class ReportGenerator
 
             foreach ($brands as $brand) {
 
-                //get real issues
+                //réccupère tout les issues dont la date de fin est compris dans la plage
                 $issues = $this->entityManager->getRepository(Issue::class)->findByBrand($brand, $startDate, $endDate);
 
                 $countIssuesCategory = $countIssuesCategory + count($issues);
 
 
-                //count fake issues
+                //Compte les issues ou les pannes ne sont pas constatés
                 $countFakeIssues = $this->entityManager->getRepository(Issue::class)->countFakeIssues($brand, $startDate, $endDate);
 
                 $countFakeIssuesCategory = $countFakeIssuesCategory + $countFakeIssues;
@@ -94,15 +94,25 @@ class ReportGenerator
                 /** @var Issue $issue */
                 foreach ($issues as $issue) {
 
+                    //réccupère la date de début de la panne
                     $dateRequest = $issue->getDateRequest();
+
+                    //réccupère la date de fin de panne
                     $repairDate = $issue->getRepair()->getDateEnd();
 
+                    //si la date de début de panne est avant la date du filtre, place la date du filtre à la place
+                    if($dateRequest < $startDate){
+                        $dateRequest = $startDate;
+                    }
+
+                    //delta en heure des deux dates
                     $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $dateRequest);
 
+                    //cumul du temps d'indispo pour le modèle
                     $repairTime = $repairTime + $repairIssueTime;
 
                 }
-
+                //cumul du temps de réparation pour la catégorie
                 $repairTimeCategory = $repairTimeCategory + $repairTime;
 
 
