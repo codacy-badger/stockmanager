@@ -1,12 +1,17 @@
 {% extends 'admin/index.html.twig' %}
-
+{% block isActiveReport %}active{% endblock %}
 {% block title %}Reporting{% endblock %}
 
 {% block body %}
+    <div class="row justify-content-center">
 
-    {{ form_start(form) }}
-    {{ form_rest(form) }}
-    <button class="btn btn-primary">Valider</button>
-    {{ form_end(form) }}
+        <div class="col-md-5">
+
+            {{ form_start(form) }}
+            {{ form_rest(form) }}
+            <button class="btn btn-primary">Valider</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
 
 {% endblock %}
