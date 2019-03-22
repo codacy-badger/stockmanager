@@ -76,6 +76,11 @@ class Report
      */
     private $degradationQuantity;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $newIssueQuantity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -223,6 +228,18 @@ class Report
     public function setDegradationQuantity(?int $degradationQuantity): self
     {
         $this->degradationQuantity = $degradationQuantity;
+
+        return $this;
+    }
+
+    public function getNewIssueQuantity(): ?int
+    {
+        return $this->newIssueQuantity;
+    }
+
+    public function setNewIssueQuantity(?int $newIssueQuantity): self
+    {
+        $this->newIssueQuantity = $newIssueQuantity;
 
         return $this;
     }

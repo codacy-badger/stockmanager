@@ -241,6 +241,7 @@ class ReportGenerator
                 ->setStartDate($startDate)
                 ->setEndDate($endDate)
                 ->setCategory($category)
+                ->setNewIssueQuantity($countNewIssuesCategory)
                 ->setFakeIssueQuantity($countFakeIssuesCategory)
                 ->setCurrentIssueQuantity($countCurrentIssuesCategory)
                 ->setSubcontractorIssueQuantity($countSubcontractorIssuesCategory)

@@ -47,6 +47,7 @@
             <tr>
                 <th>Catégorie</th>
                 <th>Nombre total de pannes valides</th>
+                <th>Nombre nouvelles pannes</th>
                 <th>Nombre de pannes encore en cours avant periode</th>
                 <th>Nombre de pannes chez le soustraitants</th>
                 <th>Nombre fausses pannes</th>
@@ -65,6 +66,7 @@
                 <tr>
                     <td>{{ availability.category.name }}</td>
                     <td>{{ availability.issueQuantity }}</td>
+                    <td>{{ availability.newIssueQuantity }}</td>
                     <td>{{ availability.currentIssueQuantity }}</td>
                     <td>{{ availability.subcontractorIssueQuantity }}</td>
                     <td>{{ availability.fakeIssueQuantity }}</td>
