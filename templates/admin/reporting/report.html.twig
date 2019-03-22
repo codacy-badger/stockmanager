@@ -7,19 +7,35 @@
 
 {% block body %}
     <div class="row">
+        <table class="table table-stripped table-sm table-bordered">
+            <thead>
+            <tr>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ dateStart | date('d/m/Y', "Europe/Paris") }}</td>
+                <td>{{ dateEnd | date('d/m/Y', "Europe/Paris") }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
 
         <table class="table table-bordered table-striped table-sm">
             <thead>
             <tr>
+                <th>Nouveaux tickets</th>
                 <th>Tickets traités</th>
-                <th>Tickets ouverts</th>
                 <th>Réparations traités</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>{{ issueEnd }}</td>
                 <td>{{ issueStart }}</td>
+                <td>{{ issueEnd }}</td>
                 <td>{{ repaired }}</td>
             </tr>
             </tbody>
@@ -30,11 +46,12 @@
             <thead>
             <tr>
                 <th>Catégorie</th>
-                <th>Date début</th>
-                <th>Date fin</th>
-                <th>Nombre d'équipements en panne</th>
+                <th>Nombre total de pannes valides</th>
+                <th>Nombre de pannes encore en cours avant periode</th>
+                <th>Nombre de pannes chez le soustraitants</th>
                 <th>Nombre fausses pannes</th>
-                <th>Temps de réparation</th>
+                <th>Nombre de dégradations</th>
+                <th>Temps d'indisponibilité</th>
                 <th>MTBF</th>
                 <th>MTTR</th>
                 <th>Taux</th>
@@ -43,13 +60,15 @@
             </tr>
             </thead>
             <tbody>
+
             {% for availability in availabilities %}
                 <tr>
                     <td>{{ availability.category.name }}</td>
-                    <td>{{ availability.startDate | date('d/m/Y', "Europe/Paris") }}</td>
-                    <td>{{ availability.endDate | date('d/m/Y', "Europe/Paris") }}</td>
                     <td>{{ availability.issueQuantity }}</td>
+                    <td>{{ availability.currentIssueQuantity }}</td>
+                    <td>{{ availability.subcontractorIssueQuantity }}</td>
                     <td>{{ availability.fakeIssueQuantity }}</td>
+                    <td>{{ availability.degradationQuantity }}</td>
                     <td>{{ availability.repairTime }}</td>
                     <td>{{ availability.mtbf }}</td>
                     <td>{{ availability.mttr }}</td>

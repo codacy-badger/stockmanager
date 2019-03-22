@@ -81,7 +81,7 @@ class IssueRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('i')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
-            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false OR r.degradation = false')
             ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
@@ -100,13 +100,11 @@ class IssueRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('i')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
-            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false OR r.degradation = false')
             ->andWhere('i.dateRequest < :startDate1')
             ->andWhere('i.dateEnd > :startDate2')
             ->setParameter('startDate1', $startDate)
             ->setParameter('startDate2', $startDate)
-
-
             ->setParameter('brand', $brand)
             ->getQuery()
             ->getResult();
@@ -122,14 +120,12 @@ class IssueRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('i')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
-            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false')
-            ->join('r.subcontractorRepair' , 's')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false OR r.degradation = false')
+            ->join('r.subcontractorRepair', 's')
             ->andWhere('i.dateRequest < :startDate1')
             ->andWhere('s.dateReturn > :startDate2')
             ->setParameter('startDate1', $startDate)
             ->setParameter('startDate2', $startDate)
-
-
             ->setParameter('brand', $brand)
             ->getQuery()
             ->getResult();
@@ -413,6 +409,30 @@ class IssueRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->select('count(i.id)')
             ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = true')
+            ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
+            ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('brand', $brand)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
+    /**
+     * Compte toutes les dégradations par modèle
+     *
+     * @param Brand $brand
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countDegradations(Brand $brand, \DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->join('i.repair', 'r', 'WITH', 'r.degradation = true')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
             ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
             ->setParameter('startDate', $startDate)

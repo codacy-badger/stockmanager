@@ -168,6 +168,8 @@ class ReportingController extends AbstractController
                 'issues' => $issues,
                 'repaired' => $repairs,
                 'availabilities' => $availabilites,
+                'dateStart' => $data['startDate'],
+                'dateEnd' => $data['endDate'],
             ]);
 
 

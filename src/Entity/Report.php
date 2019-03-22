@@ -61,6 +61,21 @@ class Report
      */
     private $rate;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $currentIssueQuantity;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $subcontractorIssueQuantity;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $degradationQuantity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -172,6 +187,42 @@ class Report
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getCurrentIssueQuantity(): ?int
+    {
+        return $this->currentIssueQuantity;
+    }
+
+    public function setCurrentIssueQuantity(?int $currentIssueQuantity): self
+    {
+        $this->currentIssueQuantity = $currentIssueQuantity;
+
+        return $this;
+    }
+
+    public function getSubcontractorIssueQuantity(): ?int
+    {
+        return $this->subcontractorIssueQuantity;
+    }
+
+    public function setSubcontractorIssueQuantity(?int $subcontractorIssueQuantity): self
+    {
+        $this->subcontractorIssueQuantity = $subcontractorIssueQuantity;
+
+        return $this;
+    }
+
+    public function getDegradationQuantity(): ?int
+    {
+        return $this->degradationQuantity;
+    }
+
+    public function setDegradationQuantity(?int $degradationQuantity): self
+    {
+        $this->degradationQuantity = $degradationQuantity;
 
         return $this;
     }

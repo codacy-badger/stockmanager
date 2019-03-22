@@ -10,6 +10,7 @@ namespace App\Services;
 
 
 use App\Entity\Category;
+use App\Entity\Contract;
 use App\Entity\Issue;
 use App\Entity\Report;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +40,7 @@ class ReportGenerator
      */
     private $MTBFGenerator;
 
+
     /**
      * ReportGenerator constructor.
      * @param EntityManagerInterface $entityManager
@@ -52,6 +54,7 @@ class ReportGenerator
         $this->MTTRStatistics = $MTTRStatistics;
         $this->rateStatistics = $rateStatistics;
         $this->MTBFGenerator = $MTBFGenerator;
+
     }
 
     /**
@@ -82,6 +85,10 @@ class ReportGenerator
             $countFakeIssuesCategory = 0;
             $repairTimeCategory = 0;
 
+            //contrat hors sismo
+            $contract = new Contract();
+            $contratHorsSismo = $contract::CONTRAT_HORS_SISMO;
+
 
             foreach ($brands as $brand) {
 
@@ -96,6 +103,9 @@ class ReportGenerator
 
                 //Compte les issues ou les pannes ne sont pas constatés
                 $countFakeIssues = $this->entityManager->getRepository(Issue::class)->countFakeIssues($brand, $startDate, $endDate);
+
+                //Compte le nombre de  nouvelles dégradations
+                $countDegradations = $this->entityManager->getRepository(Issue::class)->countDegradations($brand, $startDate, $endDate);
 
                 //comptage
                 $countFakeIssuesCategory = $countFakeIssuesCategory + $countFakeIssues;
@@ -116,18 +126,25 @@ class ReportGenerator
                 /** @var Issue $issue */
                 foreach ($subcontractorIssues as $issue) {
 
+                    //si l'équipepment a subit des dégradations ou est un contrat hors sismo  on ne le prend pas en compte
+                    if ($issue->getRepair()->getDegradation() || $issue->getEquipment()->getContract()->getId() == $contratHorsSismo) {
 
-                    $repairDate = $issue->getRepair()->getSubcontractorRepair()->getDateReturn();
 
-                    if ($repairDate >= $endDate) {
-                        $repairDate = $endDate;
+                    } else {
+
+
+                        $repairDate = $issue->getRepair()->getSubcontractorRepair()->getDateReturn();
+
+                        if ($repairDate >= $endDate) {
+                            $repairDate = $endDate;
+                        }
+
+                        //delta en heure des deux dates
+                        $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $startDate);
+
+                        //cumul du temps d'indispo pour le modèle
+                        $repairSubTime = $repairSubTime + $repairIssueTime;
                     }
-
-                    //delta en heure des deux dates
-                    $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $startDate);
-
-                    //cumul du temps d'indispo pour le modèle
-                    $repairSubTime = $repairSubTime + $repairIssueTime;
                 }
 
                 $repairCurTime = 0;
@@ -135,8 +152,10 @@ class ReportGenerator
                 /** @var Issue $issue */
                 foreach ($currentIssues as $issue) {
 
-                    if ($issue->getRepair()->getNoBreakdown()) {
-                        return;
+                    //si l'équipement n'a pas de panne constaté ou a subit des dégradations ou est un contrat hors SISMO on ne le prend pas en compte
+                    if ($issue->getRepair()->getNoBreakdown() || $issue->getRepair()->getDegradation() || $issue->getEquipment()->getContract()->getId() == $contratHorsSismo) {
+
+
                     } else {
 
                         $repairDate = $issue->getRepair()->getDateEnd();
@@ -161,35 +180,39 @@ class ReportGenerator
                 /** @var Issue $issue */
                 foreach ($newIssues as $issue) {
 
+                    if ($issue->getRepair()->getNoBreakdown() || $issue->getRepair()->getDegradation() || $issue->getEquipment()->getContract()->getId() == $contratHorsSismo) {
 
-                    //réccupère la date de début de la panne
+                    } else {
 
-                    $dateRequest = $issue->getDateRequest();
+                        //réccupère la date de début de la panne
 
-                    //réccupère la date de fin de panne
-                    if ($issue->getRepair()->getIsGoingToSubcontractor()) {
+                        $dateRequest = $issue->getDateRequest();
 
-                        //si la date de fin de panne n'est pas null
-                        if (!null === $issue->getRepair()->getSubcontractorRepair()->getDateReturn()) {
-                            $repairDate = $issue->getRepair()->getSubcontractorRepair()->getDateReturn();
+                        //réccupère la date de fin de panne
+                        if ($issue->getRepair()->getIsGoingToSubcontractor()) {
+
+                            //si la date de fin de panne n'est pas null
+                            if (!null === $issue->getRepair()->getSubcontractorRepair()->getDateReturn()) {
+                                $repairDate = $issue->getRepair()->getSubcontractorRepair()->getDateReturn();
+                            } else {
+                                $repairDate = $endDate;
+                            }
+
                         } else {
+                            $repairDate = $issue->getRepair()->getDateEnd();
+                        }
+
+                        //si la date de fin de panne est après la date du filtre, place la date du filtre à la place
+                        if ($repairDate >= $endDate) {
                             $repairDate = $endDate;
                         }
 
-                    } else {
-                        $repairDate = $issue->getRepair()->getDateEnd();
+                        //delta en heure des deux dates
+                        $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $dateRequest);
+
+                        //cumul du temps d'indispo pour le modèle
+                        $repairNewTime = $repairNewTime + $repairIssueTime;
                     }
-
-                    //si la date de fin de panne est après la date du filtre, place la date du filtre à la place
-                    if ($repairDate >= $endDate) {
-                        $repairDate = $endDate;
-                    }
-
-                    //delta en heure des deux dates
-                    $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $dateRequest);
-
-                    //cumul du temps d'indispo pour le modèle
-                    $repairNewTime = $repairNewTime + $repairIssueTime;
 
                 }
                 //cumul du temps de réparation pour la catégorie
@@ -202,8 +225,6 @@ class ReportGenerator
             $numberOfDays = $deltaDate->d + 1;
 
 
-            dump($numberOfDays);
-
             $mtbf = $this->MTBFGenerator->generate($numberOfDays, $category->getHoursPerDay(), $category->getContractualQuantity(), $totalIssues);
             $mttr = $this->MTTRStatistics->generate($repairTimeCategory, $totalIssues);
 
@@ -214,12 +235,16 @@ class ReportGenerator
                 $rate = 1;
             }
 
+
             $report = new Report();
             $report->setIssueQuantity($totalIssues)
                 ->setStartDate($startDate)
                 ->setEndDate($endDate)
                 ->setCategory($category)
                 ->setFakeIssueQuantity($countFakeIssuesCategory)
+                ->setCurrentIssueQuantity($countCurrentIssuesCategory)
+                ->setSubcontractorIssueQuantity($countSubcontractorIssuesCategory)
+                ->setDegradationQuantity($countDegradations)
                 ->setRepairTime($repairTimeCategory)
                 ->setMtbf($mtbf)
                 ->setMttr($mttr)
