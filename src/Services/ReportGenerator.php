@@ -54,6 +54,11 @@ class ReportGenerator
         $this->MTBFGenerator = $MTBFGenerator;
     }
 
+    /**
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function generate(\DateTime $startDate, \DateTime $endDate)
     {
         //delete content in table report
@@ -71,67 +76,146 @@ class ReportGenerator
 
             $brands = $category->getBrands();
 
-            $countIssuesCategory = 0;
+            $countNewIssuesCategory = 0;
+            $countCurrentIssuesCategory = 0;
+            $countSubcontractorIssuesCategory = 0;
             $countFakeIssuesCategory = 0;
             $repairTimeCategory = 0;
 
 
             foreach ($brands as $brand) {
 
-                //réccupère tout les issues dont la date de fin est compris dans la plage
-                $issues = $this->entityManager->getRepository(Issue::class)->findByBrand($brand, $startDate, $endDate);
+                //réccupère tout les issues dont la date de début est compris dans la plage
+                $newIssues = $this->entityManager->getRepository(Issue::class)->findNewByBrand($brand, $startDate, $endDate);
 
-                $countIssuesCategory = $countIssuesCategory + count($issues);
+                //réccupère tout les issues qui ne sont pas encore été traités
+                $currentIssues = $this->entityManager->getRepository(Issue::class)->findCurrentByBrand($brand, $startDate);
 
+                //récupère tout les issues qui sont encore chez le sous traitant
+                $subcontractorIssues = $this->entityManager->getRepository(Issue::class)->findSubcontractorRepairsByBrand($brand, $startDate);
 
                 //Compte les issues ou les pannes ne sont pas constatés
                 $countFakeIssues = $this->entityManager->getRepository(Issue::class)->countFakeIssues($brand, $startDate, $endDate);
 
+                //comptage
                 $countFakeIssuesCategory = $countFakeIssuesCategory + $countFakeIssues;
 
-                $repairTime = 0;
+                $countNewIssuesCategory = $countNewIssuesCategory + count($newIssues);
+
+                $countCurrentIssuesCategory = $countCurrentIssuesCategory + count($currentIssues);
+
+                $countSubcontractorIssuesCategory = $countSubcontractorIssuesCategory + count($subcontractorIssues);
+
+
+                //somme de toute les pannes
+                $totalIssues = $countNewIssuesCategory + $countCurrentIssuesCategory + $countSubcontractorIssuesCategory;
+
+
+                $repairSubTime = 0;
 
                 /** @var Issue $issue */
-                foreach ($issues as $issue) {
+                foreach ($subcontractorIssues as $issue) {
+
+
+                    $repairDate = $issue->getRepair()->getSubcontractorRepair()->getDateReturn();
+
+                    if ($repairDate >= $endDate) {
+                        $repairDate = $endDate;
+                    }
+
+                    //delta en heure des deux dates
+                    $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $startDate);
+
+                    //cumul du temps d'indispo pour le modèle
+                    $repairSubTime = $repairSubTime + $repairIssueTime;
+                }
+
+                $repairCurTime = 0;
+
+                /** @var Issue $issue */
+                foreach ($currentIssues as $issue) {
+
+                    if ($issue->getRepair()->getNoBreakdown()) {
+                        return;
+                    } else {
+
+                        $repairDate = $issue->getRepair()->getDateEnd();
+
+                        if ($repairDate >= $endDate) {
+                            $repairDate = $endDate;
+                        }
+
+                        //delta en heure des deux dates
+                        $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $startDate);
+
+                        //cumul du temps d'indispo pour le modèle
+                        $repairCurTime = $repairCurTime + $repairIssueTime;
+
+                    }
+
+                }
+
+
+                $repairNewTime = 0;
+
+                /** @var Issue $issue */
+                foreach ($newIssues as $issue) {
+
 
                     //réccupère la date de début de la panne
+
                     $dateRequest = $issue->getDateRequest();
 
                     //réccupère la date de fin de panne
-                    $repairDate = $issue->getRepair()->getDateEnd();
+                    if ($issue->getRepair()->getIsGoingToSubcontractor()) {
 
-                    //si la date de début de panne est avant la date du filtre, place la date du filtre à la place
-                    if($dateRequest < $startDate){
-                        $dateRequest = $startDate;
+                        //si la date de fin de panne n'est pas null
+                        if (!null === $issue->getRepair()->getSubcontractorRepair()->getDateReturn()) {
+                            $repairDate = $issue->getRepair()->getSubcontractorRepair()->getDateReturn();
+                        } else {
+                            $repairDate = $endDate;
+                        }
+
+                    } else {
+                        $repairDate = $issue->getRepair()->getDateEnd();
+                    }
+
+                    //si la date de fin de panne est après la date du filtre, place la date du filtre à la place
+                    if ($repairDate >= $endDate) {
+                        $repairDate = $endDate;
                     }
 
                     //delta en heure des deux dates
                     $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $dateRequest);
 
                     //cumul du temps d'indispo pour le modèle
-                    $repairTime = $repairTime + $repairIssueTime;
+                    $repairNewTime = $repairNewTime + $repairIssueTime;
 
                 }
                 //cumul du temps de réparation pour la catégorie
-                $repairTimeCategory = $repairTimeCategory + $repairTime;
+                $repairTimeCategory = $repairTimeCategory + $repairNewTime + $repairSubTime + $repairCurTime;
 
 
             }
 
-            $numberOfDays = $startDate->diff($endDate);
+            $deltaDate = $startDate->diff($endDate);
+            $numberOfDays = $deltaDate->d + 1;
 
-            $mtbf = $this->MTBFGenerator->generate($numberOfDays->d, $category->getHoursPerDay(), $category->getContractualQuantity(), $countIssuesCategory);
-            $mttr = $this->MTTRStatistics->generate($repairTimeCategory, $countIssuesCategory);
+
+            dump($numberOfDays);
+
+            $mtbf = $this->MTBFGenerator->generate($numberOfDays, $category->getHoursPerDay(), $category->getContractualQuantity(), $totalIssues);
+            $mttr = $this->MTTRStatistics->generate($repairTimeCategory, $totalIssues);
 
             //if mtbf is null then the rate is 100%
-            if(null !== $mtbf) {
+            if (null !== $mtbf) {
                 $rate = $this->rateStatistics->getRate($mtbf, $mttr);
-            }else{
+            } else {
                 $rate = 1;
             }
 
             $report = new Report();
-            $report->setIssueQuantity($countIssuesCategory)
+            $report->setIssueQuantity($totalIssues)
                 ->setStartDate($startDate)
                 ->setEndDate($endDate)
                 ->setCategory($category)

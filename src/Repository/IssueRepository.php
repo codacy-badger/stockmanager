@@ -73,18 +73,63 @@ class IssueRepository extends ServiceEntityRepository
 
 
     /**
-     * Find finished issues by brand by date
+     * Find new issues by brand by date
      * @param Brand $brand
      * @return mixed
      */
-    public function findByBrand(Brand $brand, \DateTime $startDate, \DateTime $endDate)
+    public function findNewByBrand(Brand $brand, \DateTime $startDate, \DateTime $endDate)
     {
         return $this->createQueryBuilder('i')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
             ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false')
-            ->andWhere('i.dateEnd BETWEEN :startDate AND :endDate')
+            ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
+            ->setParameter('brand', $brand)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Find Current issues by brand by date
+     * @param Brand $brand
+     * @return mixed
+     */
+    public function findCurrentByBrand(Brand $brand, \DateTime $startDate)
+    {
+
+        return $this->createQueryBuilder('i')
+            ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false')
+            ->andWhere('i.dateRequest < :startDate1')
+            ->andWhere('i.dateEnd > :startDate2')
+            ->setParameter('startDate1', $startDate)
+            ->setParameter('startDate2', $startDate)
+
+
+            ->setParameter('brand', $brand)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Find Subcontractors issues by brand by date
+     * @param Brand $brand
+     * @return mixed
+     */
+    public function findSubcontractorRepairsByBrand(Brand $brand, \DateTime $startDate)
+    {
+
+        return $this->createQueryBuilder('i')
+            ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false')
+            ->join('r.subcontractorRepair' , 's')
+            ->andWhere('i.dateRequest < :startDate1')
+            ->andWhere('s.dateReturn > :startDate2')
+            ->setParameter('startDate1', $startDate)
+            ->setParameter('startDate2', $startDate)
+
+
             ->setParameter('brand', $brand)
             ->getQuery()
             ->getResult();
@@ -369,7 +414,7 @@ class IssueRepository extends ServiceEntityRepository
             ->select('count(i.id)')
             ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = true')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
-            ->andWhere('i.dateEnd BETWEEN :startDate AND :endDate')
+            ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
             ->setParameter('brand', $brand)

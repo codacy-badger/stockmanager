@@ -23,8 +23,12 @@ class CategoryType extends AbstractType
             ])
             ->add('hoursPerDay', IntegerType::class)
             ->add('mtbf', IntegerType::class)
-            ->add('isContractual', CheckboxType::class)
-            ->add('contractualQuantity', IntegerType::class)
+            ->add('isContractual', CheckboxType::class, [
+                'required' => false
+            ])
+            ->add('contractualQuantity', IntegerType::class, [
+                'required' => false
+            ])
         ;
     }
 
