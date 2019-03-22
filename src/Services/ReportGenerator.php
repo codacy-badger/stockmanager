@@ -131,11 +131,10 @@ class ReportGenerator
 
 
                     } else {
-
-
+                        dump($issue->getId());
                         $repairDate = $issue->getRepair()->getSubcontractorRepair()->getDateReturn();
 
-                        if ($repairDate >= $endDate) {
+                        if ($repairDate >= $endDate || null === $repairDate) {
                             $repairDate = $endDate;
                         }
 
@@ -184,6 +183,7 @@ class ReportGenerator
 
                     } else {
 
+                        dump($issue->getId());
                         //réccupère la date de début de la panne
 
                         $dateRequest = $issue->getDateRequest();
