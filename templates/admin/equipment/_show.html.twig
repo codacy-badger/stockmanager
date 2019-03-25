@@ -33,8 +33,8 @@
                         <div>Envoi Sous-Traitant: {{ myIssue.repair.subcontractorRepair.dateDispatch | date("d/m/Y",
                             "Europe/Paris") }}
                         </div>
-                            <div>Retour Sous-Traitant: {{ myIssue.repair.subcontractorRepair.dateReturn | date("d/m/Y",
-                                    "Europe/Paris") }}
+                            <div>Retour Sous-Traitant: {% if myIssue.repair.subcontractorRepair.dateReturn is not null %}{{ myIssue.repair.subcontractorRepair.dateReturn | date("d/m/Y",
+                                    "Europe/Paris") }}{% else %}n/a{% endif %}
                             </div>
                         {% endif %}
                     </td>
