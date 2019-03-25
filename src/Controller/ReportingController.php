@@ -7,12 +7,14 @@ use App\Entity\Issue;
 use App\Entity\Operator;
 use App\Entity\Repair;
 use App\Entity\Report;
+use App\Entity\ReportContract;
 use App\Entity\Statistics;
 use App\Services\MTBFGenerator;
 use App\Services\MTTRGenerator;
 use App\Services\PieChartGenerator;
 use App\Services\RateStatistics;
 use App\Services\ReportGenerator;
+use App\Services\ReportGeneratorContract;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -71,7 +73,7 @@ class ReportingController extends AbstractController
     {
         $countRealIssues = $this->em->getRepository(Repair::class)->countRealIssues();
         $countFakeIssues = $this->em->getRepository(Repair::class)->countFakeIssues();
-        $countCurrentMonthIssues = $this->em->getRepository(Repair::class)->findAll();
+
 
         $categories = $this->em->getRepository(Category::class)->findAll();
 
@@ -103,7 +105,7 @@ class ReportingController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function report(Request $request, ReportGenerator $reportGenerator, MTBFGenerator $MTBFGenerator, MTTRGenerator $MTTRGenerator, RateStatistics $rateStatistics)
+    public function report(Request $request, ReportGeneratorContract $reportGeneratorContract, ReportGenerator $reportGenerator, MTBFGenerator $MTBFGenerator, MTTRGenerator $MTTRGenerator, RateStatistics $rateStatistics)
     {
 
         $defaultData = null;
@@ -158,12 +160,15 @@ class ReportingController extends AbstractController
 
 
             //generation du tableau de dispo
+            $reportGeneratorContract->generate($data['startDate'], $data['endDate']);
+
             $reportGenerator->generate($data['startDate'], $data['endDate']);
 
-
 //            réccupération du tableau
-            $availabilites = $this->em->getRepository(Report::class)->findAll();
+            $availabilites = $this->em->getRepository(ReportContract::class)->findAll();
 
+
+            $availabilitesInfo = $this->em->getRepository(Report::class)->findAll();
 
             //calcul du taux de dispo global
 
@@ -226,7 +231,6 @@ class ReportingController extends AbstractController
             $embRate = $rateStatistics->getRate($embMTBF, $embMTTR);
 
 
-
             //total
             $totalMTBF = $MTBFGenerator->generate($numberOfDays, $totalAverage, $totalContractual, $totalIssue);
             $totalMTTR = $MTTRGenerator->generate($totalRepairTime, $totalIssue);
@@ -244,6 +248,7 @@ class ReportingController extends AbstractController
                 'issues' => $issues,
                 'repaired' => $repairs,
                 'availabilities' => $availabilites,
+                'availabilitiesInfo' => $availabilitesInfo,
                 'dateStart' => $data['startDate'],
                 'dateEnd' => $data['endDate'],
             ]);

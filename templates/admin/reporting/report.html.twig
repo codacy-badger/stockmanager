@@ -37,18 +37,57 @@
             </thead>
             <tbody>
             <tr>
-                <td class="bg-primary text-white">{{ embMTBF }}</td>
-                <td class="bg-primary text-white">{{ embMTTR }}</td>
-                <td class="bg-primary text-white">{{ embRate }}</td>
-                <td>{{ totalMTBF }}</td>
-                <td>{{ totalMTTR }}</td>
-                <td>{{ totalRate }}</td>
+                <td class="bg-primary text-white">{{ embMTBF | round(0,'common')}}</td>
+                <td class="bg-primary text-white">{{ embMTTR | round(0,'common')}}</td>
+                <td class="bg-primary text-white">{{ (embRate*100) | round(2,'common')}}</td>
+                <td>{{ totalMTBF | round(0,'common')}}</td>
+                <td>{{ totalMTTR | round(0,'common')}}</td>
+                <td>{{ (totalRate*100) | round(2,'common')}}</td>
             </tr>
             </tbody>
         </table>
     </div>
     <div class="row">
         <table class="table table-bordered table-striped table-sm">
+            <caption>Date début: déclaration de la panne, Date de fin: fin échange standard</caption>
+            <thead>
+            <tr>
+                <th>Catégorie</th>
+                <th>Nombre total de pannes valides</th>
+                <th>Nombre nouvelles pannes</th>
+                <th>Nombre fausses pannes</th>
+                <th>Nombre de dégradations</th>
+                <th>Temps d'indisponibilité</th>
+                <th>MTBF</th>
+                <th>MTTR</th>
+                <th>Taux</th>
+
+
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for availability in availabilities %}
+                <tr {% if availability.category.isEmbeded %}class="table-primary"{% endif %}>
+                    <td>{{ availability.category.name }}</td>
+                    <td class="table-info">{{ availability.issueQuantity }}</td>
+                    <td>{{ availability.newIssueQuantity }}</td>
+                    <td>{{ availability.fakeIssueQuantity }}</td>
+                    <td>{{ availability.degradationQuantity }}</td>
+                    <td class="table-info">{{ availability.repairTime }}</td>
+                    <td class="table-info">{{ availability.mtbf | round(0,'common')}}</td>
+                    <td class="table-info">{{ availability.mttr | round(0,'common')}}</td>
+                    <td class="table-info">{{ (availability.rate*100) | round(2,'common') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {#table des infos complémentaires#}
+    <div class="row">
+        <table class="table table-bordered table-striped table-sm">
+            <caption>Date début: déclaration de la panne, Date de fin: fin de la réparation</caption>
             <thead>
             <tr>
                 <th>Catégorie</th>
@@ -68,19 +107,19 @@
             </thead>
             <tbody>
 
-            {% for availability in availabilities %}
-                <tr {% if availability.category.isEmbeded %}class="bg-primary text-white"{% endif %}>
+            {% for availability in availabilitiesInfo %}
+                <tr {% if availability.category.isEmbeded %}class="table-primary"{% endif %}>
                     <td>{{ availability.category.name }}</td>
-                    <td class="bg-info text-white">{{ availability.issueQuantity }}</td>
+                    <td class="table-info">{{ availability.issueQuantity }}</td>
                     <td>{{ availability.newIssueQuantity }}</td>
                     <td>{{ availability.currentIssueQuantity }}</td>
                     <td>{{ availability.subcontractorIssueQuantity }}</td>
                     <td>{{ availability.fakeIssueQuantity }}</td>
                     <td>{{ availability.degradationQuantity }}</td>
-                    <td class="bg-info text-white">{{ availability.repairTime }}</td>
-                    <td class="bg-info text-white">{{ availability.mtbf }}</td>
-                    <td class="bg-info text-white">{{ availability.mttr }}</td>
-                    <td class="bg-info text-white">{{ availability.rate }}</td>
+                    <td class="table-info">{{ availability.repairTime }}</td>
+                    <td class="table-info">{{ availability.mtbf | round(0,'common') }}</td>
+                    <td class="table-info">{{ availability.mttr | round(0,'common') }}</td>
+                    <td class="table-info">{{ (availability.rate*100) | round(2,'common') }}</td>
                 </tr>
             {% endfor %}
             </tbody>
