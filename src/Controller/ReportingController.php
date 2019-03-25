@@ -224,8 +224,7 @@ class ReportingController extends AbstractController
             $embMTBF = $MTBFGenerator->generate($numberOfDays, $embAverage, $embTotalContractual, $embTotalIssue);
             $embMTTR = $MTTRGenerator->generate($embTotalRepairTime, $embTotalIssue);
             $embRate = $rateStatistics->getRate($embMTBF, $embMTTR);
-            dump($embTotalIssue);
-            dump($embMTTR);
+
 
 
             //total
