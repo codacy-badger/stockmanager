@@ -69,7 +69,7 @@
             <tbody>
 
             {% for availability in availabilities %}
-                <tr {% if availability.isCalculated %}class="bg-primary text-white"{% endif %}>
+                <tr {% if availability.category.isEmbeded %}class="bg-primary text-white"{% endif %}>
                     <td>{{ availability.category.name }}</td>
                     <td class="bg-info text-white">{{ availability.issueQuantity }}</td>
                     <td>{{ availability.newIssueQuantity }}</td>
