@@ -8,7 +8,10 @@ use App\Entity\Operator;
 use App\Entity\Repair;
 use App\Entity\Report;
 use App\Entity\Statistics;
+use App\Services\MTBFGenerator;
+use App\Services\MTTRGenerator;
 use App\Services\PieChartGenerator;
+use App\Services\RateStatistics;
 use App\Services\ReportGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -94,13 +97,13 @@ class ReportingController extends AbstractController
 
     /**
      * Formulaire de reporting
-     * 
+     *
      * @Route("admin/reporting/report", name="reporting_report")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function report(Request $request, ReportGenerator $reportGenerator)
+    public function report(Request $request, ReportGenerator $reportGenerator, MTBFGenerator $MTBFGenerator, MTTRGenerator $MTTRGenerator, RateStatistics $rateStatistics)
     {
 
         $defaultData = null;
@@ -162,7 +165,81 @@ class ReportingController extends AbstractController
             $availabilites = $this->em->getRepository(Report::class)->findAll();
 
 
+            //calcul du taux de dispo global
+
+            //variables pour les embarqués
+            $embTotalContractual = 0;
+            $embTotalIssue = 0;
+            $embTotalRepairTime = 0;
+
+            //variables globales
+
+            $totalContractual = 0;
+            $totalIssue = 0;
+            $totalRepairTime = 0;
+
+            //pour les embarqués
+            $embHoursPerDay = 0;
+            $embCountItem = 0;
+
+            //globale
+            $totalHoursPerDay = 0;
+            $countItem = 0;
+
+
+            foreach ($availabilites as $categoryAvalabilites) {
+
+                if ($categoryAvalabilites->getCategory()->getIsEmbeded()) {
+
+                    $issueQuantity = $categoryAvalabilites->getIssueQuantity();
+                    $contractualQuantity = $categoryAvalabilites->getContractualQuantity();
+                    $repairTime = $categoryAvalabilites->getRepairTime();
+
+
+                    $embTotalIssue = $embTotalIssue + $issueQuantity;
+                    $embTotalContractual = $embTotalContractual + $contractualQuantity;
+                    $embTotalRepairTime = $embTotalRepairTime + $repairTime;
+
+                    $embHoursPerDay = $embHoursPerDay + $categoryAvalabilites->getCategory()->getHoursPerDay();
+                    $embCountItem++;
+                }
+
+                $totalIssue = $totalIssue + $categoryAvalabilites->getIssueQuantity();
+                $totalContractual = $totalContractual + $categoryAvalabilites->getContractualQuantity();
+                $totalRepairTime = $totalRepairTime + $categoryAvalabilites->getRepairTime();
+
+                $totalHoursPerDay = $totalHoursPerDay + $categoryAvalabilites->getCategory()->getHoursPerDay();
+                $countItem++;
+            }
+
+
+            $embAverage = $embHoursPerDay / $embCountItem;
+
+            $totalAverage = $totalHoursPerDay / $countItem;
+
+            $deltaDate = $data['startDate']->diff($data['endDate']);
+            $numberOfDays = $deltaDate->d + 1;
+
+            // embarqués
+            $embMTBF = $MTBFGenerator->generate($numberOfDays, $embAverage, $embTotalContractual, $embTotalIssue);
+            $embMTTR = $MTTRGenerator->generate($embTotalRepairTime, $embTotalIssue);
+            $embRate = $rateStatistics->getRate($embMTBF, $embMTTR);
+            dump($embTotalIssue);
+            dump($embMTTR);
+
+
+            //total
+            $totalMTBF = $MTBFGenerator->generate($numberOfDays, $totalAverage, $totalContractual, $totalIssue);
+            $totalMTTR = $MTTRGenerator->generate($totalRepairTime, $totalIssue);
+            $totalRate = $rateStatistics->getRate($totalMTBF, $totalMTTR);
+
             return $this->render('admin/reporting/report.html.twig', [
+                'totalMTBF' => $totalMTBF,
+                'totalMTTR' => $totalMTTR,
+                'totalRate' => $totalRate,
+                'embMTBF' => $embMTBF,
+                'embMTTR' => $embMTTR,
+                'embRate' => $embRate,
                 'issueEnd' => $issueEnd,
                 'issueStart' => $issueStart,
                 'issues' => $issues,
@@ -176,10 +253,7 @@ class ReportingController extends AbstractController
         }
 
 
-        return $this->render('admin/reporting/form.html.twig', [
-            'form' => $form->createView(),
-
-        ]);
+        return $this->render('admin/reporting/form.html.twig', ['form' => $form->createView(),]);
 
     }
 

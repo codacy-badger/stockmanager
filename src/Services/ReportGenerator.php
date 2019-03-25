@@ -236,8 +236,10 @@ class ReportGenerator
             }
 
 
+
             $report = new Report();
             $report->setIssueQuantity($totalIssues)
+                ->setContractualQuantity($category->getContractualQuantity())
                 ->setStartDate($startDate)
                 ->setEndDate($endDate)
                 ->setCategory($category)

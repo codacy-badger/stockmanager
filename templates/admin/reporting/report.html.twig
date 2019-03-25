@@ -27,16 +27,22 @@
         <table class="table table-bordered table-striped table-sm">
             <thead>
             <tr>
-                <th>Nouveaux tickets</th>
-                <th>Tickets traités</th>
-                <th>Réparations traités</th>
+                <th>MTBF embarqué</th>
+                <th>MTTR embarqué</th>
+                <th>Taux de disponibilité embarqués</th>
+                <th>MTBF global</th>
+                <th>MTTR global</th>
+                <th>Taux de disponibilité global</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>{{ issueStart }}</td>
-                <td>{{ issueEnd }}</td>
-                <td>{{ repaired }}</td>
+                <td class="bg-primary text-white">{{ embMTBF }}</td>
+                <td class="bg-primary text-white">{{ embMTTR }}</td>
+                <td class="bg-primary text-white">{{ embRate }}</td>
+                <td>{{ totalMTBF }}</td>
+                <td>{{ totalMTTR }}</td>
+                <td>{{ totalRate }}</td>
             </tr>
             </tbody>
         </table>
@@ -63,18 +69,18 @@
             <tbody>
 
             {% for availability in availabilities %}
-                <tr>
+                <tr {% if availability.isCalculated %}class="bg-primary text-white"{% endif %}>
                     <td>{{ availability.category.name }}</td>
-                    <td>{{ availability.issueQuantity }}</td>
+                    <td class="bg-info text-white">{{ availability.issueQuantity }}</td>
                     <td>{{ availability.newIssueQuantity }}</td>
                     <td>{{ availability.currentIssueQuantity }}</td>
                     <td>{{ availability.subcontractorIssueQuantity }}</td>
                     <td>{{ availability.fakeIssueQuantity }}</td>
                     <td>{{ availability.degradationQuantity }}</td>
-                    <td>{{ availability.repairTime }}</td>
-                    <td>{{ availability.mtbf }}</td>
-                    <td>{{ availability.mttr }}</td>
-                    <td>{{ availability.rate }}</td>
+                    <td class="bg-info text-white">{{ availability.repairTime }}</td>
+                    <td class="bg-info text-white">{{ availability.mtbf }}</td>
+                    <td class="bg-info text-white">{{ availability.mttr }}</td>
+                    <td class="bg-info text-white">{{ availability.rate }}</td>
                 </tr>
             {% endfor %}
             </tbody>

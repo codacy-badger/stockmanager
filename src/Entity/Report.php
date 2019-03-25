@@ -81,11 +81,16 @@ class Report
      */
     private $newIssueQuantity;
 
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $contractualQuantity;
+
     public function getId(): ?int
     {
         return $this->id;
     }
-
 
 
     public function getStartDate(): ?\DateTimeInterface
@@ -240,6 +245,19 @@ class Report
     public function setNewIssueQuantity(?int $newIssueQuantity): self
     {
         $this->newIssueQuantity = $newIssueQuantity;
+
+        return $this;
+    }
+
+
+    public function getContractualQuantity(): ?int
+    {
+        return $this->contractualQuantity;
+    }
+
+    public function setContractualQuantity(?int $contractualQuantity): self
+    {
+        $this->contractualQuantity = $contractualQuantity;
 
         return $this;
     }

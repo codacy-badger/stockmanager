@@ -55,6 +55,7 @@ class Category
      */
     private $isContractual;
 
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Brand", mappedBy="category")
      */
@@ -64,6 +65,11 @@ class Category
      * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="category", cascade={"persist", "remove"})
      */
     private $report;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isEmbeded;
 
     public function __construct()
     {
@@ -241,6 +247,20 @@ class Category
 
         return $this;
     }
+
+    public function getIsEmbeded(): ?bool
+    {
+        return $this->isEmbeded;
+    }
+
+    public function setIsEmbeded(?bool $isEmbeded): self
+    {
+        $this->isEmbeded = $isEmbeded;
+
+        return $this;
+    }
+
+
 
 
 }

@@ -26,6 +26,9 @@ class CategoryType extends AbstractType
             ->add('isContractual', CheckboxType::class, [
                 'required' => false
             ])
+            ->add('isEmbeded', CheckboxType::class, [
+                'required' => false
+            ])
             ->add('contractualQuantity', IntegerType::class, [
                 'required' => false
             ])

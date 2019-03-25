@@ -13,6 +13,7 @@
             <th>Temps de fonctionnement par jour (h)</th>
             <th>Mtbf</th>
             <th>Pris en compte taux dispo</th>
+            <th>Embarqué</th>
             <th>Quantitée contractuelle</th>
             <th>Image</th>
             <th>actions</th>
@@ -26,6 +27,7 @@
                 <td>{{ category.hoursPerDay }}</td>
                 <td>{{ category.mtbf }}</td>
                 <td>{% if category.isContractual %}oui{% else %}non{% endif %}</td>
+                <td>{% if category.isEmbeded %}oui{% else %}non{% endif %}</td>
                 <td>{{ category.contractualQuantity }}</td>
                 <td><img src="{{ asset(category.image.url) }}" alt="{{ category.image.alt }}" style="width:30px;"></td>
                 <td>
