@@ -18,7 +18,7 @@
                 <tr>
                     <td>
                         {{ myIssue.id }}
-                        {% if myIssue.dateEnd is null %}
+                        {% if myIssue.repair.dateEnd is null %}
                             <span class="badge badge-danger">Panne en cours</span>
                         {% else %}
                             <span class="badge badge-success">Panne terminée</span>
