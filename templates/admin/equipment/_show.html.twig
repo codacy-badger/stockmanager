@@ -19,7 +19,7 @@
                     <td>
                         {{ myIssue.id }}
                         {% if myIssue.repair.dateEnd is null %}
-                            <span class="badge badge-danger">Panne en cours</span>
+                            <a href="{{ path('repair_item', {'id': myIssue.repair.id }) }}" class="badge badge-danger">Panne en cours</a>
                         {% else %}
                             <span class="badge badge-success">Panne terminée</span>
                         {% endif %}
