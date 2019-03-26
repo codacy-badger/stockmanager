@@ -156,7 +156,7 @@ class RepairController extends AbstractController
     }
 
     /**
-     * @Route("/repair-item-issue-{id}", name="repair_item", methods="POST")
+     * @Route("/repair-item-issue-{id}", name="repair_item", methods="GET|POST")
      * @param Issue $issue
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response

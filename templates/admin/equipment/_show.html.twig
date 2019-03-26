@@ -18,8 +18,18 @@
                 <tr>
                     <td>
                         {{ myIssue.id }}
-                        {% if myIssue.repair.dateEnd is null %}
-                            <a href="{{ path('repair_item', {'id': myIssue.repair.id }) }}" class="badge badge-danger">Panne en cours</a>
+                        {% if myIssue.dateEnd is null %}
+                            <span class="badge badge-danger">Traitement échange
+                                en cours</span>
+                        {% elseif myIssue.repair.dateEnd is not defined %}
+
+                            <form action="{{ path('repair_item', {'id': myIssue.id}) }}"
+                                  method="post">
+                                <input type="hidden" name="token"
+                                       value="{{ csrf_token('repair_token') }}"/>
+                                <button type="submit" class="badge badge-danger"> En panne, Réparer
+                                </button>
+                            </form>
                         {% else %}
                             <span class="badge badge-success">Panne terminée</span>
                         {% endif %}
@@ -28,21 +38,26 @@
                     <td class="d-flex flex-column">
                         <div>Déclaration: {{ myIssue.dateRequest | date("d/m/Y", "Europe/Paris") }}</div>
                         <div>Echange: {{ myIssue.dateEnd | date("d/m/Y", "Europe/Paris") }}</div>
-                        <div>Réparation: {% if myIssue.repair.dateEnd is not null %}{{ myIssue.repair.dateEnd | date("d/m/Y", "Europe/Paris") }}{% else %}n/a{% endif %}</div>
-                        {% if myIssue.repair.isGoingToSubcontractor %}
-                        <div>Envoi Sous-Traitant: {{ myIssue.repair.subcontractorRepair.dateDispatch | date("d/m/Y",
-                            "Europe/Paris") }}
-                        </div>
-                            <div>Retour Sous-Traitant: {% if myIssue.repair.subcontractorRepair.dateReturn is not null %}{{ myIssue.repair.subcontractorRepair.dateReturn | date("d/m/Y",
-                                    "Europe/Paris") }}{% else %}n/a{% endif %}
-                            </div>
+                        <div>
+                            Réparation: {% if myIssue.repair.dateEnd is defined %}{{ myIssue.repair.dateEnd | date("d/m/Y", "Europe/Paris") }}{% else %}n/a{% endif %}</div>
+                        {% if myIssue.repair is defined %}
+                            {% if myIssue.repair.isGoingToSubcontractor%}
+                                <div>Envoi
+                                    Sous-Traitant: {{ myIssue.repair.subcontractorRepair.dateDispatch | date("d/m/Y",
+                                        "Europe/Paris") }}
+                                </div>
+                                <div>Retour
+                                    Sous-Traitant: {% if myIssue.repair.subcontractorRepair.dateReturn is not null %}{{ myIssue.repair.subcontractorRepair.dateReturn | date("d/m/Y",
+                                        "Europe/Paris") }}{% else %}n/a{% endif %}
+                                </div>
+                            {% endif %}
                         {% endif %}
                     </td>
 
                     <td>
 
                         {% if myIssue.repair %}
-                        {{ myIssue.repair.technician.firstname }} {{ myIssue.repair.technician.lastname }}
+                            {{ myIssue.repair.technician.firstname }} {{ myIssue.repair.technician.lastname }}
                         {% endif %}
                     </td>
                     <td>{{ myIssue.user.operator.name }}</td>
@@ -57,11 +72,11 @@
                     </td>
                     <td>
                         <ul>
-                        {% if myIssue.repair %}
-                            {% for part in myIssue.repair.parts %}
-                                <li><span class="badge badge-info">{{ part.name }}</span></li>
-                            {% endfor %}
-                        {% endif %}
+                            {% if myIssue.repair %}
+                                {% for part in myIssue.repair.parts %}
+                                    <li><span class="badge badge-info">{{ part.name }}</span></li>
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                     </td>
                 </tr>
