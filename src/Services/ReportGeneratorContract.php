@@ -149,11 +149,12 @@ class ReportGeneratorContract
             }
 
             $deltaDate = $startDate->diff($endDate);
-            $numberOfDays = $deltaDate->days;
+            $numberOfDays = $deltaDate->days+1;
 
 
             $mtbf = $this->MTBFGenerator->generate($numberOfDays, $category->getHoursPerDay(), $category->getContractualQuantity(), $totalIssues);
             $mttr = $this->MTTRStatistics->generate($repairTimeCategory, $totalIssues);
+
 
             //if mtbf is null then the rate is 100%
             if (null !== $mtbf) {

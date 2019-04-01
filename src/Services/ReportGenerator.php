@@ -222,7 +222,7 @@ class ReportGenerator
             }
 
             $deltaDate = $startDate->diff($endDate);
-            $numberOfDays = $deltaDate->days;
+            $numberOfDays = $deltaDate->days+1;
 
 
             $mtbf = $this->MTBFGenerator->generate($numberOfDays, $category->getHoursPerDay(), $category->getContractualQuantity(), $totalIssues);
