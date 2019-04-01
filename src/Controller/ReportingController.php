@@ -223,7 +223,7 @@ class ReportingController extends AbstractController
             $totalAverage = $totalHoursPerDay / $countItem;
 
             $deltaDate = $data['startDate']->diff($data['endDate']);
-            $numberOfDays = $deltaDate->d + 1;
+            $numberOfDays = $deltaDate->days + 1;
 
             // embarqués
             $embMTBF = $MTBFGenerator->generate($numberOfDays, $embAverage, $embTotalContractual, $embTotalIssue);
