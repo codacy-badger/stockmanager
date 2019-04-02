@@ -11,7 +11,7 @@ class ReportContract
 {
 
 
-    const CONTRACT_RATE = '98.5';
+    const CONTRACT_RATE = '99.5';
 
     /**
      * @ORM\Id()
