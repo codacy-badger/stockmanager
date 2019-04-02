@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Part;
 use App\Entity\Repair;
 use App\Entity\Symptom;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -33,7 +34,11 @@ class RepairType extends AbstractType
                 'class' => Part::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                        ->orderBy('p.name', 'ASC');
+                },
 
             ])
             ->add('degradation', CheckboxType::class, [

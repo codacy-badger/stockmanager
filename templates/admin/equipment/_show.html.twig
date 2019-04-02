@@ -44,7 +44,7 @@
                         <div>Echange: {{ myIssue.dateEnd | date("d/m/Y", "Europe/Paris") }}</div>
                         <div>
                             Réparation: {% if myIssue.repair.dateEnd is defined %}{{ myIssue.repair.dateEnd | date("d/m/Y", "Europe/Paris") }}{% else %}n/a{% endif %}</div>
-                        {% if myIssue.repair is defined %}
+                        {% if myIssue.repair is not null %}
                             {% if myIssue.repair.isGoingToSubcontractor %}
                                 <div>Envoi
                                     Sous-Traitant: {{ myIssue.repair.subcontractorRepair.dateDispatch | date("d/m/Y",
