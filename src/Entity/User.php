@@ -76,6 +76,11 @@ class User implements UserInterface, \Serializable
      */
     private $passwordRetry;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Token")
+     */
+    private $token;
+
 
     public function __construct()
     {
@@ -284,6 +289,18 @@ class User implements UserInterface, \Serializable
                 $issue->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getToken(): ?Token
+    {
+        return $this->token;
+    }
+
+    public function setToken(?Token $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }
