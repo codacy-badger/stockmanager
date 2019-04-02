@@ -165,7 +165,7 @@ class ReportingController extends AbstractController
             $reportGenerator->generate($data['startDate'], $data['endDate']);
 
 //            réccupération du tableau
-            $availabilites = $this->em->getRepository(ReportContract::class)->findAll();
+            $availabilites = $this->em->getRepository(ReportContract::class)->findAllOrder();
 
 
             $availabilitesInfo = $this->em->getRepository(Report::class)->findAll();

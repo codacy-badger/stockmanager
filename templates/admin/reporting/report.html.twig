@@ -24,6 +24,11 @@
     </div>
     <div class="row">
 
+        {% set rateInfo = "" %}
+        {% for availability in availabilities %}
+            {% set rateInfo = constant('CONTRACT_RATE', availability) %}
+        {% endfor %}
+
         <table class="table table-bordered table-striped table-sm">
             <thead>
             <tr>
@@ -37,12 +42,13 @@
             </thead>
             <tbody>
             <tr>
-                <td class="bg-primary text-white">{{ embMTBF | round(0,'common')}}</td>
-                <td class="bg-primary text-white">{{ embMTTR | round(0,'common')}}</td>
-                <td class="bg-primary text-white">{{ (embRate*100) | round(2,'common')}}</td>
-                <td>{{ totalMTBF | round(0,'common')}}</td>
-                <td>{{ totalMTTR | round(0,'common')}}</td>
-                <td>{{ (totalRate*100) | round(2,'common')}}</td>
+                <td class="bg-primary text-white">{{ embMTBF | round(0,'common') }}</td>
+                <td class="bg-primary text-white">{{ embMTTR | round(0,'common') }}</td>
+                <td class="{% if totalRate*100 > rateInfo %}bg-success{% else %}bg-danger{% endif %} text-white">{{ (embRate*100) | round(2,'common') }}</td>
+                <td>{{ totalMTBF | round(0,'common') }}</td>
+                <td>{{ totalMTTR | round(0,'common') }}</td>
+                <td>{{ (totalRate*100) | round(2,'common') }}</td>
+
             </tr>
             </tbody>
         </table>
@@ -53,11 +59,13 @@
             <thead>
             <tr>
                 <th>Catégorie</th>
-                <th>Nombre total de pannes valides</th>
-                <th>Nombre nouvelles pannes</th>
-                <th>Nombre fausses pannes</th>
-                <th>Nombre de dégradations</th>
-                <th>Temps d'indisponibilité</th>
+                <th>Temps de fonctionnement par jours (h)</th>
+                <th>Quantitée totale (hors maintenance)</th>
+                <th>Total de pannes valides</th>
+                <th>Nb nouvelles pannes</th>
+                <th>Nb fausses pannes</th>
+                <th>Nb de dégradations</th>
+                <th>Temps d'indisponibilité (h)</th>
                 <th>MTBF</th>
                 <th>MTTR</th>
                 <th>Taux</th>
@@ -70,14 +78,16 @@
             {% for availability in availabilities %}
                 <tr {% if availability.category.isEmbeded %}class="table-primary"{% endif %}>
                     <td>{{ availability.category.name }}</td>
+                    <td>{{ availability.category.hoursPerDay }}</td>
+                    <td>{{ availability.category.contractualQuantity }}</td>
                     <td class="table-info">{{ availability.issueQuantity }}</td>
                     <td>{{ availability.newIssueQuantity }}</td>
                     <td>{{ availability.fakeIssueQuantity }}</td>
                     <td>{{ availability.degradationQuantity }}</td>
                     <td class="table-info">{{ availability.repairTime }}</td>
-                    <td class="table-info">{{ availability.mtbf | round(0,'common')}}</td>
-                    <td class="table-info">{{ availability.mttr | round(0,'common')}}</td>
-                    <td class="table-info">{{ (availability.rate*100) | round(2,'common') }}</td>
+                    <td class="table-info">{{ availability.mtbf | round(0,'common') }}</td>
+                    <td class="table-info">{{ availability.mttr | round(0,'common') }}</td>
+                    <td class="{% if availability.rate*100 > rateInfo %}bg-success{% else %}bg-danger{% endif %} text-white">{{ (availability.rate*100) | round(2,'common') }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -119,7 +129,7 @@
                     <td class="table-info">{{ availability.repairTime }}</td>
                     <td class="table-info">{{ availability.mtbf | round(0,'common') }}</td>
                     <td class="table-info">{{ availability.mttr | round(0,'common') }}</td>
-                    <td class="table-info">{{ (availability.rate*100) | round(2,'common') }}</td>
+                    <td class="{% if availability.rate*100 > rateInfo %}bg-success{% else %}bg-danger{% endif %} text-white">{{ (availability.rate*100) | round(2,'common') }}</td>
                 </tr>
             {% endfor %}
             </tbody>

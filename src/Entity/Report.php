@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Report
 {
+
+    const CONTRACT_RATE = '98.5';
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

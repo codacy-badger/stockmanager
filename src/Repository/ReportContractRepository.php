@@ -29,6 +29,16 @@ class ReportContractRepository extends ServiceEntityRepository
 
     }
 
+    public function findAllOrder()
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.category', 'c')
+            ->orderBy('c.isEmbeded', 'DESC')
+            ->orderBy('r.issueQuantity', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Report[] Returns an array of Report objects
 //     */
