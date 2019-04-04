@@ -70,7 +70,7 @@ class RepairExportXlsx
             $symptoms = $issue->getSymptoms();
 
 
-            $repairSymptoms = $issue->getRepair()->getSymptoms() ?? 'aucun';
+            $repairSymptoms = null === $issue->getRepair() ? $issue->getRepair()->getSymptoms() : 'aucun';
 
 
 
