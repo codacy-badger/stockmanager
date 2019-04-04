@@ -13,9 +13,12 @@ use App\Services\MTBFGenerator;
 use App\Services\MTTRGenerator;
 use App\Services\PieChartGenerator;
 use App\Services\RateStatistics;
+use App\Services\RepairExportXlsx;
 use App\Services\ReportGenerator;
 use App\Services\ReportGeneratorContract;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\Request;
@@ -133,6 +136,7 @@ class ReportingController extends AbstractController
 
             $data = $form->getData();
 
+
 //            Compte le nombre de ticket fermés
             $issueEnd = $this->em->getRepository(Issue::class)->countResolvedIssues(
                 $data['startDate'],
@@ -147,13 +151,6 @@ class ReportingController extends AbstractController
 
 //            Compte le nombre de réparations traités
             $repairs = $this->em->getRepository(Repair::class)->countRepaired(
-                $data['startDate'],
-                $data['endDate']
-            );
-
-
-//            Réccupération de touts les issues correspondants à la periode souhaitée
-            $issues = $this->em->getRepository(Issue::class)->getOperatorIssuesByPeriod(
                 $data['startDate'],
                 $data['endDate']
             );
@@ -228,13 +225,17 @@ class ReportingController extends AbstractController
             // embarqués
             $embMTBF = $MTBFGenerator->generate($numberOfDays, $embAverage, $embTotalContractual, $embTotalIssue);
             $embMTTR = $MTTRGenerator->generate($embTotalRepairTime, $embTotalIssue);
+
             $embRate = $rateStatistics->getRate($embMTBF, $embMTTR);
 
 
             //total
             $totalMTBF = $MTBFGenerator->generate($numberOfDays, $totalAverage, $totalContractual, $totalIssue);
             $totalMTTR = $MTTRGenerator->generate($totalRepairTime, $totalIssue);
+
+
             $totalRate = $rateStatistics->getRate($totalMTBF, $totalMTTR);
+
 
             return $this->render('admin/reporting/report.html.twig', [
                 'totalMTBF' => $totalMTBF,
@@ -245,7 +246,6 @@ class ReportingController extends AbstractController
                 'embRate' => $embRate,
                 'issueEnd' => $issueEnd,
                 'issueStart' => $issueStart,
-                'issues' => $issues,
                 'repaired' => $repairs,
                 'availabilities' => $availabilites,
                 'availabilitiesInfo' => $availabilitesInfo,
@@ -258,6 +258,38 @@ class ReportingController extends AbstractController
 
 
         return $this->render('admin/reporting/form.html.twig', ['form' => $form->createView(),]);
+
+    }
+
+    /**
+     * Contractual export
+     *
+     * @Route("admin/reporting/export/{startDate}/{endDate}", name="reporting_export", methods={"GET"})
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @param RepairExportXlsx $repairExportXlsx
+     */
+    public function export(\DateTime $startDate, \DateTime $endDate, RepairExportXlsx $repairExportXlsx)
+    {
+        $issues = $this->em->getRepository(Issue::class)->findNewAll($startDate, $endDate);
+
+        return $repairExportXlsx->export($issues);
+
+    }
+
+    /**
+     * All export
+     *
+     * @Route("admin/reporting/exportAll/{startDate}/{endDate}", name="reporting_exportAll", methods={"GET"})
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @param RepairExportXlsx $repairExportXlsx
+     */
+    public function allExport(\DateTime $startDate, \DateTime $endDate, RepairExportXlsx $repairExportXlsx)
+    {
+        $issues = $this->em->getRepository(Issue::class)->findAllByDate($startDate, $endDate);
+
+        return $repairExportXlsx->export($issues);
 
     }
 

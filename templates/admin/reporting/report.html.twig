@@ -6,6 +6,10 @@
 {% endblock %}
 
 {% block body %}
+    <div class="row mb-3">
+        <a class="btn btn-primary" href="{{ path('reporting_export', {startDate: dateStart.date, endDate : dateEnd.date}) }}"><i class="far fa-file-excel"></i> Export Contractuel</a>
+        <a class="btn btn-info ml-1" href="{{ path('reporting_exportAll', {startDate: dateStart.date, endDate : dateEnd.date}) }}"><i class="far fa-file-excel"></i> Export Total</a>
+    </div>
     <div class="row">
         <table class="table table-stripped table-sm table-bordered">
             <thead>

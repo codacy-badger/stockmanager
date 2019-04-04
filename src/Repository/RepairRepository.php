@@ -106,8 +106,22 @@ class RepairRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-
-
+    /**
+     * Get end repairs by date
+     *
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return mixed
+     */
+    public function repairsByDate(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.dateEnd BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Repair[] Returns an array of Repair objects

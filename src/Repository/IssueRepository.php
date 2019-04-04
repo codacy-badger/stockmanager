@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Brand;
+use App\Entity\Contract;
 use App\Entity\Equipment;
 use App\Entity\Issue;
 use App\Entity\Operator;
@@ -79,13 +80,47 @@ class IssueRepository extends ServiceEntityRepository
      */
     public function findNewByBrand(Brand $brand, \DateTime $startDate, \DateTime $endDate)
     {
+
+        $contract = new Contract();
+
         return $this->createQueryBuilder('i')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
-            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false OR r.degradation = false')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false AND r.degradation = false')
+            ->join('e.contract', 'c', 'WITH', 'c.id != :idContract')
             ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
             ->setParameter('brand', $brand)
+            ->setParameter('idContract', $contract::CONTRAT_HORS_SISMO)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findNewAll(\DateTime $startDate, \DateTime $endDate)
+    {
+
+        $contract = new Contract();
+
+        return $this->createQueryBuilder('i')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false AND r.degradation = false')
+            ->join('i.equipment', 'e')
+            ->join('e.contract', 'c', 'WITH', 'c.id != :idContract')
+            ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('idContract', $contract::CONTRAT_HORS_SISMO)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllByDate(\DateTime $startDate, \DateTime $endDate)
+    {
+
+        return $this->createQueryBuilder('i')
+            ->join('i.equipment', 'e')
+            ->andWhere('i.dateRequest BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
             ->getQuery()
             ->getResult();
     }
@@ -97,15 +132,18 @@ class IssueRepository extends ServiceEntityRepository
      */
     public function findCurrentByBrand(Brand $brand, \DateTime $startDate)
     {
+        $contract = new Contract();
 
         return $this->createQueryBuilder('i')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
-            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false OR r.degradation = false')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false AND r.degradation = false')
+            ->join('e.contract', 'c', 'WITH', 'c.id != :idContract')
             ->andWhere('i.dateRequest < :startDate1')
             ->andWhere('i.dateEnd > :startDate2')
             ->setParameter('startDate1', $startDate)
             ->setParameter('startDate2', $startDate)
             ->setParameter('brand', $brand)
+            ->setParameter('idContract', $contract::CONTRAT_HORS_SISMO)
             ->getQuery()
             ->getResult();
     }
@@ -117,16 +155,19 @@ class IssueRepository extends ServiceEntityRepository
      */
     public function findSubcontractorRepairsByBrand(Brand $brand, \DateTime $startDate)
     {
+        $contract = new Contract();
 
         return $this->createQueryBuilder('i')
             ->join('i.equipment', 'e', 'WITH', 'e.brand = :brand')
-            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false OR r.degradation = false')
+            ->join('i.repair', 'r', 'WITH', 'r.noBreakdown = false AND r.degradation = false')
             ->join('r.subcontractorRepair', 's')
+            ->join('e.contract', 'c', 'WITH', 'c.id != :idContract')
             ->andWhere('i.dateRequest < :startDate1')
             ->andWhere('s.dateReturn > :startDate2 OR s.dateReturn is null')
             ->setParameter('startDate1', $startDate)
             ->setParameter('startDate2', $startDate)
             ->setParameter('brand', $brand)
+            ->setParameter('idContract', $contract::CONTRAT_HORS_SISMO)
             ->getQuery()
             ->getResult();
     }
@@ -440,23 +481,6 @@ class IssueRepository extends ServiceEntityRepository
             ->setParameter('brand', $brand)
             ->getQuery()
             ->getSingleScalarResult();
-    }
-
-
-    /**
-     * Renvoi tous les Issues en fonction d'une periode
-     * @param \DateTime $startDate
-     * @param \DateTime $endDate
-     * @return mixed
-     */
-    public function getOperatorIssuesByPeriod(\DateTime $startDate, \DateTime $endDate)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.dateEnd BETWEEN :startDate AND :endDate')
-            ->setParameter('startDate', $startDate)
-            ->setParameter('endDate', $endDate)
-            ->getQuery()
-            ->getResult();
     }
 
 
