@@ -69,7 +69,10 @@ class RepairExportXlsx
 
             $symptoms = $issue->getSymptoms();
 
-            $repairSymptoms = $issue->getRepair()->getSymptoms();
+
+            $repairSymptoms = $issue->getRepair()->getSymptoms() ?? 'aucun';
+
+
 
             $allSymptoms = null;
             foreach ($symptoms as $symptom) {
