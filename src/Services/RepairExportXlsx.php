@@ -79,7 +79,8 @@ class RepairExportXlsx
             }
 
             $allRepairSymptoms = null;
-            foreach ($symptoms as $symptom) {
+
+            foreach ($repairSymptoms as $symptom) {
                 $allRepairSymptoms = $symptom->getName() . ', ' . $allRepairSymptoms;
             }
 
