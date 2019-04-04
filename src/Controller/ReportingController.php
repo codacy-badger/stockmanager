@@ -137,29 +137,20 @@ class ReportingController extends AbstractController
             $data = $form->getData();
 
 
-//            Compte le nombre de ticket fermés
-            $issueEnd = $this->em->getRepository(Issue::class)->countResolvedIssues(
-                $data['startDate'],
-                $data['endDate']
-            );
+            /** @var \DateTime $startDate */
+            $startDate = $data['startDate'];
+            /** @var \DateTime $endDate */
+            $endDate = $data['endDate'];
 
-//            Compte le nombre de tickets ouverts
-            $issueStart = $this->em->getRepository(Issue::class)->countOpenedIssues(
-                $data['startDate'],
-                $data['endDate']
-            );
-
-//            Compte le nombre de réparations traités
-            $repairs = $this->em->getRepository(Repair::class)->countRepaired(
-                $data['startDate'],
-                $data['endDate']
-            );
-
+            if ($startDate > $endDate) {
+                $this->addFlash('danger', 'La date de début ne peut pas être supérieure à la date de fin');
+                return $this->redirectToRoute('reporting_report');
+            }
 
             //generation du tableau de dispo
-            $reportGeneratorContract->generate($data['startDate'], $data['endDate']);
+            $reportGeneratorContract->generate($startDate, $endDate);
 
-            $reportGenerator->generate($data['startDate'], $data['endDate']);
+            $reportGenerator->generate($startDate, $endDate);
 
 //            réccupération du tableau
             $availabilites = $this->em->getRepository(ReportContract::class)->findAllOrder();
@@ -219,7 +210,7 @@ class ReportingController extends AbstractController
 
             $totalAverage = $totalHoursPerDay / $countItem;
 
-            $deltaDate = $data['startDate']->diff($data['endDate']);
+            $deltaDate = $startDate->diff($endDate);
             $numberOfDays = $deltaDate->days + 1;
 
             // embarqués
@@ -244,13 +235,10 @@ class ReportingController extends AbstractController
                 'embMTBF' => $embMTBF,
                 'embMTTR' => $embMTTR,
                 'embRate' => $embRate,
-                'issueEnd' => $issueEnd,
-                'issueStart' => $issueStart,
-                'repaired' => $repairs,
                 'availabilities' => $availabilites,
                 'availabilitiesInfo' => $availabilitesInfo,
-                'dateStart' => $data['startDate'],
-                'dateEnd' => $data['endDate'],
+                'dateStart' => $startDate,
+                'dateEnd' => $endDate,
             ]);
 
 
