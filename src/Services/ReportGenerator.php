@@ -200,18 +200,22 @@ class ReportGenerator
 
                         } else {
                             $repairDate = $issue->getRepair()->getDateEnd();
+
                         }
 
                         //si la date de fin de panne est après la date du filtre, place la date du filtre à la place
                         if ($repairDate >= $endDate) {
                             $repairDate = $endDate;
+
                         }
 
                         //delta en heure des deux dates
                         $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $dateRequest);
 
+
                         //cumul du temps d'indispo pour le modèle
                         $repairNewTime = $repairNewTime + $repairIssueTime;
+
                     }
 
                 }
@@ -222,7 +226,7 @@ class ReportGenerator
             }
 
             $deltaDate = $startDate->diff($endDate);
-            $numberOfDays = $deltaDate->days+1;
+            $numberOfDays = $deltaDate->days + 1;
 
 
             $mtbf = $this->MTBFGenerator->generate($numberOfDays, $category->getHoursPerDay(), $category->getContractualQuantity(), $totalIssues);
@@ -234,7 +238,6 @@ class ReportGenerator
             } else {
                 $rate = 1;
             }
-
 
 
             $report = new Report();

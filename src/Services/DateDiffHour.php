@@ -20,8 +20,15 @@ class DateDiffHour
     public function getDiff(\DateTimeInterface $dateEnd, \DateTimeInterface $dateStart): int
     {
         $diff = $dateEnd->diff($dateStart);
-        $hours = $diff->h;
-        $hours = $hours + ($diff->days * 24);
+
+
+        if ($diff->i > 0 && $diff->i < 60) {
+            $hours = 1;
+        } else {
+
+            $hours = $diff->h;
+            $hours = $hours + ($diff->days * 24);
+        }
 
         return $hours;
     }

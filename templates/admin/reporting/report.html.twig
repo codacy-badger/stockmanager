@@ -91,7 +91,7 @@
                     <td class="table-info">{{ availability.repairTime }}</td>
                     <td class="table-info">{{ availability.mtbf | round(0,'common') }}</td>
                     <td class="table-info">{{ availability.mttr | round(0,'common') }}</td>
-                    <td class="{% if availability.rate*100 > rateInfo %}bg-success{% else %}bg-danger{% endif %} text-white">{{ (availability.rate*100) | round(4,'common') }}</td>
+                    <td class="{% if availability.rate*100 > rateInfo %}bg-success{% else %}bg-danger{% endif %} text-white">{{ (availability.rate*100) | round(3,'common') }}</td>
                 </tr>
             {% endfor %}
             </tbody>

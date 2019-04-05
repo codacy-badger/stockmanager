@@ -106,9 +106,8 @@ class ReportGeneratorContract
                 $countNewIssuesCategory = $countNewIssuesCategory + count($newIssues);
 
 
-
                 //somme de toute les pannes
-                $totalIssues = $countNewIssuesCategory ;
+                $totalIssues = $countNewIssuesCategory;
 
 
                 $repairNewTime = 0;
@@ -125,14 +124,13 @@ class ReportGeneratorContract
 
                         $dateRequest = $issue->getDateRequest();
 
-
-                            $repairDate = $issue->getDateEnd();
-
+                        $repairDate = $issue->getDateEnd();
 
                         //si la date de fin de panne est après la date du filtre, place la date du filtre à la place
                         if ($repairDate >= $endDate) {
                             $repairDate = $endDate;
                         }
+
 
                         //delta en heure des deux dates
                         $repairIssueTime = $this->dateDiffHour->getDiff($repairDate, $dateRequest);
@@ -149,7 +147,13 @@ class ReportGeneratorContract
             }
 
             $deltaDate = $startDate->diff($endDate);
-            $numberOfDays = $deltaDate->days+1;
+            $numberOfDays = $deltaDate->days + 1;
+
+
+//            si le temps d'indispo est compris entre 0 et 1 heure, arrondir a 1h
+            if ($repairTimeCategory > 0 && $repairTimeCategory < 1) {
+                $repairTimeCategory = 1;
+            }
 
 
             $mtbf = $this->MTBFGenerator->generate($numberOfDays, $category->getHoursPerDay(), $category->getContractualQuantity(), $totalIssues);
@@ -162,7 +166,6 @@ class ReportGeneratorContract
             } else {
                 $rate = 1;
             }
-
 
 
             $report = new ReportContract();
