@@ -22,7 +22,7 @@ class DateDiffHour
         $diff = $dateEnd->diff($dateStart);
 
 
-        if ($diff->i > 0 && $diff->i < 60) {
+        if ($diff->i > 0 && $diff->i < 60 && $diff->h == 0) {
             $hours = 1;
         } else {
 
