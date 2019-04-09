@@ -14,6 +14,12 @@ use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 class PieChartGenerator
 {
 
+    /**
+     * @param $values
+     * @param int $height
+     * @param int $width
+     * @return PieChart
+     */
     public function generate($values, int $height, int $width)
     {
         $pieChart = new PieChart();
