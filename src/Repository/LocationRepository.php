@@ -85,7 +85,7 @@ class LocationRepository extends ServiceEntityRepository
             ->andWhere('l.equipment = :equipment')
             ->orderBy('l.id', 'desc')
             ->setParameter('equipment', $equipment)
-//            ->setFirstResult(0)
+            ->setMaxResults(1)
             ->getQuery()
             ->getResult();
 

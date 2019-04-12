@@ -163,19 +163,28 @@ class IssueController extends AbstractController
     public function edit(Request $request, Issue $issue): Response
     {
 
-        $damagedEquipement = $issue->getEquipment();
+        $oldDamagedEquipement = $issue->getEquipment();
+        $oldReplaceEquipement = $issue->getEquipmentReplace();
 
         $form = $this->createForm(IssueEditType::class, $issue);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($damagedEquipement !== $issue->getEquipment()) {
+            $newDamagedEquipement = $issue->getEquipment();
+            $newReplaceEquipement = $issue->getEquipmentReplace();
+
+            $site = new Site();
+
+//Si l'équipement en panne a été changé alors on supprime l'ancienne localisation de l'ancien équipepent et on ajoute une nouvelle localisation pour le nouveau
+            if (null !== $oldDamagedEquipement && $oldDamagedEquipement !== $newDamagedEquipement) {
 
 
-                $lastLocation = $this->em->getRepository(Location::class)->findLastLocation($damagedEquipement);
-                dump($lastLocation);
-                die();
+            }
+
+            if (null !== $oldReplaceEquipement && $oldReplaceEquipement !== $newReplaceEquipement) {
+
+
             }
 
             $this->getDoctrine()->getManager()->flush();

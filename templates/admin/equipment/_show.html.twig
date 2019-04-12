@@ -30,7 +30,7 @@
                                 <button type="submit" class="badge badge-danger"> En panne, Réparer
                                 </button>
                             </form>
-                        {% elseif myIssue.repair.subcontractorRepair is defined %}
+                        {% elseif myIssue.repair.subcontractorRepair is not null %}
                             {% if myIssue.repair.subcontractorRepair.dateReturn is null %}
                                 <span class="badge badge-danger">Chez le sous traitant</span>
                             {% endif %}
