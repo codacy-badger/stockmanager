@@ -107,19 +107,17 @@ class RepairController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            // if equipment is send to subcontractor then record it to this entity
-            if (null == !$repair->getIsGoingToSubcontractor()) {
+            if (null === $repair->getSubcontractorRepair()) {
 
-                if (null === $repair->getSubcontractorRepair()) {
-
-                    $subcontracterRepair = new SubcontractorRepair();
-                }
-
-                $subcontracterRepair->setRepair($repair);
-
-                $this->em->persist($subcontracterRepair);
-
+                $subcontracterRepair = new SubcontractorRepair();
+            } else {
+                $subcontracterRepair = $repair->getSubcontractorRepair();
             }
+
+
+            $subcontracterRepair->setRepair($repair);
+
+            $this->em->persist($subcontracterRepair);
 
 
             $hours = $dateDiffHour->getDiff($repair->getDateEnd(), $repair->getIssue()->getDateRequest());

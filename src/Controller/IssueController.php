@@ -140,7 +140,6 @@ class IssueController extends AbstractController
     }
 
 
-
     /**
      * show issue
      *
@@ -163,11 +162,21 @@ class IssueController extends AbstractController
      */
     public function edit(Request $request, Issue $issue): Response
     {
+
+        $damagedEquipement = $issue->getEquipment();
+
         $form = $this->createForm(IssueEditType::class, $issue);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            if ($damagedEquipement !== $issue->getEquipment()) {
+
+
+                $lastLocation = $this->em->getRepository(Location::class)->findLastLocation($damagedEquipement);
+                dump($lastLocation);
+                die();
+            }
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -178,11 +187,13 @@ class IssueController extends AbstractController
             ]);
         }
 
+
         return $this->render('admin/issue/edit.html.twig', [
             'issue' => $issue,
             'form' => $form->createView(),
         ]);
     }
+
 
     /**
      * Delete issue
@@ -445,7 +456,6 @@ class IssueController extends AbstractController
             'number' => $number
         ]);
     }
-
 
 
 }

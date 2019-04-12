@@ -78,4 +78,17 @@ class LocationRepository extends ServiceEntityRepository
 
     }
 
+
+    public function findLastLocation(Equipment $equipment)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.equipment = :equipment')
+            ->orderBy('l.id', 'desc')
+            ->setParameter('equipment', $equipment)
+//            ->setFirstResult(0)
+            ->getQuery()
+            ->getResult();
+
+    }
+
 }
