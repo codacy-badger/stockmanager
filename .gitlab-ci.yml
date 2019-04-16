@@ -1,4 +1,4 @@
-image: php:7.2
+image: php:7.2-cli
 before_script:
     # Install composer
     - curl -sS https://getcomposer.org/installer | php
