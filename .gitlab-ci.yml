@@ -1,5 +1,6 @@
 image: php:7.2
 job:
   script:
+    - chmod +x bin/phpunit
     - bin/phpunit
     
