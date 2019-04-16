@@ -2,14 +2,17 @@
     <div class="row">
         <h4>Historique des pannes
             pour: {{ equipment.brand.category.name }} {{ equipment.brand.name }} {{ equipment.serial }}</h4>
-        <table class="table table-sm table-striped">
+        <table class="table table-sm table-striped table-bordered">
             <thead>
             <tr>
                 <th>Id</th>
                 <th>Date</th>
                 <th>Technicien</th>
                 <th>Provenance</th>
+                <th>Symptomes client</th>
+                <th>Description client</th>
                 <th>Symptômes</th>
+                <th>Description tech</th>
                 <th>pièces changés</th>
             </tr>
             </thead>
@@ -63,8 +66,27 @@
                         {% if myIssue.repair %}
                             {{ myIssue.repair.technician.firstname }} {{ myIssue.repair.technician.lastname }}
                         {% endif %}
-                    </td>
+
+                        {# provenance #}
                     <td>{{ myIssue.user.operator.name }}</td>
+
+{#                    symtpome client#}
+                    <td>
+                        <ul>
+
+                            {% for symptom in myIssue.symptoms %}
+                                <li> {{ symptom.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+
+{#                    description client#}
+
+                    <td>
+                        {{ myIssue.description }}
+                    </td>
+
+                    {# symptome tech#}
                     <td>
                         <ul>
                             {% if myIssue.repair %}
@@ -74,6 +96,12 @@
                             {% endif %}
                         </ul>
                     </td>
+
+{#                    decription tech #}
+                    <td>
+                        {{ myIssue.repair.description }}
+                    </td>
+
                     <td>
                         <ul>
                             {% if myIssue.repair %}
