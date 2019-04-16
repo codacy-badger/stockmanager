@@ -1,6 +1,10 @@
 image: php:7.2
+before_script:
+    # Install composer
+    - curl -sS https://getcomposer.org/installer | php
+    # Install all project dependencies
+    - php composer.phar install
 job:
   script:
-    - chmod +x bin/phpunit
     - bin/phpunit
     
