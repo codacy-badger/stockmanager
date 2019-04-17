@@ -1,4 +1,4 @@
-image: composer
+image: deinternetjongens/php7.2
 
 cache:
   paths:
