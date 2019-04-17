@@ -1,4 +1,4 @@
-image: grafikart/gitlab-ci:php7
+image: composer
 
 cache:
   paths:
