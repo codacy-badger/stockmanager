@@ -1,7 +1,7 @@
 <section class="mt-1">
     <div class="row">
         <h4>Historique des pannes
-            pour: {{ equipment.brand.category.name }} {{ equipment.brand.name }} {{ equipment.serial }}</h4>
+            pour: {{ equipment.brand.category.name }} {{ equipment.brand.name }} {{ equipment.serial }} <span class="badge {% if equipment.contract.id == constant('App\\Entity\\Contract::CONTRAT_HORS_SISMO') %}badge-danger{% else %}badge-secondary{% endif %}">{{ equipment.contract.name }}</span></h4>
         <table class="table table-sm table-striped table-bordered small">
             <thead>
             <tr>
