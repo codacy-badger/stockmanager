@@ -70,7 +70,7 @@
                         {# provenance #}
                     <td>{{ myIssue.user.operator.name }}</td>
 
-{#                    symtpome client#}
+                    {#                    symtpome client#}
                     <td>
                         <ul>
 
@@ -80,9 +80,10 @@
                         </ul>
                     </td>
 
-{#                    description client#}
+                    {#                    description client#}
 
                     <td>
+
                         {{ myIssue.description }}
                     </td>
 
@@ -97,9 +98,11 @@
                         </ul>
                     </td>
 
-{#                    decription tech #}
+                    {#                    decription tech #}
                     <td>
-                        {{ myIssue.repair.description }}
+                        {% if myIssue.repair %}
+                            {{ myIssue.repair.description }}
+                        {% endif %}
                     </td>
 
                     <td>
