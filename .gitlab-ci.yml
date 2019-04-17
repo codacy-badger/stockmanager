@@ -9,5 +9,6 @@ before_script:
 
 test:php7:
   script:
+    - chmod 777 -R bin/
     - bin/phpunit
 
