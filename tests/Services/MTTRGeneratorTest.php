@@ -9,7 +9,7 @@ class MTTRGeneratorTest extends TestCase
 {
 
     /**
-     *  someRandomMTTR
+     *  @dataProvider someRandomMTTR
      */
     public function testMMTRCompute($timeToRepair, $numberOfFailures, $expectedResult)
     {
