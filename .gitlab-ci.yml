@@ -1,0 +1,12 @@
+image: grafikart/gitlab-ci:php7
+
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  - composer install
+
+test:php7:
+  script:
+    - composer test
