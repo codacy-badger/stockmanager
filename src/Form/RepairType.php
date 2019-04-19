@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Brand;
 use App\Entity\Part;
 use App\Entity\Repair;
+use App\Entity\Software;
 use App\Entity\Symptom;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -12,14 +14,19 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RepairType extends AbstractType
 {
+
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        $brand = $options['brand'];
+dump($brand);
+
         $builder
             ->add('description', TextareaType::class)
             ->add('symptoms', EntityType::class, [
@@ -50,8 +57,19 @@ class RepairType extends AbstractType
             ->add('timeToRepair', IntegerType::class, [
                 'required' => false
             ])
-            ->add('softVersion', TextType::class, [
-                'required' => false
+            ->add('software', EntityType::class, [
+                'class' => Software::class,
+                'choice_label' => 'id',
+                'required' => false,
+                'query_builder' => function (EntityRepository $er) use ($brand) {
+
+                    $var = $er->createQueryBuilder('s')
+                        ->andWhere('s.brand = :brand')
+                        ->setParameter('brand', $brand);
+
+                    return $var;
+
+                }
             ])
             ->add('statsDownload', CheckboxType::class, [
                 'required' => false
@@ -66,15 +84,18 @@ class RepairType extends AbstractType
                 'widget' => 'single_text',
                 'required' => true,
                 'model_timezone' => 'UTC',
-                'view_timezone'  => 'Europe/Paris'
+                'view_timezone' => 'Europe/Paris'
             ]);
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Repair::class,
-            'translation_domain' => 'messages'
+            'data_class' => null,
+            'translation_domain' => 'messages',
+            'brand' => null,
         ]);
     }
 }

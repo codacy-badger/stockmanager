@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -27,6 +29,16 @@ class Brand
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="brands")
      */
     private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Software", mappedBy="brand")
+     */
+    private $softwares;
+
+    public function __construct()
+    {
+        $this->softwares = new ArrayCollection();
+    }
 
 
 
@@ -55,6 +67,37 @@ class Brand
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Software[]
+     */
+    public function getSoftwares(): Collection
+    {
+        return $this->softwares;
+    }
+
+    public function addSoftware(Software $software): self
+    {
+        if (!$this->softwares->contains($software)) {
+            $this->softwares[] = $software;
+            $software->setBrand($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSoftware(Software $software): self
+    {
+        if ($this->softwares->contains($software)) {
+            $this->softwares->removeElement($software);
+            // set the owning side to null (unless already changed)
+            if ($software->getBrand() === $this) {
+                $software->setBrand(null);
+            }
+        }
 
         return $this;
     }

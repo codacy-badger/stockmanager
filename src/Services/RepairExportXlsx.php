@@ -69,7 +69,11 @@ class RepairExportXlsx
 
             $symptoms = $issue->getSymptoms();
 
-            $repairSymptoms = $issue->getRepair()->getSymptoms();
+            if ($issue->getRepair()) {
+                $repairSymptoms = $issue->getRepair()->getSymptoms();
+            }else{
+                $repairSymptoms = null;
+            }
 
             $allSymptoms = null;
             foreach ($symptoms as $symptom) {

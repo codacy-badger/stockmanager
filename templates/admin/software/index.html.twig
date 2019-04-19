@@ -11,6 +11,7 @@
                 <th>Id</th>
                 <th>Version</th>
                 <th>Detail</th>
+                <th>Brand</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -20,9 +21,9 @@
                 <td>{{ software.id }}</td>
                 <td>{{ software.version }}</td>
                 <td>{{ software.detail }}</td>
+                <td>{{ software.brand.name }}</td>
                 <td>
-                    <a href="{{ path('software_show', {'id': software.id}) }}">show</a>
-                    <a href="{{ path('software_edit', {'id': software.id}) }}">edit</a>
+                    <a class="btn btn-warning" href="{{ path('software_edit', {'id': software.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +34,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('software_new') }}">Create new</a>
+    <a class="btn btn-info" href="{{ path('software_new') }}">Créer</a>
 {% endblock %}

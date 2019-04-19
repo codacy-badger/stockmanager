@@ -79,6 +79,11 @@ class Repair
     private $softVersion;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Software")
+     */
+    private $software;
+
+    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Issue")
      */
     private $issue;
@@ -337,6 +342,18 @@ class Repair
     public function setIsGoingToSubcontractor(?bool $isGoingToSubcontractor): self
     {
         $this->isGoingToSubcontractor = $isGoingToSubcontractor;
+
+        return $this;
+    }
+
+    public function getSoftware(): ?Software
+    {
+        return $this->software;
+    }
+
+    public function setSoftware(?Software $software): self
+    {
+        $this->software = $software;
 
         return $this;
     }

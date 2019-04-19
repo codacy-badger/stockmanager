@@ -28,6 +28,11 @@ class Software
      */
     private $detail;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Brand", inversedBy="softwares")
+     */
+    private $brand;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +58,18 @@ class Software
     public function setDetail(?string $detail): self
     {
         $this->detail = $detail;
+
+        return $this;
+    }
+
+    public function getBrand(): ?Brand
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(?Brand $brand): self
+    {
+        $this->brand = $brand;
 
         return $this;
     }

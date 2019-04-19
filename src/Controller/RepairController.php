@@ -214,7 +214,11 @@ class RepairController extends AbstractController
         }
 
 
-        $form = $this->get('form.factory')->create(RepairType::class, $repair);
+        $form = $this->get('form.factory')->create(RepairType::class,
+            [
+                'data_class' => $repair,
+                'brand' => $issue->getEquipment()->getBrand()
+            ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
