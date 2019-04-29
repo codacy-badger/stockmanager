@@ -180,10 +180,23 @@ class IssueController extends AbstractController
             if (null !== $oldDamagedEquipement && $oldDamagedEquipement !== $newDamagedEquipement) {
 
 
+                $location = $this->em->getRepository(Location::class)->findOneBy([
+                    'date' => $issue->getDateEnd(),
+                    'equipment' => $oldDamagedEquipement
+                ]);
+
+                $location->setEquipment($newDamagedEquipement);
+
             }
 
             if (null !== $oldReplaceEquipement && $oldReplaceEquipement !== $newReplaceEquipement) {
+                /** @var Location $location */
+                $location = $this->em->getRepository(Location::class)->findOneBy([
+                    'date' => $issue->getDateEnd(),
+                    'equipment' => $oldReplaceEquipement
+                ]);
 
+                $location->setEquipment($newReplaceEquipement);
 
             }
 
