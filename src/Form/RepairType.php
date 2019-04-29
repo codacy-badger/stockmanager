@@ -4,7 +4,9 @@ namespace App\Form;
 
 use App\Entity\Part;
 use App\Entity\Repair;
+use App\Entity\Software;
 use App\Entity\Symptom;
+use App\Repository\SoftwareRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -23,6 +25,7 @@ class RepairType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
+        $brand = $options['brand'];
 
         $builder
             ->add('description', TextareaType::class)
@@ -54,8 +57,14 @@ class RepairType extends AbstractType
             ->add('timeToRepair', IntegerType::class, [
                 'required' => false
             ])
-            ->add('softVersion', TextType::class, [
-                'required' => false
+
+            ->add('software', EntityType::class, [
+                'class' => Software::class,
+                'choice_label' => 'version',
+                'label' => 'Software version',
+                'query_builder' => function (SoftwareRepository $sr) use ($brand) {
+                    return $sr->findByBrand($brand);
+                }
             ])
             ->add('statsDownload', CheckboxType::class, [
                 'required' => false
@@ -81,6 +90,7 @@ class RepairType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Repair::class,
             'translation_domain' => 'messages',
+            'brand' => null,
 
         ]);
     }

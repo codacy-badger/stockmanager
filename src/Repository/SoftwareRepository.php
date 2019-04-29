@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Brand;
 use App\Entity\Software;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -47,4 +48,12 @@ class SoftwareRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findByBrand(Brand $brand)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.brand = :brand')
+            ->setParameter('brand', $brand)
+         ;
+    }
 }

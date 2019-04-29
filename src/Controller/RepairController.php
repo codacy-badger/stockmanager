@@ -101,7 +101,9 @@ class RepairController extends AbstractController
      */
     public function edit(Request $request, Repair $repair, DateDiffHour $dateDiffHour): Response
     {
-        $form = $this->createForm(RepairType::class, $repair);
+        $form = $this->createForm(RepairType::class, $repair, [
+            'brand' => $repair->getIssue()->getEquipment()->getBrand()
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -214,7 +216,9 @@ class RepairController extends AbstractController
         }
 
 
-        $form = $this->createForm(RepairType::class, $repair);
+        $form = $this->createForm(RepairType::class, $repair, [
+            'brand' => $issue->getEquipment()->getBrand(),
+        ]);
 
         $form->handleRequest($request);
 
