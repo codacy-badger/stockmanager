@@ -136,4 +136,24 @@ class SubcontractorController extends AbstractController
             'count' => $count,
         ]);
     }
+
+
+    /**
+     * @Route("/delete/{id}", name="subcontractorrepair_delete", methods="DELETE")
+     * @param Request $request
+     * @param SubcontractorRepair $subcontractorRepair
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function delete(Request $request, SubcontractorRepair $subcontractorRepair)
+    {
+        if ($this->isCsrfTokenValid('delete-subcontractorRepair', $request->request->get('_token'))) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($subcontractorRepair);
+            $em->flush();
+
+            $this->addFlash('success', "La ligne sous-traitant a bien été supprimée");
+        }
+
+        return $this->redirectToRoute('subcontractor_index');
+    }
 }

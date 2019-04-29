@@ -81,6 +81,7 @@
 
                 <td>
                     <a class="btn btn-warning btn-sm" href="{{ path('subcontractor_edit', {'id': subcontractor.id} ) }}" >Modifier</a>
+                    {{ include('admin/subcontractor/_delete_form.html.twig') }}
                 </td>
 
             </tr>

@@ -10,7 +10,6 @@ namespace App\Services;
 
 
 use App\Entity\Issue;
-use App\Entity\Repair;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,7 +70,7 @@ class RepairExportXlsx
 
             if ($issue->getRepair()) {
                 $repairSymptoms = $issue->getRepair()->getSymptoms();
-            }else{
+            } else {
                 $repairSymptoms = null;
             }
 
@@ -84,8 +83,10 @@ class RepairExportXlsx
 
             $allRepairSymptoms = null;
 
-            foreach ($repairSymptoms as $symptom) {
-                $allRepairSymptoms = $symptom->getName() . ', ' . $allRepairSymptoms;
+            if ($repairSymptoms) {
+                foreach ($repairSymptoms as $symptom) {
+                    $allRepairSymptoms = $symptom->getName() . ', ' . $allRepairSymptoms;
+                }
             }
 
             $sheet->setCellValue('A' . $i, $issue->getId());

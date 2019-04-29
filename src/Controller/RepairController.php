@@ -214,18 +214,16 @@ class RepairController extends AbstractController
         }
 
 
-        $form = $this->get('form.factory')->create(RepairType::class,
-            [
-                'data_class' => $repair,
-                'brand' => $issue->getEquipment()->getBrand()
-            ]);
+        $form = $this->createForm(RepairType::class, $repair);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            // if equipment is send to subcontractor then record it to this entity
-            if (null == !$repair->getIsGoingToSubcontractor()) {
+            // si l'équipement est envoyé chez le sous traitant , on enregistre
+            if ($repair->getIsGoingToSubcontractor()) {
+
                 $subcontracterRepair = new SubcontractorRepair();
                 $subcontracterRepair->setRepair($repair);
 
@@ -234,12 +232,12 @@ class RepairController extends AbstractController
 
             } else {
 
-                //cas ou l'quipement est réparé par siteoise
+
+                //cas ou l'équipement est réparé par siteoise
                 //get number of hours to repair
                 $hours = $dateDiffHour->getDiff($repair->getDateEnd(), $issue->getDateRequest());
 
                 $repair->setUnavailability($hours);
-
 
                 //réccupérer le site SITEOISE
                 $homeSite = $this->em->getRepository(Site::class)->findOneBy(['id' => Site::SITEOISE]);
