@@ -7,7 +7,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SoftwareRepository")
- * @UniqueEntity(fields={"version"}, message="Cette version existe déjà.")
  */
 class Software
 {
