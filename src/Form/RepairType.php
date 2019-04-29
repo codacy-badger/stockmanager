@@ -54,7 +54,7 @@ class RepairType extends AbstractType
             ->add('timeToRepair', IntegerType::class, [
                 'required' => false
             ])
-            ->add('software', TextType::class, [
+            ->add('softVersion', TextType::class, [
                 'required' => false
             ])
             ->add('statsDownload', CheckboxType::class, [
