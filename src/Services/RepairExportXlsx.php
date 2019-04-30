@@ -55,12 +55,14 @@ class RepairExportXlsx
         $sheet->setCellValue('H1', 'Date déclaration');
         $sheet->setCellValue('I1', 'Date échange');
         $sheet->setCellValue('J1', 'Symptômes client');
-        $sheet->setCellValue('K1', 'Fausse panne');
-        $sheet->setCellValue('L1', 'Contrat');
-        $sheet->setCellValue('M1', 'Degradation');
-        $sheet->setCellValue('N1', 'Description réparation');
-        $sheet->setCellValue('O1', 'Date réparation');
-        $sheet->setCellValue('P1', 'Symptômes réparation');
+        $sheet->setCellValue('K1', 'Description client');
+        $sheet->setCellValue('L1', 'Fausse panne');
+        $sheet->setCellValue('M1', 'Contrat');
+        $sheet->setCellValue('N1', 'Degradation');
+        $sheet->setCellValue('O1', 'Description réparation');
+        $sheet->setCellValue('P1', 'Date réparation');
+        $sheet->setCellValue('Q1', 'Symptômes réparation');
+        $sheet->setCellValue('R1', 'Pièces changées');
 
         //set table dynamic lines
         /** @var Issue $issue */
@@ -70,8 +72,10 @@ class RepairExportXlsx
 
             if ($issue->getRepair()) {
                 $repairSymptoms = $issue->getRepair()->getSymptoms();
+                $parts = $issue->getRepair()->getParts();
             } else {
                 $repairSymptoms = null;
+                $parts = null;
             }
 
             $allSymptoms = null;
@@ -89,6 +93,14 @@ class RepairExportXlsx
                 }
             }
 
+            $allParts = null;
+
+            if ($parts) {
+                foreach ($parts as $part) {
+                    $allParts = $part->getName() . ', ' . $allParts;
+                }
+            }
+
             $sheet->setCellValue('A' . $i, $issue->getId());
             $sheet->setCellValue('B' . $i, $issue->getEquipment()->getSerial());
             $sheet->setCellValue('C' . $i, $issue->getEquipment()->getBrand()->getCategory()->getName());
@@ -99,12 +111,14 @@ class RepairExportXlsx
             $sheet->setCellValue('H' . $i, $issue->getDateRequest()->setTimezone(new \DateTimeZone('Europe/Paris')));
             $sheet->setCellValue('I' . $i, $issue->getDateEnd() ? $issue->getDateEnd()->setTimeZone(new \DateTimeZone('Europe/Paris')) : 'aucune');
             $sheet->setCellValue('J' . $i, $allSymptoms);
-            $sheet->setCellValue('K' . $i, $issue->getRepair() ? $issue->getRepair()->getNoBreakdown() : 'aucune');
-            $sheet->setCellValue('L' . $i, $issue->getEquipment()->getContract()->getName());
-            $sheet->setCellValue('M' . $i, $issue->getRepair() ? $issue->getRepair()->getDegradation() : 'aucune');
-            $sheet->setCellValue('N' . $i, $issue->getRepair() ? $issue->getRepair()->getDescription() : 'aucune');
-            $sheet->setCellValue('O' . $i, $issue->getRepair() ? $issue->getRepair()->getDateEnd()->setTimezone(new \DateTimeZone('Europe/Paris')) : 'aucune');
-            $sheet->setCellValue('P' . $i, $allRepairSymptoms);
+            $sheet->setCellValue('K' . $i, $issue->getDescription());
+            $sheet->setCellValue('L' . $i, $issue->getRepair() ? $issue->getRepair()->getNoBreakdown() : 'aucune');
+            $sheet->setCellValue('M' . $i, $issue->getEquipment()->getContract()->getName());
+            $sheet->setCellValue('N' . $i, $issue->getRepair() ? $issue->getRepair()->getDegradation() : 'aucune');
+            $sheet->setCellValue('O' . $i, $issue->getRepair() ? $issue->getRepair()->getDescription() : 'aucune');
+            $sheet->setCellValue('P' . $i, $issue->getRepair() ? $issue->getRepair()->getDateEnd()->setTimezone(new \DateTimeZone('Europe/Paris')) : 'aucune');
+            $sheet->setCellValue('Q' . $i, $allRepairSymptoms ? $allRepairSymptoms : 'aucune');
+            $sheet->setCellValue('R' . $i, $allParts ? $allParts : 'aucune');
 
             $allSymptoms = null;
             $i++;

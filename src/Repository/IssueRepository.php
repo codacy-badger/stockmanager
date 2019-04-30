@@ -57,6 +57,7 @@ class IssueRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
     /**
      * Find all issues by operator
      * @param Operator $operator
