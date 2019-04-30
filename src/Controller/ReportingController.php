@@ -8,7 +8,6 @@ use App\Entity\Operator;
 use App\Entity\Repair;
 use App\Entity\Report;
 use App\Entity\ReportContract;
-use App\Entity\Statistics;
 use App\Services\MTBFGenerator;
 use App\Services\MTTRGenerator;
 use App\Services\PieChartGenerator;
@@ -17,8 +16,6 @@ use App\Services\RepairExportXlsx;
 use App\Services\ReportGenerator;
 use App\Services\ReportGeneratorContract;
 use Doctrine\ORM\EntityManagerInterface;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\Request;
@@ -263,6 +260,21 @@ class ReportingController extends AbstractController
 
         return $repairExportXlsx->export($issues);
 
+    }
+
+    /**
+     * Export des réparations non traités
+     *
+     * @Route("admin/reporting/export/notFixed", name="reporting_notrepaired", methods={"GET"})
+     * @param RepairExportXlsx $repairExportXlsx
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    public function exportRepairsNotFinished(RepairExportXlsx $repairExportXlsx)
+    {
+        $issues = $this->em->getRepository(Issue::class)->getNotRepaired();
+
+        return $repairExportXlsx->export($issues);
     }
 
     /**
