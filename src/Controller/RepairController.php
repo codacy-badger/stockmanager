@@ -101,6 +101,9 @@ class RepairController extends AbstractController
      */
     public function edit(Request $request, Repair $repair, DateDiffHour $dateDiffHour): Response
     {
+
+        $checkIfisGoingToSubcontractor = $repair->getSubcontractorRepair();
+
         $form = $this->createForm(RepairType::class, $repair, [
             'brand' => $repair->getIssue()->getEquipment()->getBrand()
         ]);
@@ -109,17 +112,14 @@ class RepairController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            if (null === $repair->getSubcontractorRepair()) {
+            if ($repair->getIsGoingToSubcontractor() === true && $checkIfisGoingToSubcontractor === null ) {
 
                 $subcontracterRepair = new SubcontractorRepair();
-            } else {
-                $subcontracterRepair = $repair->getSubcontractorRepair();
+                $subcontracterRepair->setDateEntry($repair->getDateEnd());
+                $subcontracterRepair->setRepair($repair);
+
+                $this->em->persist($subcontracterRepair);
             }
-
-
-            $subcontracterRepair->setRepair($repair);
-
-            $this->em->persist($subcontracterRepair);
 
 
             $hours = $dateDiffHour->getDiff($repair->getDateEnd(), $repair->getIssue()->getDateRequest());

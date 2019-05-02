@@ -27,7 +27,7 @@ class SubcontractorRepair
     private $dateReturn;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Repair", inversedBy="subcontractorRepair", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Repair", inversedBy="subcontractorRepair", cascade={"persist"})
      */
     private $repair;
 
