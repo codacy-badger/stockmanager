@@ -51,7 +51,7 @@ class RepairExportXlsx
         $sheet->setCellValue('D1', 'Modèle');
         $sheet->setCellValue('E1', 'Utilisateur');
         $sheet->setCellValue('F1', 'Réseau de transport');
-        $sheet->setCellValue('G1', 'Réseau de transport');
+        $sheet->setCellValue('G1', 'Exploitant');
         $sheet->setCellValue('H1', 'Date déclaration');
         $sheet->setCellValue('I1', 'Date échange');
         $sheet->setCellValue('J1', 'Symptômes client');
