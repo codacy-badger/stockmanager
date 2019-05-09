@@ -151,22 +151,33 @@
             <div class="destination">
                 <h4>Destinataire</h4>
                 <span class="upper">
-                     {% for issue in delivery.issues %}
-                         {% if loop.first %}
-                             {{ issue.user.operator.name }}
-                         {% endif %}
-                     {% endfor %}
+{% if delivery.issues.count > 0 %}
+    {% for issue in delivery.issues %}
+        {% if loop.first %}
+            {{ issue.user.operator.name }}
+        {% endif %}
+    {% endfor %}
+{% elseif delivery.user %}
+    {{ delivery.user.operator.name }}
+{% endif %}
                 </span><br>
             </div>
             <div class="address">
                 <h4>Adresse de livraison</h4>
-                {% for issue in delivery.issues %}
-                    {% if loop.first %}
-                        {{ issue.user.operator.site.name }}<br>
-                        {{ issue.user.operator.site.adress }}<br>
-                        {{ issue.user.operator.site.postal }} {{ issue.user.operator.site.city }}
-                    {% endif %}
-                {% endfor %}
+                {% if delivery.issues.count > 0 %}
+                    {% for issue in delivery.issues %}
+                        {% if loop.first %}
+                            {{ issue.user.operator.site.name }}<br>
+                            {{ issue.user.operator.site.adress }}<br>
+                            {{ issue.user.operator.site.postal }} {{ issue.user.operator.site.city }}
+                        {% endif %}
+                    {% endfor %}
+                {% elseif delivery.user %}
+                    {{ delivery.user.operator.site.name }}<br>
+                    {{ delivery.user.operator.site.adress }}<br>
+                    {{ delivery.user.operator.site.postal }} {{ delivery.user.operator.site.city }}
+
+                {% endif %}
             </div>
         </div>
     </div>
@@ -195,7 +206,9 @@
     <table class="details">
         <tr>
             <th>Type de Matériel livré</th>
-            <th>Matériel en panne</th>
+            {% if delivery.issues.count > 0 %}
+                <th>Matériel en panne</th>
+            {% endif %}
         </tr>
 
         {% for issue in delivery.issues %}
@@ -216,7 +229,9 @@
     </table>
     <table class="obs">
         <tr>
-            <th>Materiel remplaçant</th>
+            {% if delivery.issues.count > 0 %}
+                <th>Materiel remplaçant</th>
+            {% endif %}
         </tr>
         {% for issue in delivery.issues %}
             <tr>

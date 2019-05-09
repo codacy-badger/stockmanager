@@ -33,3 +33,7 @@ services:
     App\Services\EmailNotificator:
         arguments:
             $logoPath: 'img/om.png'
+
+    App\EventListener\DeliveryListener:
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate}

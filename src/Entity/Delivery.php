@@ -33,6 +33,11 @@ class Delivery
      */
     private $equipments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     */
+    private $user;
+
     public function __construct()
     {
         $this->issues = new ArrayCollection();
@@ -109,6 +114,18 @@ class Delivery
         if ($this->equipments->contains($equipment)) {
             $this->equipments->removeElement($equipment);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
