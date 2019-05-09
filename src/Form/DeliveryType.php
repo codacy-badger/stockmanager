@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Delivery;
 use App\Entity\Equipment;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -24,6 +25,12 @@ class DeliveryType extends AbstractType
             )
         ->add('dateCreation', DateType::class, [
             'widget' =>'single_text'
+        ])
+        ->add('user', EntityType::class, [
+            'class' => User::class,
+            'choice_label' => 'lastname',
+            'multiple' => false,
+            'required' => false
         ])
         ;
     }

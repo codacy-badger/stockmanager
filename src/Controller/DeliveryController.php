@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Delivery;
+use App\Entity\Location;
 use App\Entity\Operator;
 use App\Form\DeliveryType;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,7 +24,9 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        $deliveries = $this->getDoctrine()->getRepository(Delivery::class)->findWithIssues();
+        $deliveries = $this->getDoctrine()->getRepository(Delivery::class)->findBy([], [
+            'id' => 'DESC'
+        ]);
 
         return $this->render('admin/delivery/index.html.twig', [
             'deliveries' => $deliveries
@@ -55,7 +59,6 @@ class DeliveryController extends Controller
             $date = new \DateTime();
 
             $delivery->setDateCreation($date);
-
 
 
             foreach ($myOperator->getUsers() as $user) {
@@ -144,9 +147,12 @@ class DeliveryController extends Controller
      */
     public function edit(Request $request, Delivery $delivery)
     {
+
+
         $form = $this->createForm(DeliveryType::class, $delivery);
 
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -158,9 +164,52 @@ class DeliveryController extends Controller
 
         }
 
+
         return $this->render('admin/delivery/edit.html.twig', [
             'form' => $form->createView(),
             'delivery' => $delivery
+        ]);
+    }
+
+    /**
+     * @Route("/new", name="delivery_new", methods={"POST|GET"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function new(Request $request)
+    {
+
+        $delivery = new Delivery();
+
+        $form = $this->createForm(DeliveryType::class, $delivery);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($delivery);
+
+//Création de la nouvelle localisation de chaque équipements
+            foreach ($delivery->getEquipments() as $equipment) {
+                $location = new Location();
+                $location->setEquipment($equipment)
+                    ->setSite($delivery->getUser()->getOperator()->getSite())
+                    ->setDate($delivery->getDateCreation())
+                    ->setIsOk(true);
+
+                $em->persist($location);
+            }
+
+            $em->flush();
+
+            $this->addFlash('success', "Le bon de livraison a bien été créé");
+            return $this->redirectToRoute('delivery_index');
+
+        }
+
+        return $this->render('admin/delivery/new.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 

@@ -3,7 +3,13 @@
 {% block title %}Bons de livraisons{% endblock %}
 {% block isActiveDelivery %}active{% endblock %}
 {% block body %}
-    <h1><i class="fas fa-truck"></i> Bons de livraisons</h1>
+    <div class="row align-items-center">
+        <h1><i class="fas fa-truck"></i> Bons de livraisons</h1>
+        <div class="ml-3">
+            <a class="btn btn-info" href="{{ path('delivery_new') }}" data-toggle="tooltip" data-placement="top"
+               title="Creer un nouveau BL"><i class="fab fa-wpforms"></i> Créer</a>
+        </div>
+    </div>
 
     <table class="table table-sm table-striped">
         <thead>
@@ -26,20 +32,30 @@
                 </td>
                 <td>{{ delivery.equipments.count }}</td>
                 <td>
-                    {% for issue in delivery.issues %}
-                        {% if loop.first %}
-                            {{ issue.user.operator.name }}
-                        {% endif %}
-                    {% endfor %}
+                    {% if delivery.issues.count > 0 %}
+                        {% for issue in delivery.issues %}
+                            {% if loop.first %}
+                                <span class="badge badge-secondary">automatique</span> {{ issue.user.operator.name }}
+                            {% endif %}
+                        {% endfor %}
+                    {% elseif delivery.user %}
+                        <span class="badge badge-warning">saisi</span> {{ delivery.user.operator.name }}
+                    {% else %}
+                        <span class="badge badge-danger">incomplet</span>
+                    {% endif %}
                 </td>
                 <td class="d-flex">
-                    <a class="btn btn-primary btn-sm mr-1" href="{{ path('delivery_edit', {'id': delivery.id}) }}">Modifier</a>
+                    <a class="btn btn-outline-danger btn-sm mr-1" data-toggle="tooltip" data-placement="top"
+                       title="Attention! A utiliser avec parcimonie"
+                       href="{{ path('delivery_edit', {'id': delivery.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
 
                     <form action="{{ path('delivery_export', {'id': delivery.id}) }}"
                           method="post">
                         <input type="hidden" name="token"
                                value="{{ csrf_token('delivery-export') }}"/>
-                        <button type="submit" class="btn btn-sm btn-warning"><i class="fas fa-file-export"></i> Exporter
+                        <button type="submit" class="btn btn-sm btn-dark" data-toggle="tooltip" data-placement="top"
+                                title="Export du BL au format PDF"><i class="fas fa-file-export"></i>
+                            Exporter
                         </button>
                     </form>
                 </td>
@@ -51,5 +67,6 @@
         {% endfor %}
         </tbody>
     </table>
+
 
 {% endblock %}

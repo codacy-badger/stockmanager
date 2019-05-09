@@ -46,12 +46,13 @@ class LocationController extends AbstractController
 
 
     /**
-     * @Route("/search", name="location_search")
+     * @Route("/search", name="location_search", methods={"GET|POST"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function search(Request $request, RateStatistics $rate, Equipment $equipement = null)
+    public function search(Request $request)
     {
+
 
         $search = new Search();
 
@@ -145,6 +146,27 @@ class LocationController extends AbstractController
             'historicIssues' => $equipement->getIssues(),
             'locations' => $searchLocations,
             'equipment' => $equipement,
+        ]);
+    }
+
+    /**
+     * @Route("/delete/{id}", name="location_delete", methods="DELETE")
+     */
+    public function delete(Request $request, Location $location)
+    {
+        $equipment = $location->getEquipment();
+
+        if ($this->isCsrfTokenValid('delete-location', $request->request->get('_token'))) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($location);
+            $em->flush();
+
+            $this->addFlash('success', 'La localisation a bien été supprimée');
+        }
+
+        return $this->redirectToRoute('equipment_show', [
+            'id' => $equipment->getId()
         ]);
     }
 
