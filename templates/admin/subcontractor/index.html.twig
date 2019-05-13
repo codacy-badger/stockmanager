@@ -45,7 +45,9 @@
                                 <b>Modèle:</b> {{ subcontractor.repair.issue.equipment.brand.name }}
                             </div>
                             <div class="small">
-                                <b>N° Serie:</b> <a href="{{ path('equipment_show', {'id': subcontractor.repair.issue.equipment.id}) }}" target="_blank">{{ subcontractor.repair.issue.equipment.serial }}</a>
+                                <b>N° Serie:</b> <a
+                                        href="{{ path('equipment_show', {'id': subcontractor.repair.issue.equipment.id}) }}"
+                                        target="_blank">{{ subcontractor.repair.issue.equipment.serial }}</a>
                             </div>
                             {% if subcontractor.repair.issue.equipment.contract.id == out_sismo_contract %}
                                 <div>
@@ -80,8 +82,13 @@
 
 
                 <td>
-                    <a class="btn btn-warning btn-sm" href="{{ path('subcontractor_edit', {'id': subcontractor.id} ) }}" >Modifier</a>
-                    {{ include('admin/subcontractor/_delete_form.html.twig') }}
+                    <div class="d-flex">
+
+                        <a class="btn btn-warning btn-sm mr-1"
+                           href="{{ path('subcontractor_edit', {'id': subcontractor.id} ) }}"><i
+                                    class="fas fa-edit"></i> Modifier</a>
+                        {{ include('admin/subcontractor/_delete_form.html.twig') }}
+                    </div>
                 </td>
 
             </tr>

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +37,21 @@ class Part
      * @ORM\ManyToOne(targetEntity="App\Entity\PartGroup", inversedBy="parts")
      */
     private $partGroup;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PartQuantity", mappedBy="part")
+     */
+    private $quantities;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $threshold;
+
+    public function __construct()
+    {
+        $this->quantities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -85,6 +102,49 @@ class Part
     public function setPartGroup(?PartGroup $partGroup): self
     {
         $this->partGroup = $partGroup;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PartQuantity[]
+     */
+    public function getQuantities(): Collection
+    {
+        return $this->quantities;
+    }
+
+    public function addQuantity(PartQuantity $quantity): self
+    {
+        if (!$this->quantities->contains($quantity)) {
+            $this->quantities[] = $quantity;
+            $quantity->setPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuantity(PartQuantity $quantity): self
+    {
+        if ($this->quantities->contains($quantity)) {
+            $this->quantities->removeElement($quantity);
+            // set the owning side to null (unless already changed)
+            if ($quantity->getPart() === $this) {
+                $quantity->setPart(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getThreshold(): ?int
+    {
+        return $this->threshold;
+    }
+
+    public function setThreshold(?int $threshold): self
+    {
+        $this->threshold = $threshold;
 
         return $this;
     }

@@ -71,7 +71,7 @@
                     {{ repair.description }}
                 </td>
                 <td>
-                    {% if repair.isGoingToSubcontractor %}
+                    {% if repair.subcontractorRepair %}
                         <span class="badge badge-warning" data-toggle="tooltip" data-placement="top"
                               title="Début {{ repair.subcontractorRepair.dateEntry | date('d/m/Y', "Europe/Paris") }}, Retour {{ repair.subcontractorRepair.dateReturn | date('d/m/Y', "Europe/Paris") }}">Parti chez le sous traitant</span>
                     {% endif %}

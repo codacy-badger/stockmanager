@@ -41,3 +41,7 @@ services:
     App\EventSubscriber\IssueSubscriber:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
+
+    App\EventSubscriber\RepairSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
