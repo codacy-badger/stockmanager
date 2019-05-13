@@ -110,7 +110,7 @@ class IssueSubscriber implements EventSubscriber
         $newLocation = new Location();
         $newLocation->setEquipment($issue->getEquipmentReplace())
             ->setSite($site)
-            ->setDate($issue->getDateEnd())
+            ->setDate($issue->getDateEnd() ? $issue->getDateEnd() : $issue->getDateReady())
             ->setIsOk($isOk);
 
         $entityManager->persist($newLocation);
