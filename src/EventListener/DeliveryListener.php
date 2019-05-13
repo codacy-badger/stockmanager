@@ -6,11 +6,34 @@ namespace App\EventListener;
 
 use App\Entity\Delivery;
 use App\Entity\Location;
-use App\Entity\User;
+use Doctrine\Common\EventSubscriber;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Events;
 
-class DeliveryListener
+
+
+class DeliveryListener implements EventSubscriber
 {
+
+    public function getSubscribedEvents()
+    {
+        return [
+            Events::preUpdate,
+            Events::postPersist
+        ];
+    }
+
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+
+        if (!$entity instanceof Delivery) {
+            return;
+        }
+
+
+    }
 
     public function preUpdate(PreUpdateEventArgs $args)
     {
@@ -20,6 +43,7 @@ class DeliveryListener
             return;
         }
 
+        //evite la boucle infinie
         $entityManager = $args->getEntityManager();
 
         $eventManager = $entityManager->getEventManager();
@@ -27,12 +51,38 @@ class DeliveryListener
         $eventManager->removeEventListener('preUpdate', $this);
 
 
-        $this->addLocation($entity, $args);
+        $this->updateLocation($entity, $args);
 
 
     }
 
-    public function addLocation(Delivery $delivery, PreUpdateEventArgs $args)
+    public function addLocation(Delivery $delivery, LifecycleEventArgs $args)
+    {
+        $entityManager = $args->getObjectManager();
+
+        $site = $delivery->getUser()->getOperator()->getSite();
+
+        foreach ($delivery->getEquipments() as $equipment) {
+
+            if (!$equipment) {
+                return;
+            }
+
+            $location = new Location();
+            $location->setSite($site)
+                ->setIsOk(true)
+                ->setEquipment($equipment)
+                ->setDate($delivery->getDateCreation());
+
+            $entityManager->persist($location);
+        }
+
+        $entityManager->flush();
+
+
+    }
+
+    public function updateLocation(Delivery $delivery, PreUpdateEventArgs $args)
     {
         $entityManager = $args->getEntityManager();
 
@@ -64,7 +114,6 @@ class DeliveryListener
 
 
             foreach ($locations as $location) {
-
 
 
                 if ($args->hasChangedField('dateCreation')) {

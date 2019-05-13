@@ -36,4 +36,8 @@ services:
 
     App\EventListener\DeliveryListener:
         tags:
-            - { name: doctrine.event_listener, event: preUpdate}
+            - { name: doctrine.event_subscriber, connection: default }
+
+    App\EventSubscriber\IssueSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

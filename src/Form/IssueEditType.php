@@ -2,12 +2,10 @@
 
 namespace App\Form;
 
-use App\Entity\Equipment;
 use App\Entity\Issue;
 use PUGX\AutocompleterBundle\Form\Type\AutocompleteType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,7 +28,7 @@ class IssueEditType extends AbstractType
 
 
             ])
-            ->add('dateRequest', DateType::class)
+            ->add('dateRequest', DateTimeType::class)
 
 
 

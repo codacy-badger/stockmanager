@@ -171,34 +171,6 @@ class IssueController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $newDamagedEquipement = $issue->getEquipment();
-            $newReplaceEquipement = $issue->getEquipmentReplace();
-
-            $site = new Site();
-
-//Si l'équipement en panne a été changé alors on supprime l'ancienne localisation de l'ancien équipepent et on ajoute une nouvelle localisation pour le nouveau
-            if (null !== $oldDamagedEquipement && $oldDamagedEquipement !== $newDamagedEquipement) {
-
-
-                $location = $this->em->getRepository(Location::class)->findOneBy([
-                    'date' => $issue->getDateEnd(),
-                    'equipment' => $oldDamagedEquipement
-                ]);
-
-                $location->setEquipment($newDamagedEquipement);
-
-            }
-
-            if (null !== $oldReplaceEquipement && $oldReplaceEquipement !== $newReplaceEquipement) {
-                /** @var Location $location */
-                $location = $this->em->getRepository(Location::class)->findOneBy([
-                    'date' => $issue->getDateEnd(),
-                    'equipment' => $oldReplaceEquipement
-                ]);
-
-                $location->setEquipment($newReplaceEquipement);
-
-            }
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -210,10 +182,8 @@ class IssueController extends AbstractController
         }
 
 
-        return $this->render('admin/issue/edit.html.twig', [
-            'issue' => $issue,
-            'form' => $form->createView(),
-        ]);
+        return $this->render('admin/issue/edit.html.twig', ['issue' => $issue,
+            'form' => $form->createView(),]);
     }
 
 
@@ -225,7 +195,8 @@ class IssueController extends AbstractController
      * @param Issue $issue
      * @return Response
      */
-    public function delete(Request $request, Issue $issue): Response
+    public
+    function delete(Request $request, Issue $issue): Response
     {
         if ($this->isCsrfTokenValid('delete-issue', $request->request->get('_token'))) {
 
@@ -246,7 +217,8 @@ class IssueController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      */
-    public function setChecked(Issue $issue, Request $request)
+    public
+    function setChecked(Issue $issue, Request $request)
     {
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('check-issue-check', $submittedToken)) {
@@ -278,7 +250,8 @@ class IssueController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws \Exception
      */
-    public function setReadyForm(Issue $issue, Request $request)
+    public
+    function setReadyForm(Issue $issue, Request $request)
     {
 
         $form = $this->createForm(ReplaceType::class, $issue);
@@ -312,7 +285,8 @@ class IssueController extends AbstractController
      * @param Issue $issue
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function setReady(Request $request, Issue $issue)
+    public
+    function setReady(Request $request, Issue $issue)
     {
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('check-issue-ready', $submittedToken)) {
@@ -337,7 +311,8 @@ class IssueController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      */
-    public function setReadyWithoutReplace(Request $request, Issue $issue)
+    public
+    function setReadyWithoutReplace(Request $request, Issue $issue)
     {
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('check-issue-ready-without-replace', $submittedToken)) {
@@ -421,7 +396,8 @@ class IssueController extends AbstractController
      * @Route("admin/issue/count-widget", name="issue_countWidget")
      * @return Response
      */
-    public function countWidget()
+    public
+    function countWidget()
     {
         $countNew = $this->getDoctrine()->getRepository(Issue::class)->countNew();
         $countCheck = $this->getDoctrine()->getRepository(Issue::class)->countCheck();
@@ -440,7 +416,8 @@ class IssueController extends AbstractController
      * @Route("admin/issue/allOpenIssues", name="issue_allOpenIssues")
      * @return Response
      */
-    public function countAllOpenIssues()
+    public
+    function countAllOpenIssues()
     {
 
         $number = $this->getDoctrine()->getRepository('App:Issue')->countAllOpenIssues();
@@ -455,7 +432,8 @@ class IssueController extends AbstractController
      * @Route("admin/issue/userOpenIssues", name="issue_userOpenIssues")
      * @return Response
      */
-    public function countUserOpenIssues()
+    public
+    function countUserOpenIssues()
     {
         $user = $this->getUser();
         $number = $this->getDoctrine()->getRepository('App:Issue')->countUserOpenIssues($user->getOperator());
@@ -470,7 +448,8 @@ class IssueController extends AbstractController
      * @Route("admin/issue/countNonNotified", name="issue_countNonNotified")
      * @return Response
      */
-    public function countNonNotified()
+    public
+    function countNonNotified()
     {
         $number = $this->getDoctrine()->getRepository(Issue::class)->countNonNotifed();
 
