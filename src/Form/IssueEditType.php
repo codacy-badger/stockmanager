@@ -28,7 +28,10 @@ class IssueEditType extends AbstractType
 
 
             ])
-            ->add('dateRequest', DateTimeType::class)
+            ->add('dateRequest', DateTimeType::class, [
+                'model_timezone' => 'UTC',
+                'view_timezone' => 'Europe/Paris'
+            ])
 
 
 
