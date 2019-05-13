@@ -70,6 +70,14 @@ class IssueSubscriber implements EventSubscriber
                 $this->addLocation($entityManager, $issue, $siteHome, false);
             }
 
+            foreach ($locations as $location) {
+
+                if ($args->hasChangedField('equipment')) {
+                    $location->setEquipment($issue->getEquipment());
+                }
+
+            }
+
         }
 
         if ($args->hasChangedField('equipmentReplace')) {
@@ -85,18 +93,17 @@ class IssueSubscriber implements EventSubscriber
                 $this->addLocation($entityManager, $issue, $issue->getUser()->getOperator()->getSite(), true);
 
             }
-        }
 
 
-        foreach ($locations as $location) {
+            foreach ($locations as $location) {
 
-            if ($args->hasChangedField('equipment')) {
-                $location->setEquipment($issue->getEquipment());
+
+                if ($args->hasChangedField('equipmentReplace')) {
+                    $location->setEquipment($issue->getEquipmentReplace());
+                }
+
+
             }
-            if ($args->hasChangedField('equipmentReplace')) {
-                $location->setEquipment($issue->getEquipmentReplace());
-            }
-
 
         }
 

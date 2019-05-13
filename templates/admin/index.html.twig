@@ -46,7 +46,8 @@
 
     <li class="nav-item">
         <a class="nav-link {% block isActivePart %}{% endblock %}"
-           href="{{ path('part_index') }}"><i class="fas fa-puzzle-piece"></i> Gestion des pièces détachées</a>
+           href="{{ path('part_index') }}"><i class="fas fa-puzzle-piece"></i> Gestion des pièces
+            détachées {{ render(controller('App\\Controller\\PartController::warningThreshold')) }}</a>
     </li>
 
     <li class="nav-item">

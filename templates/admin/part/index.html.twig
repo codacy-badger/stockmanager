@@ -5,28 +5,45 @@
 {% block body %}
     <h1>Pièces détachées</h1>
 
-    <table class="table table-sm table-striped">
+    <table class="table table-sm table-striped table-bordered small">
         <thead>
         <tr>
             <th>Id</th>
             <th>Nom</th>
             <th>Références</th>
             <th>Temps théorique de réparation</th>
+            <th>Seuil d'alerte</th>
             <th>Groupe de pièce</th>
+            <th>Quantité</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for part in parts %}
+
             <tr>
                 <td>{{ part.id }}</td>
                 <td>{{ part.name }}</td>
                 <td>{{ part.reference }}</td>
                 <td>{{ part.repairTime }}</td>
+                <td>{{ part.threshold }}</td>
                 <td>{{ part.partGroup.name }}</td>
+
+                {% set total = 0 %}
+                {% for quantity in part.quantities %}
+
+                    {% set total = total + quantity.quantity %}
+
+                {% endfor %}
+
+                <td {% if total < part.threshold %}class="badge badge-danger"{% endif %}>{{ total }}</td>
                 <td>
+                    <a class="btn btn-outline-primary btn-sm" href="{{ path('part_quantity_add', {'id': part.id }) }}">
+                        <i class="fas fa-plus-circle"></i> Ajouter
+                    </a>
                     <a class="btn btn-warning btn-sm" href="{{ path('part_edit', {'id': part.id}) }}"><i
                                 class="fas fa-edit"></i> Modifier</a>
+
                 </td>
             </tr>
         {% else %}

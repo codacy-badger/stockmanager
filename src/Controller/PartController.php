@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Part;
+use App\Entity\PartQuantity;
+use App\Form\PartQuantityType;
 use App\Form\PartType;
 use App\Repository\PartRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -75,7 +77,7 @@ class PartController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'La pièce a bien été modifiée');
-            return $this->redirectToRoute('part_edit', ['id' => $part->getId()]);
+            return $this->redirectToRoute('part_index');
         }
 
         return $this->render('admin/part/edit.html.twig', [
@@ -101,5 +103,75 @@ class PartController extends AbstractController
         }
 
         return $this->redirectToRoute('part_index');
+    }
+
+    /**
+     * @Route("/add-quantity/{id}", name="part_quantity_add", methods={"GET|POST"})
+     * @param Part $part
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
+     */
+    public function addQuantity(Part $part, Request $request)
+    {
+        $partQuantity = new PartQuantity();
+        $partQuantity->setPart($part);
+
+
+        $form = $this->createForm(PartQuantityType::class, $partQuantity);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $partQuantity->setDate(new \DateTime());
+
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($partQuantity);
+            $em->flush();
+
+            $this->addFlash('success', "Ajout de la quantitée " . $partQuantity->getQuantity() . " pour la pièce " . $part->getName() . " bien effectuée");
+            return $this->redirectToRoute('part_index');
+
+        }
+
+        return $this->render('admin/partQuantity/form.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
+
+    /**
+     * @Route("/warning-threshold", name="part_warning")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function warningThreshold()
+    {
+
+        $warning = false;
+
+        $parts = $this->getDoctrine()->getRepository(Part::class)->findAll();
+
+        foreach ($parts as $part) {
+
+            $quantities = $part->getQuantities();
+
+            $total = 0;
+
+            foreach ($quantities as $quantity) {
+                $total = $total + $quantity->getQuantity();
+            }
+
+
+            if ($part->getThreshold() && $total < $part->getThreshold()) {
+                $warning = true;
+            }
+
+        }
+
+        return $this->render('admin/part/_warning.html.twig', [
+            'warning' => $warning,
+        ]);
     }
 }
