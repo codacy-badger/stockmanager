@@ -83,7 +83,7 @@ class LocationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.equipment = :equipment')
-            ->orderBy('l.id', 'desc')
+            ->orderBy('l.date', 'desc')
             ->setParameter('equipment', $equipment)
             ->setMaxResults(1)
             ->getQuery()
