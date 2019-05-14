@@ -35,11 +35,12 @@ class LocationRepository extends ServiceEntityRepository
 
     )
     {
-
+        $expr = $this->getEntityManager()->getExpressionBuilder();
 
         $statement = $this->createQueryBuilder('l')
             ->leftJoin('l.equipment', 'e')
             ->leftJoin('e.brand', 'b');
+
 
         if (null !== $equipment) {
             $statement->andWhere('l.equipment = :equipment');
@@ -70,8 +71,21 @@ class LocationRepository extends ServiceEntityRepository
         }
 
 
-        $statement->addOrderBy('l.date', 'desc')
-            ->addOrderBy('l.id', 'desc');
+        $statement
+            ->andWhere($expr->in('l.date',
+                $this->createQueryBuilder('l2')
+                    ->select('MAX(l2.date) AS maxDate')
+                    ->where('l2.equipment = l.equipment ')
+                    ->groupBy('l2.equipment')
+                    ->getDQL()
+
+            ))
+
+            ->addOrderBy('l.date', 'desc')
+            ->addOrderBy('l.id', 'desc')
+            ->groupBy('e')
+
+            ;
 
 
         return $statement->getQuery()->getResult();
