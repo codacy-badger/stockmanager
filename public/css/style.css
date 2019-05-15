@@ -123,5 +123,22 @@ html {
     background-image: none;
 }
 
+/*changement de couleur du placeholder dans le textarea d'un formulaire*/
+textarea::-webkit-input-placeholder {
+    color: rgba(0, 0, 0, 0.33) !important;
+}
+
+textarea:-moz-placeholder { /* Firefox 18- */
+    color: rgba(0, 0, 0, 0.33) !important;
+}
+
+textarea::-moz-placeholder {  /* Firefox 19+ */
+    color: rgba(0, 0, 0, 0.33) !important;
+}
+
+textarea:-ms-input-placeholder {
+    color: rgba(0, 0, 0, 0.33) !important;
+}
+
 
 

@@ -43,7 +43,8 @@ class IssueType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
-                'translation_domain' => 'messages'
+                'translation_domain' => 'messages',
+                'attr' => ['placeholder' => 'Veuillez indiquer ici une description plus complète de la panne, le numéro de véhicule ...']
             ]);
 
 
