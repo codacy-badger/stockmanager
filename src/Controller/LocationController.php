@@ -62,16 +62,20 @@ class LocationController extends AbstractController
 
         if ($formSearch->isSubmitted() && $formSearch->isValid()) {
 
+            if ($search->getEquipment()) {
 
-            $result = $this->em->getRepository(Location::class)->search(
-                $search->getEquipment(),
-                $search->getSite(),
-                $search->getBrand(),
-                $search->getCategory(),
-                $search->getContract()
+                $result = $this->em->getRepository(Location::class)->searchByEquipment($search->getEquipment());
 
-            );
+            } else {
+                $result = $this->em->getRepository(Location::class)->search(
+                    $search->getEquipment(),
+                    $search->getSite(),
+                    $search->getBrand(),
+                    $search->getCategory(),
+                    $search->getContract()
 
+                );
+            }
 
             if (null === $search->getEquipment()) {
                 $issues = null;
