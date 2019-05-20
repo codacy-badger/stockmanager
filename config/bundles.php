@@ -17,5 +17,5 @@ return [
     PUGX\AutocompleterBundle\PUGXAutocompleterBundle::class => ['all' => true],
     CMEN\GoogleChartsBundle\CMENGoogleChartsBundle::class => ['all' => true],
     Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
-    Aws\Symfony\AwsBundle::class => ['all' => true],
+
 ];
