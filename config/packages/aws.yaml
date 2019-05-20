@@ -7,4 +7,5 @@ aws:
             region: eu-west-3
             credentials:
                 key: '%env(AWS_KEY)%'
+                secret: '%env(AWS_SECRET)%'
 

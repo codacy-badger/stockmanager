@@ -17,7 +17,9 @@ use App\Services\DateDiffHour;
 use App\Services\MTBFStatistics;
 use App\Services\MTTRStatistics;
 use App\Services\RateStatistics;
+use Aws\S3\S3Client;
 use Doctrine\ORM\EntityManagerInterface;
+use Gaufrette\Adapter\AwsS3;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,7 +114,7 @@ class RepairController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            if ($repair->getIsGoingToSubcontractor() === true && $checkIfisGoingToSubcontractor === null ) {
+            if ($repair->getIsGoingToSubcontractor() === true && $checkIfisGoingToSubcontractor === null) {
 
                 $subcontracterRepair = new SubcontractorRepair();
                 $subcontracterRepair->setDateEntry($repair->getDateEnd());
@@ -306,6 +308,8 @@ class RepairController extends AbstractController
             'count' => $count,
         ]);
     }
+
+
 
 
 }
