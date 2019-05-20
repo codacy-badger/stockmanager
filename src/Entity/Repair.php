@@ -5,9 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RepairRepository")
+ * @Vich\Uploadable()
  */
 class Repair
 {
@@ -93,9 +96,18 @@ class Repair
      */
     private $unavailability;
 
+    /**
+     * @var Document
+     * @ORM\OneToOne(targetEntity="App\Entity\Document", orphanRemoval=true, cascade={"persist", "remove"} ),
+     * @ORM\JoinColumn(name="document_file_id", referencedColumnName="id", onDelete="SET NULL")
+     *
+     */
+    private $myDocument;
+
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\SubcontractorRepair", mappedBy="repair", cascade={"persist", "remove"})
+     *
      */
     private $subcontractorRepair;
 
@@ -354,6 +366,18 @@ class Repair
     public function setSoftware(?Software $software): self
     {
         $this->software = $software;
+
+        return $this;
+    }
+
+    public function getMyDocument(): ?Document
+    {
+        return $this->myDocument;
+    }
+
+    public function setMyDocument(?Document $document): self
+    {
+        $this->myDocument = $document;
 
         return $this;
     }
