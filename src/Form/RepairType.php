@@ -16,7 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class RepairType extends AbstractType
 {
@@ -79,8 +78,7 @@ class RepairType extends AbstractType
                 'required' => true,
                 'model_timezone' => 'UTC',
                 'view_timezone' => 'Europe/Paris'
-            ])
-            ->add('myDocument', DocumentType::class);
+            ]);
 
 
     }
