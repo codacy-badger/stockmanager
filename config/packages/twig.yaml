@@ -5,3 +5,4 @@ twig:
     form_themes: ['bootstrap_4_layout.html.twig']
     globals:
         out_sismo_contract: '%out_sismo_contract%'
+        document_getter: '@document_getter'

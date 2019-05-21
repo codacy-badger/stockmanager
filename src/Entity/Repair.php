@@ -95,7 +95,6 @@ class Repair
     private $unavailability;
 
 
-
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\SubcontractorRepair", mappedBy="repair", cascade={"persist", "remove"})
      *
@@ -106,6 +105,12 @@ class Repair
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isGoingToSubcontractor;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Document", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="document_file_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $document;
 
 
 
@@ -357,6 +362,18 @@ class Repair
     public function setSoftware(?Software $software): self
     {
         $this->software = $software;
+
+        return $this;
+    }
+
+    public function getDocument(): ?Document
+    {
+        return $this->document;
+    }
+
+    public function setDocument(?Document $document): self
+    {
+        $this->document = $document;
 
         return $this;
     }
