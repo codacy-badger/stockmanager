@@ -45,6 +45,8 @@ class LocationRepository extends ServiceEntityRepository
         if (null !== $equipment) {
             $statement->andWhere('l.equipment = :equipment');
             $statement->setParameter('equipment', $equipment);
+
+            return $statement->getQuery()->getResult();
         }
         if (null !== $site) {
 
