@@ -45,6 +45,8 @@ class LocationRepository extends ServiceEntityRepository
         if (null !== $equipment) {
             $statement->andWhere('l.equipment = :equipment');
             $statement->setParameter('equipment', $equipment);
+            $statement->addOrderBy('l.date', 'desc')
+                ->addOrderBy('l.id', 'desc');
 
             return $statement->getQuery()->getResult();
         }
@@ -82,12 +84,9 @@ class LocationRepository extends ServiceEntityRepository
                     ->getDQL()
 
             ))
-
             ->addOrderBy('l.date', 'desc')
             ->addOrderBy('l.id', 'desc')
-            ->groupBy('e')
-
-            ;
+            ->groupBy('e');
 
 
         return $statement->getQuery()->getResult();
