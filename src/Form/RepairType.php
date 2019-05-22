@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Document;
 use App\Entity\Part;
 use App\Entity\Repair;
 use App\Entity\Software;
@@ -73,12 +74,16 @@ class RepairType extends AbstractType
             ->add('isGoingToSubcontractor', CheckboxType::class, [
                 'required' => false
             ])
+            ->add('document', DocumentType::class)
             ->add('dateEnd', DateTimeType::class, [
                 'widget' => 'single_text',
                 'required' => true,
                 'model_timezone' => 'UTC',
                 'view_timezone' => 'Europe/Paris'
-            ]);
+            ])
+
+
+        ;
 
 
     }

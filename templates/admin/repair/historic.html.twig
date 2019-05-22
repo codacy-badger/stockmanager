@@ -13,6 +13,7 @@
             <th>Commentaires</th>
             <th>Travaux effectués</th>
             <th>Temps d'indisponibilité (h)</th>
+            <th>Document</th>
             <th>Actions</th>
 
         </tr>
@@ -89,6 +90,12 @@
                         Fin : {{ repair.dateEnd | date('d/m/Y H:i', "Europe/Paris") }}">{{ repair.unavailability }}</span>
 
 
+                </td>
+                <td>
+                    {% if repair.document %}
+                        <a href="{{ path('document_download', {'id': repair.document.id}) }}" target="_blank"><i
+                                    class="fa fa-print"></i> Document</a>
+                    {% endif %}
                 </td>
                 <td>
                     <a class="btn btn-warning btn-sm" href="{{ path('repair_edit', {'id' : repair.id }) }}"><i

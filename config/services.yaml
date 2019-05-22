@@ -8,6 +8,9 @@ parameters:
     out_sismo_contract: 5
 
 services:
+
+
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -45,4 +48,24 @@ services:
     App\EventSubscriber\RepairSubscriber:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
+
+    ct_file_store.s3:
+        class: Aws\S3\S3Client
+        factory: [Aws\S3\S3Client, 'factory']
+        arguments:
+            -
+                version: 'latest'
+                region: '%env(AWS_REGION)%'
+                credentials:
+                    key: '%env(AWS_ACCESS_KEY_ID)%'
+                    secret: '%env(AWS_SECRET_ACCESS_KEY)%'
+
+    document_getter:
+        autowire: true
+        class: App\Services\DocumentGetter
+        arguments:
+            - '%env(AWS_BUCKET_NAME)%'
+            - '@ct_file_store.s3'
+
+    App\Services\DocumentGetter: '@document_getter'
 
