@@ -38,6 +38,11 @@ class Delivery
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->issues = new ArrayCollection();
@@ -126,6 +131,18 @@ class Delivery
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getComments(): ?string
+    {
+        return $this->comments;
+    }
+
+    public function setComments(?string $comments): self
+    {
+        $this->comments = $comments;
 
         return $this;
     }
