@@ -200,11 +200,17 @@ class IssueController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete-issue', $request->request->get('_token'))) {
 
+            $id = $issue->getId();
+
             $this->em->remove($issue);
             $this->em->flush();
+
+
+            $this->addFlash('success', "Le ticket ". $id ." a bien été supprimé");
+
         }
 
-        return $this->redirectToRoute('issue_index');
+        return $this->redirectToRoute('admin_index');
     }
 
 

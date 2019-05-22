@@ -203,35 +203,56 @@
                     <td>
 
                         {% if status == 'new' %}
-                            <form action="{{ path('issue_setChecked', {'id': issue.id}) }}"
-                                  method="post">
-                                <input type="hidden" name="token"
-                                       value="{{ csrf_token('check-issue-check') }}"/>
-                                <button type="submit" class="btn btn-sm btn-primary"><i
-                                            class="fas fa-check-square"></i> Prendre en compte
-                                </button>
-                            </form>
+                            <div class="d-flex flex-column">
+                                <div>
+                                    <form action="{{ path('issue_setChecked', {'id': issue.id}) }}"
+                                          method="post">
+                                        <input type="hidden" name="token"
+                                               value="{{ csrf_token('check-issue-check') }}"/>
+                                        <button type="submit" class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-check-square"></i> Prendre en compte
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="pt-1">
+                                    {{ include('admin/issue/_delete_form.html.twig') }}
+                                </div>
+                            </div>
+
                         {% elseif status == 'check' %}
-                            {% if issue.equipment.contract.id == out_sismo_contract %}
-                                <form action="{{ path('issue_setReadyWithoutReplace', {'id': issue.id}) }}"
-                                      method="post">
-                                    <input type="hidden" name="token"
-                                           value="{{ csrf_token('check-issue-ready-without-replace') }}"/>
-                                    <button type="submit" class="btn btn-sm btn-primary"><i
-                                                class="fas fa-check-square"></i> Valider
-                                    </button>
-                                </form>
-                            {% else %}
-                                <form action="{{ path('issue_setReady', {'id': issue.id}) }}"
-                                      method="post">
-                                    <input type="hidden" name="token"
-                                           value="{{ csrf_token('check-issue-ready') }}"/>
-                                    <button type="submit" class="btn btn-sm btn-primary"><i
-                                                class="fas fa-check-square"></i> Affecter un équipement de
-                                        remplacement
-                                    </button>
-                                </form>
-                            {% endif %}
+                            <div class="d-flex flex-column">
+                                {% if issue.equipment.contract.id == out_sismo_contract %}
+                                    <div>
+
+                                        <form action="{{ path('issue_setReadyWithoutReplace', {'id': issue.id}) }}"
+                                              method="post">
+                                            <input type="hidden" name="token"
+                                                   value="{{ csrf_token('check-issue-ready-without-replace') }}"/>
+                                            <button type="submit" class="btn btn-sm btn-primary"><i
+                                                        class="fas fa-check-square"></i> Valider
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <div>
+
+                                        <form action="{{ path('issue_setReady', {'id': issue.id}) }}"
+                                              method="post">
+                                            <input type="hidden" name="token"
+                                                   value="{{ csrf_token('check-issue-ready') }}"/>
+                                            <button type="submit" class="btn btn-sm btn-primary"><i
+                                                        class="fas fa-check-square"></i> Affecter un équipement de
+                                                remplacement
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                                <div class="pt-1">
+                                    {{ include('admin/issue/_delete_form.html.twig') }}
+                                </div>
+
+                            </div>
+
                         {% elseif status == 'ready' %}
                             <div class="d-flex flex-column">
                                 <div>
@@ -253,6 +274,9 @@
                                                     class="fas fa-check-square"></i> Terminer
                                         </button>
                                     </form>
+                                </div>
+                                <div class="pt-1">
+                                    {{ include('admin/issue/_delete_form.html.twig') }}
                                 </div>
                             </div>
 
