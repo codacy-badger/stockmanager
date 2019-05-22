@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DocumentRepository")
@@ -31,6 +32,7 @@ class Document
     /**
      * @var
      * @Vich\UploadableField(mapping="document", fileNameProperty="name")
+     * @Assert\File(maxSize="1024k", maxSizeMessage="Le fichier ne doit pas dépasser 1024k")
      */
     private $file;
 
