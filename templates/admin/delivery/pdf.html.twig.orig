@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bon de Livraison</title>
+    <meta charset="UTF-8">
+    <style>
+
+
+        body {
+            font-family: "Verdana", sans-serif;
+            font-size: 0.8em;
+        }
+
+        h4 {
+            text-transform: uppercase;
+        }
+
+        .head {
+            height: 220px;
+            width: 100%;
+
+        }
+
+        .head-left {
+            float: left;
+            width: 50%;
+            border: 1px solid black;
+        }
+
+        .top {
+            width: 100%;
+            height: 80px;
+        }
+
+        .logo {
+            float: left;
+        }
+
+        .title {
+            float: right;
+            text-transform: uppercase;
+            color: #4e555b;
+        }
+
+        .head-right {
+            float: right;
+            width: 45%;
+
+
+        }
+
+        .to {
+            padding-left: 10px;
+        }
+
+        .from {
+            padding-left: 10px;
+            border: 1px solid black;
+            padding-bottom: 10px;
+        }
+
+        .address {
+            padding-bottom: 10px;
+        }
+
+
+        .upper {
+            color: #4e555b;;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .other {
+            border: 1px solid black;
+            width: 50%;
+            height: 70px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 10px;
+
+        }
+
+        .date {
+            float: left;
+
+        }
+
+        .modality {
+            float: right;
+
+
+        }
+
+        .content {
+            margin-top: 10px;
+            height: 300px;
+            width: 100%;
+            border: 1px solid black;
+        }
+
+        .details {
+            float: left;
+            width: 60%;
+            padding: 10px;
+
+
+        }
+
+
+        .obs {
+            float: left;
+            padding: 10px;
+        }
+
+        .quantity {
+            border: 1px solid black;
+            margin-top: 10px;
+            padding: 10px;
+        }
+
+        .signature {
+            margin-top: 10px;
+            border: 1px solid black;
+            height: 80px;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .footer {
+            padding: 20px;
+            font-size: 0.7em;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="top">
+    <div class="logo">
+        <img src="https://s3.eu-west-3.amazonaws.com/elasticbeanstalk-eu-west-3-401933455022/om.png" alt="Oise Mobilité" style="height: 50px;">
+    </div>
+    <div class="title">
+        <h2>bon de livraison</h2>
+    </div>
+</div>
+<div class="head">
+    <div class="head-left">
+
+        <div class="to">
+            <div class="destination">
+                <h4>Destinataire</h4>
+                <span class="upper">{{ user.operator.name }}</span><br>
+                {{ user.firstname }} {{ user.lastname }}
+            </div>
+            <div class="address">
+                <h4>Adresse de livraison</h4>
+                {{ user.operator.name }}<br>
+                {{ user.operator.site.name }}<br>
+                {{ user.operator.site.adress }}<br>
+                {{ user.operator.site.postal }} {{ user.operator.site.city }}
+
+            </div>
+        </div>
+    </div>
+    <div class="head-right">
+
+        <div class="from">
+            <h4>expediteur</h4>
+            <span class="upper">Site.Oise</span><br>
+            <span class="upper">Agence Oise Mobilité</span><br>
+            19 rue Pierre Jacoby <br>
+            60000 Beauvais <br>
+        </div>
+    </div>
+</div>
+<div class="other">
+    <div class="date">
+        <p><b>Date</b></p>
+        {{ "now"|date("d/m/Y") }}
+    </div>
+    <div class="modality">
+        <p><b>Modalités de livraison</b></p>
+        En main propre
+    </div>
+</div>
+<div class="content">
+    <table class="details">
+        <tr>
+            <th>Type de Materiel livré</th>
+            <th>Numéro de série</th>
+        </tr>
+        {% for issue in user.issues %}
+            <tr>
+                <td>{{ issue.equipment.brand.category.name }} {{ issue.equipment.brand.name }} </td>
+                <td>{{ issue.equipment.serial }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <table class="obs">
+        <tr>
+            <th>Materiel remplacé</th>
+        </tr>
+        {% for issue in user.issues %}
+            <tr>
+                <td>
+                    {% if issue.equipmentReplace == null %}
+                        Non affecté
+                    {% else %}
+                        {{ issue.equipmentReplace.serial }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
+<div class="quantity">
+    <b>Quantité :</b>
+    {{ user.issues.count }}
+</div>
+<div class="signature">
+    <h4>signature</h4>
+</div>
+<div class="footer">
+<<<<<<< HEAD
+    <img src="https://s3.eu-west-3.amazonaws.com/elasticbeanstalk-eu-west-3-401933455022/so.png" alt="logo" /> <br>
+=======
+    <img src="https://s3.eu-west-3.amazonaws.com/elasticbeanstalk-eu-west-3-401933455022/so.png" alt="Site.Oise"> <br>
+>>>>>>> 212b938e906e9982067871db681399279baea043
+    19 rue Pierre Jacoby<br>
+    60000 BEAUVAIS <br>
+    Tel : 03 44 05 32 95 Fax : 03 44 05 33 08 <br>
+    S.A.S. au capital de 400 000 € <br>
+    RCS Beauvais 523 243 996 <br>
+    Siret : 523 243 996 000 15 - APE : 7112B <br>
+
+</div>
+</body>
+</html>
