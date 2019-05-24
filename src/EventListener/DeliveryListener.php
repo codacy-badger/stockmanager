@@ -13,7 +13,6 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
 
-
 class DeliveryListener implements EventSubscriber
 {
 
@@ -40,15 +39,12 @@ class DeliveryListener implements EventSubscriber
     {
 
 
-
         $entity = $args->getObject();
-
 
 
         if (!$entity instanceof Delivery) {
             return;
         }
-
 
 
         //evite la boucle infinie
@@ -94,9 +90,13 @@ class DeliveryListener implements EventSubscriber
     {
         $entityManager = $args->getEntityManager();
 
-        /** @var Issue $issue */
-        $issue = $delivery->getIssues()->first();
-        $site = $issue->getUser()->getOperator()->getSite();
+        if ($delivery->getUser()) {
+            $site = $delivery->getUser()->getOperator()->getSite();
+        } else {
+            /** @var Issue $issue */
+            $issue = $delivery->getIssues()->first();
+            $site = $issue->getUser()->getOperator()->getSite();
+        }
 
         foreach ($delivery->getEquipments() as $equipment) {
 
