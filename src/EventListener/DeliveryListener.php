@@ -5,6 +5,7 @@ namespace App\EventListener;
 
 
 use App\Entity\Delivery;
+use App\Entity\Issue;
 use App\Entity\Location;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
@@ -37,11 +38,18 @@ class DeliveryListener implements EventSubscriber
 
     public function preUpdate(PreUpdateEventArgs $args)
     {
+
+
+
         $entity = $args->getObject();
+
+
 
         if (!$entity instanceof Delivery) {
             return;
         }
+
+
 
         //evite la boucle infinie
         $entityManager = $args->getEntityManager();
@@ -86,8 +94,9 @@ class DeliveryListener implements EventSubscriber
     {
         $entityManager = $args->getEntityManager();
 
-        $site = $delivery->getUser()->getOperator()->getSite();
-
+        /** @var Issue $issue */
+        $issue = $delivery->getIssues()->first();
+        $site = $issue->getUser()->getOperator()->getSite();
 
         foreach ($delivery->getEquipments() as $equipment) {
 
