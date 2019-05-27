@@ -84,6 +84,14 @@ class LocationRepository extends ServiceEntityRepository
                     ->getDQL()
 
             ))
+            ->andWhere($expr->in('l.id',
+                $this->createQueryBuilder('l3')
+                    ->select('MAX(l3.id) AS maxId')
+                    ->where('l3.equipment = l.equipment ')
+                    ->groupBy('l3.equipment')
+                    ->getDQL()
+
+            ))
             ->addOrderBy('l.date', 'desc')
             ->addOrderBy('l.id', 'desc')
             ->groupBy('e');
