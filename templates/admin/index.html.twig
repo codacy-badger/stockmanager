@@ -124,19 +124,19 @@
                     }
                 ).done(function (data) {
                     if (data.countAllIssues > 0) {
-                        $(".nav-link #countIssues").text(data.countAllIssues);
+                        $(".nav-link #countIssues").text(data.countAllIssues).show();
                     } else {
                         $(".nav-link #countIssues").hide();
                     }
 
                     if (data.countNonNotified > 0) {
-                        $(".nav-link #countNotifications").text(data.countNonNotified);
+                        $(".nav-link #countNotifications").text(data.countNonNotified).show();
                     } else {
                         $(".nav-link #countNotifications").hide();
                     }
 
                     if (data.countRepair > 0) {
-                        $(".nav-link #countRepairs").text(data.countRepair);
+                        $(".nav-link #countRepairs").text(data.countRepair).show();
                     } else {
                         $(".nav-link #countRepairs").hide();
                     }
@@ -148,7 +148,7 @@
                     }
 
                     if (data.countSubcontractor > 0) {
-                        $(".nav-link #countSubcontractors").text(data.countSubcontractor);
+                        $(".nav-link #countSubcontractors").text(data.countSubcontractor).show();
                     } else {
                         $(".nav-link #countSubcontractors").hide();
                     }
