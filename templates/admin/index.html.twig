@@ -9,12 +9,12 @@
     <li class="nav-item">
         <a class="nav-link {% block isActiveDash %}{% endblock %}"
            href="{{ path('admin_index') }}"><i class="fas fa-chart-line"></i> Tableau de
-            bord {{ render(controller('App\\Controller\\IssueController::countAllOpenIssues')) }}</a>
+            bord <span class="badge badge-primary" id="countIssues"></span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% block isActiveNotifications %}{% endblock %}"
            href="{{ path('notification_index') }}"><i class="fas fa-envelope"></i>
-            Notifications {{ render(controller('App\\Controller\\IssueController::countNonNotified')) }}</a>
+            Notifications <span class="badge badge-primary" id="countNotifications"></span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% block isActiveDelivery %}{% endblock %}"
@@ -37,7 +37,7 @@
     <li class="nav-item">
         <a class="nav-link {% block isActiveRepair %}{% endblock %}"
            href="{{ path('repair_index') }}"><i class="fas fa-wrench"></i> Réparations à
-            traiter {{ render(controller('App\\Controller\\RepairController::countInProcessed')) }}</a>
+            traiter <span class="badge badge-primary" id="countRepairs"></span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% block isActiveHistoricRepair %}{% endblock %}"
@@ -47,13 +47,14 @@
     <li class="nav-item">
         <a class="nav-link {% block isActivePart %}{% endblock %}"
            href="{{ path('part_index') }}"><i class="fas fa-puzzle-piece"></i> Gestion des pièces
-            détachées {{ render(controller('App\\Controller\\PartController::warningThreshold')) }}</a>
+            détachées <span id="warningParts" class="badge badge-danger"><i
+                        class="fas fa-exclamation-triangle"></i></span></a>
     </li>
 
     <li class="nav-item">
         <a class="nav-link {% block isActiveSubcontractor %}{% endblock %}"
            href="{{ path('subcontractor_index') }}"><i class="fas fa-handshake"></i> Chez le
-            sous-Traitants {{ render(controller('App\\Controller\\SubcontractorController::countInProcessed')) }}</a>
+            sous-Traitants <span class="badge badge-primary" id="countSubcontractors"></span></a>
     </li>
 
 
@@ -101,4 +102,112 @@
 
 {% endblock %}
 {% block body %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(function () {
+
+            countIssues();
+            countNotifications();
+            countRepairs();
+            countSubcontractors();
+            warningParts();
+            setInterval(countIssues, 30000);
+            setInterval(countNotifications, 30000);
+            setInterval(countRepairs, 30000);
+            setInterval(countSubcontractors, 30000);
+            setInterval(warningParts, 30000);
+
+            function countIssues() {
+
+                $.ajax(
+                    {
+                        url: "{{ path('issue_allOpenIssuesJson') }}",
+                        method: "post",
+                        data: ''
+                    }
+                ).done(function (data) {
+                    if (data.number > 0) {
+                        $(".nav-link #countIssues").text(data.number);
+                    } else {
+                        $(".nav-link #countIssues").hide();
+                    }
+                });
+            }
+
+            function countNotifications() {
+
+                $.ajax(
+                    {
+                        url: "{{ path('issue_countNonNotifiedJson') }}",
+                        method: "post",
+                        data: ''
+                    }
+                ).done(function (data) {
+                    if (data.number > 0) {
+                        $(".nav-link #countNotifications").text(data.number);
+                    } else {
+                        $(".nav-link #countNotifications").hide();
+                    }
+                });
+            }
+
+            function countRepairs() {
+
+                $.ajax(
+                    {
+                        url: "{{ path('repair_countJson') }}",
+                        method: "post",
+                        data: ''
+                    }
+                ).done(function (data) {
+                    if (data.number > 0) {
+                        $(".nav-link #countRepairs").text(data.number);
+                    } else {
+                        $(".nav-link #countRepairs").hide();
+                    }
+                });
+            }
+
+            function countSubcontractors() {
+
+                $.ajax(
+                    {
+                        url: "{{ path('subcontracotr_countJson') }}",
+                        method: "post",
+                        data: ''
+                    }
+                ).done(function (data) {
+                    if (data.number > 0) {
+                        $(".nav-link #countSubcontractors").text(data.number);
+                    } else {
+                        $(".nav-link #countSubcontractors").hide();
+                    }
+                });
+            }
+
+            function warningParts() {
+
+                $.ajax(
+                    {
+                        url: "{{ path('part_warningJson') }}",
+                        method: "post",
+                        data: ''
+                    }
+                ).done(function (data) {
+                    if(data.warning === true){
+                        $(".nav-link #warningParts").show();
+                    }else{
+                        $(".nav-link #warningParts").hide();
+                    }
+                });
+            }
+
+        })
+
+
+    </script>
+
 {% endblock %}

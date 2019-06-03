@@ -9,6 +9,7 @@ use App\Form\SubcontractorType;
 use App\Services\DateDiffHour;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -124,17 +125,19 @@ class SubcontractorController extends AbstractController
 
 
     /**
-     * @Route("/count", name="subcontracotr_count")
+     * @Route("/countJson", name="subcontracotr_countJson", methods={"POST"})
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function countInProcessed()
+    public function countInProcessedJson()
     {
 
         $count = $this->em->getRepository(SubcontractorRepair::class)->countNotEnded();
 
-        return $this->render('admin/subcontractor/_count.html.twig', [
-            'count' => $count,
+        $response = new JsonResponse([
+            'number' => $count
         ]);
+
+        return $response;
     }
 
 

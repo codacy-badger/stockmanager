@@ -13,6 +13,7 @@ use App\Form\ReplaceType;
 use App\Repository\IssueRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -206,7 +207,7 @@ class IssueController extends AbstractController
             $this->em->flush();
 
 
-            $this->addFlash('success', "Le ticket ". $id ." a bien été supprimé");
+            $this->addFlash('success', "Le ticket " . $id . " a bien été supprimé");
 
         }
 
@@ -418,19 +419,21 @@ class IssueController extends AbstractController
         ]);
     }
 
+
+
     /**
-     * @Route("admin/issue/allOpenIssues", name="issue_allOpenIssues")
+     * @Route("admin/issue/allOpenIssuesJson", name="issue_allOpenIssuesJson", methods={"POST"})
      * @return Response
      */
     public
-    function countAllOpenIssues()
+    function countAllOpenIssuesJson()
     {
 
         $number = $this->getDoctrine()->getRepository('App:Issue')->countAllOpenIssues();
 
-        return $this->render('admin/issue/_countOpenIssues.html.twig', [
-            'number' => $number
-        ]);
+        $response = new JsonResponse(['number' => $number]);
+
+        return $response;
 
     }
 
@@ -451,17 +454,20 @@ class IssueController extends AbstractController
     }
 
     /**
-     * @Route("admin/issue/countNonNotified", name="issue_countNonNotified")
+     * @Route("admin/issue/countNonNotifiedJson", name="issue_countNonNotifiedJson", methods={"POST"})
      * @return Response
      */
     public
-    function countNonNotified()
+    function countNonNotifiedJson()
     {
         $number = $this->getDoctrine()->getRepository(Issue::class)->countNonNotifed();
 
-        return $this->render('admin/issue/_countNonNotifiedIssues.html.twig', [
+        $response = new JsonResponse([
             'number' => $number
         ]);
+
+        return $response;
+
     }
 
 

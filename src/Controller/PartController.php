@@ -8,6 +8,7 @@ use App\Form\PartQuantityType;
 use App\Form\PartType;
 use App\Repository\PartRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -143,10 +144,10 @@ class PartController extends AbstractController
     }
 
     /**
-     * @Route("/warning-threshold", name="part_warning")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/warning-thresholdJson", name="part_warningJson", methods={"POST"})
+     * @return JsonResponse
      */
-    public function warningThreshold()
+    public function warningThresholdJson()
     {
 
         $warning = false;
@@ -170,8 +171,10 @@ class PartController extends AbstractController
 
         }
 
-        return $this->render('admin/part/_warning.html.twig', [
-            'warning' => $warning,
+        $response = new JsonResponse([
+            'warning' => $warning
         ]);
+
+        return $response;
     }
 }
