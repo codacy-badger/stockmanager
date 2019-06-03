@@ -143,38 +143,6 @@ class PartController extends AbstractController
 
     }
 
-    /**
-     * @Route("/warning-thresholdJson", name="part_warningJson", methods={"POST"})
-     * @return JsonResponse
-     */
-    public function warningThresholdJson()
-    {
-
-        $warning = false;
-
-        $parts = $this->getDoctrine()->getRepository(Part::class)->findAll();
-
-        foreach ($parts as $part) {
-
-            $quantities = $part->getQuantities();
-
-            $total = 0;
-
-            foreach ($quantities as $quantity) {
-                $total = $total + $quantity->getQuantity();
-            }
 
 
-            if ($part->getThreshold() && $total < $part->getThreshold()) {
-                $warning = true;
-            }
-
-        }
-
-        $response = new JsonResponse([
-            'warning' => $warning
-        ]);
-
-        return $response;
-    }
 }

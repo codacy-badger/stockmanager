@@ -400,42 +400,31 @@ class IssueController extends AbstractController
     /**
      * Count number of issues by status
      *
-     * @Route("admin/issue/count-widget", name="issue_countWidget")
+     * @Route("admin/issue/count-widgetJson", name="issue_countWidgetJson")
      * @return Response
      */
     public
-    function countWidget()
+    function countWidgetJson()
     {
-        $countNew = $this->getDoctrine()->getRepository(Issue::class)->countNew();
-        $countCheck = $this->getDoctrine()->getRepository(Issue::class)->countCheck();
-        $countReady = $this->getDoctrine()->getRepository(Issue::class)->countReady();
-        $countEnd = $this->getDoctrine()->getRepository(Issue::class)->countEnd();
+        $repo = $this->getDoctrine()->getRepository(Issue::class);
 
-        return $this->render('admin/issue/countWidget.html.twig', [
-            'countNew' => $countNew,
-            'countCheck' => $countCheck,
-            'countReady' => $countReady,
-            'countEnd' => $countEnd
-        ]);
-    }
+        $countNew = $repo->countNew();
+        $countCheck = $repo->countCheck();
+        $countReady = $repo->countReady();
+        $countEnd = $repo->countEnd();
 
-
-
-    /**
-     * @Route("admin/issue/allOpenIssuesJson", name="issue_allOpenIssuesJson", methods={"POST"})
-     * @return Response
-     */
-    public
-    function countAllOpenIssuesJson()
-    {
-
-        $number = $this->getDoctrine()->getRepository('App:Issue')->countAllOpenIssues();
-
-        $response = new JsonResponse(['number' => $number]);
+        $response = new JsonResponse([
+                'countNew' => $countNew,
+                'countCheck' => $countCheck,
+                'countReady' => $countReady,
+                'countEnd' => $countEnd
+            ]
+        );
 
         return $response;
-
     }
+
+
 
     /**
      * @Route("admin/issue/userOpenIssues", name="issue_userOpenIssues")
@@ -450,23 +439,6 @@ class IssueController extends AbstractController
         return $this->render('admin/issue/_countOpenIssues.html.twig', [
             'number' => $number
         ]);
-
-    }
-
-    /**
-     * @Route("admin/issue/countNonNotifiedJson", name="issue_countNonNotifiedJson", methods={"POST"})
-     * @return Response
-     */
-    public
-    function countNonNotifiedJson()
-    {
-        $number = $this->getDoctrine()->getRepository(Issue::class)->countNonNotifed();
-
-        $response = new JsonResponse([
-            'number' => $number
-        ]);
-
-        return $response;
 
     }
 

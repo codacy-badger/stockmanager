@@ -109,101 +109,53 @@
     <script>
         $(function () {
 
-            countIssues();
-            countNotifications();
-            countRepairs();
-            countSubcontractors();
-            warningParts();
-            setInterval(countIssues, 30000);
-            setInterval(countNotifications, 30000);
-            setInterval(countRepairs, 30000);
-            setInterval(countSubcontractors, 30000);
-            setInterval(warningParts, 30000);
+            countAllInfos();
 
-            function countIssues() {
+            setInterval(countAllInfos, 30000);
+
+
+            function countAllInfos() {
 
                 $.ajax(
                     {
-                        url: "{{ path('issue_allOpenIssuesJson') }}",
+                        url: "{{ path('admin_menuInfoJson') }}",
                         method: "post",
                         data: ''
                     }
                 ).done(function (data) {
-                    if (data.number > 0) {
-                        $(".nav-link #countIssues").text(data.number);
+                    if (data.countAllIssues > 0) {
+                        $(".nav-link #countIssues").text(data.countAllIssues);
                     } else {
                         $(".nav-link #countIssues").hide();
                     }
-                });
-            }
 
-            function countNotifications() {
-
-                $.ajax(
-                    {
-                        url: "{{ path('issue_countNonNotifiedJson') }}",
-                        method: "post",
-                        data: ''
-                    }
-                ).done(function (data) {
-                    if (data.number > 0) {
-                        $(".nav-link #countNotifications").text(data.number);
+                    if (data.countNonNotified > 0) {
+                        $(".nav-link #countNotifications").text(data.countNonNotified);
                     } else {
                         $(".nav-link #countNotifications").hide();
                     }
-                });
-            }
 
-            function countRepairs() {
-
-                $.ajax(
-                    {
-                        url: "{{ path('repair_countJson') }}",
-                        method: "post",
-                        data: ''
-                    }
-                ).done(function (data) {
-                    if (data.number > 0) {
-                        $(".nav-link #countRepairs").text(data.number);
+                    if (data.countRepair > 0) {
+                        $(".nav-link #countRepairs").text(data.countRepair);
                     } else {
                         $(".nav-link #countRepairs").hide();
                     }
-                });
-            }
 
-            function countSubcontractors() {
-
-                $.ajax(
-                    {
-                        url: "{{ path('subcontracotr_countJson') }}",
-                        method: "post",
-                        data: ''
+                    if (data.warningThreshold === false) {
+                        $(".nav-link #warningParts").hide();
+                    } else {
+                        $(".nav-link #warningParts").show();
                     }
-                ).done(function (data) {
-                    if (data.number > 0) {
-                        $(".nav-link #countSubcontractors").text(data.number);
+
+                    if (data.countSubcontractor > 0) {
+                        $(".nav-link #countSubcontractors").text(data.countSubcontractor);
                     } else {
                         $(".nav-link #countSubcontractors").hide();
                     }
+
                 });
             }
 
-            function warningParts() {
-
-                $.ajax(
-                    {
-                        url: "{{ path('part_warningJson') }}",
-                        method: "post",
-                        data: ''
-                    }
-                ).done(function (data) {
-                    if(data.warning === true){
-                        $(".nav-link #warningParts").show();
-                    }else{
-                        $(".nav-link #warningParts").hide();
-                    }
-                });
-            }
 
         })
 

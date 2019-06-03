@@ -5,11 +5,43 @@
 {% block body %}
     <div class="container-fluid">
         <div class="row justify-content-around">
-            {{ render(controller('App\\Controller\\IssueController::countWidget', {})) }}
+            {{ include('admin/issue/countWidget.html.twig') }}
             {{ render(controller('App\\Controller\\ReportingController::getIssuesByOperator', {})) }}
         </div>
         <div class="row justify-content-around">
             {{ render(controller('App\\Controller\\ReportingController::pieSymptoms', {})) }}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function () {
+
+            countWidget();
+
+            setInterval(countWidget, 30000);
+
+            function countWidget() {
+
+                $.ajax(
+                    {
+                        url: "{{ path('issue_countWidgetJson') }}",
+                        method: "post",
+                        data: ''
+                    }
+                ).done(function (data) {
+                    $("div #countNew").text(data.countNew);
+                    $("div #countCheck").text(data.countCheck);
+                    $("div #countReady").text(data.countReady);
+                    $("div #countEnd").text(data.countEnd);
+                });
+            }
+
+
+
+
+        })
+
+    </script>
 {% endblock %}

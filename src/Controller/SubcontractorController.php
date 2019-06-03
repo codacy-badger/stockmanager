@@ -125,23 +125,6 @@ class SubcontractorController extends AbstractController
 
 
     /**
-     * @Route("/countJson", name="subcontracotr_countJson", methods={"POST"})
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function countInProcessedJson()
-    {
-
-        $count = $this->em->getRepository(SubcontractorRepair::class)->countNotEnded();
-
-        $response = new JsonResponse([
-            'number' => $count
-        ]);
-
-        return $response;
-    }
-
-
-    /**
      * @Route("/delete/{id}", name="subcontractorrepair_delete", methods="DELETE")
      * @param Request $request
      * @param SubcontractorRepair $subcontractorRepair
