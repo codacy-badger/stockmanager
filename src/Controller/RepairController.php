@@ -21,6 +21,7 @@ use Aws\S3\S3Client;
 use Doctrine\ORM\EntityManagerInterface;
 use Gaufrette\Adapter\AwsS3;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -296,20 +297,20 @@ class RepairController extends AbstractController
 
 
     /**
-     * @Route("/count", name="repair_count")
+     * @Route("/countJson", name="repair_countJson", methods={"POST"})
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function countInProcessed()
+    public function countInProcessedJson()
     {
 
         $count = $this->em->getRepository(Issue::class)->countNotRepaired();
 
-        return $this->render('admin/repair/_count.html.twig', [
-            'count' => $count,
+        $response = new JsonResponse([
+            'number' => $count,
         ]);
+
+        return $response;
     }
-
-
 
 
 }

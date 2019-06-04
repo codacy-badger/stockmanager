@@ -1,9 +1,9 @@
-<div class="card mini-card shadow text-white bg-danger" >
+<div class="card mini-card shadow text-white bg-danger">
     <div class="card-body ">
         <div class="d-flex justify-content-between">
             <i class="fas fa-hourglass-start fa-5x"></i>
             <div class="d-flex flex-column align-items-end">
-                <h1>{{ countNew }}</h1>
+                <h1 id="countNew"></h1>
                 <p class="card-text">Nouveaux</p>
             </div>
         </div>
@@ -15,12 +15,12 @@
         </div>
     </div>
 </div>
-<div class="card mini-card shadow text-white bg-warning" >
+<div class="card mini-card shadow text-white bg-warning">
     <div class="card-body ">
         <div class="d-flex justify-content-between">
             <i class="fas fa-hourglass-half fa-5x"></i>
             <div class="d-flex flex-column align-items-end">
-                <h1>{{ countCheck }}</h1>
+                <h1 id="countCheck"></h1>
                 <p class="card-text">Pris en compte</p>
             </div>
         </div>
@@ -28,16 +28,17 @@
     <div class="card-footer">
         <div class="d-flex justify-content-between align-items-center">
             <div>Voir détails</div>
-            <a href="{{ path('issue_showByStatus', {'status': 'check'}) }}"><i class="fas fa-arrow-circle-right fa-2x"></i></a>
+            <a href="{{ path('issue_showByStatus', {'status': 'check'}) }}"><i
+                        class="fas fa-arrow-circle-right fa-2x"></i></a>
         </div>
     </div>
 </div>
-<div class="card mini-card shadow text-white bg-success" >
+<div class="card mini-card shadow text-white bg-success">
     <div class="card-body ">
         <div class="d-flex justify-content-between">
             <i class="fas fa-hourglass-end fa-5x"></i>
             <div class="d-flex flex-column align-items-end">
-                <h1>{{ countReady }}</h1>
+                <h1 id="countReady"></h1>
                 <p class="card-text">Prêts</p>
             </div>
         </div>
@@ -45,16 +46,17 @@
     <div class="card-footer">
         <div class="d-flex justify-content-between align-items-center">
             <div>Voir détails</div>
-            <a href="{{ path('issue_showByStatus', {'status': 'ready'}) }}"><i class="fas fa-arrow-circle-right fa-2x"></i></a>
+            <a href="{{ path('issue_showByStatus', {'status': 'ready'}) }}"><i
+                        class="fas fa-arrow-circle-right fa-2x"></i></a>
         </div>
     </div>
 </div>
-<div class="card mini-card shadow text-white bg-secondary" >
+<div class="card mini-card shadow text-white bg-secondary">
     <div class="card-body ">
         <div class="d-flex justify-content-between">
             <i class="fas fa-check fa-5x"></i>
             <div class="d-flex flex-column align-items-end">
-                <h1>{{ countEnd }}</h1>
+                <h1 id="countEnd"></h1>
                 <p class="card-text">Arrivés</p>
             </div>
         </div>
@@ -62,7 +64,8 @@
     <div class="card-footer">
         <div class="d-flex justify-content-between align-items-center">
             <div>Voir détails</div>
-            <a href="{{ path('issue_showByStatus', {'status': 'end'}) }}"><i class="fas fa-arrow-circle-right fa-2x"></i></a>
+            <a href="{{ path('issue_showByStatus', {'status': 'end'}) }}"><i
+                        class="fas fa-arrow-circle-right fa-2x"></i></a>
         </div>
     </div>
 </div>

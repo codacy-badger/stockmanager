@@ -9,6 +9,7 @@ use App\Form\SubcontractorType;
 use App\Services\DateDiffHour;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -119,21 +120,6 @@ class SubcontractorController extends AbstractController
         return $this->render('admin/subcontractor/edit.html.twig', [
             'form' => $form->createView(),
             'subcontractor' => $subcontractorRepair
-        ]);
-    }
-
-
-    /**
-     * @Route("/count", name="subcontracotr_count")
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function countInProcessed()
-    {
-
-        $count = $this->em->getRepository(SubcontractorRepair::class)->countNotEnded();
-
-        return $this->render('admin/subcontractor/_count.html.twig', [
-            'count' => $count,
         ]);
     }
 
