@@ -113,23 +113,37 @@
         }
 
         .quantity {
-            border: 1px solid black;
-            margin-top: 10px;
-            padding: 10px;
+
+            width: 30%;
+            float: left;
+        }
+
+        .comments {
+            float: right;
+            width: 70%;
+            overflow: auto;
         }
 
         .signature {
             margin-top: 10px;
             border: 1px solid black;
-            height: 80px;
+
             width: 100%;
             padding: 10px;
         }
+
 
         .footer {
             padding: 20px;
             font-size: 0.7em;
             text-align: center;
+        }
+
+        .base {
+            height: 40px;
+            border: 1px solid black;
+            margin-top: 10px;
+            padding: 10px;
         }
 
     </style>
@@ -247,19 +261,26 @@
     </table>
 
 </div>
-<div class="quantity">
-    <b>Quantité :</b>
-    {% set count = 0 %}
+<div class="base">
 
-    {% for issue in delivery.issues %}
-        {% set count = count + 1 %}
-    {% endfor %}
-    {% for eqt in delivery.equipments %}
-        {% set count = count + 1 %}
-    {% endfor %}
+    <div class="quantity">
+        <b>Quantité :</b>
+        {% set count = 0 %}
 
-    {{ count }}
+        {% for issue in delivery.issues %}
+            {% set count = count + 1 %}
+        {% endfor %}
+        {% for eqt in delivery.equipments %}
+            {% set count = count + 1 %}
+        {% endfor %}
+
+        {{ count }}
+    </div>
+    {% if delivery.comments %}
+        <div class="comments"><b>Observations : </b>{{ delivery.comments }}</div>
+    {% endif %}
 </div>
+
 <div class="signature">
     <h4>signature</h4>
 </div>
