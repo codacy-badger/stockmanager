@@ -123,6 +123,32 @@ class RepairRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Get end repairs by date by category
+     *
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return mixed
+     */
+    public function repairsByDateByCategory(Category $category, \DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.issue', 'i')
+            ->leftJoin('i.equipment', 'e')
+            ->leftJoin('e.brand', 'b')
+            ->andWhere('b.category = :category')
+            ->andWhere('r.dateEnd BETWEEN :startDate AND :endDate')
+            ->andWhere('r.degradation = false')
+            ->andWhere('r.noBreakdown = false')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('category', $category)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
 //    /**
 //     * @return Repair[] Returns an array of Repair objects
 //     */

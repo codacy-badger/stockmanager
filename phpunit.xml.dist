@@ -11,6 +11,11 @@
         <ini name="error_reporting" value="-1" />
         <env name="KERNEL_CLASS" value="App\Kernel" />
         <env name="APP_ENV" value="test" />
+        <env name="AWS_BASE_URL" value="" />
+        <env name="AWS_BUCKET_NAME" value="" />
+        <env name="AWS_ACCESS_KEY_ID" value="" />
+        <env name="AWS_SECRET_ACCESS_KEY" value="" />
+        <env name="AWS_REGION" value="" />
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="s$cretf0rt3st" />
         <env name="SHELL_VERBOSITY" value="-1" />

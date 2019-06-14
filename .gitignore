@@ -7,6 +7,7 @@
 ###> symfony/phpunit-bridge ###
 .phpunit
 /phpunit.xml
+test.html
 ###< symfony/phpunit-bridge ###
 
 ###> symfony/web-server-bundle ###

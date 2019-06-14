@@ -13,6 +13,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Category
 {
+
+    const PUPITRE = 1;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

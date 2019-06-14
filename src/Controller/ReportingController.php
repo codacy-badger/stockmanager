@@ -16,6 +16,7 @@ use App\Services\RepairExportXlsx;
 use App\Services\ReportGenerator;
 use App\Services\ReportGeneratorContract;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\Request;
@@ -290,6 +291,85 @@ class ReportingController extends AbstractController
         $issues = $this->em->getRepository(Issue::class)->findAllByDate($startDate, $endDate);
 
         return $repairExportXlsx->export($issues);
+
+    }
+
+    /**
+     * @Route("admin/reporting/symptoms", name="reporting_symptoms")
+     */
+    public function symptomsReport(Request $request)
+    {
+
+        $defaultData = null;
+
+        $form = $this->createFormBuilder($defaultData)
+            ->add('startDate', DateType::class, [
+                'widget' => 'single_text',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                ]
+            ])
+            ->add('endDate', DateType::class, [
+                'widget' => 'single_text',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                ]
+            ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name'
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $data = $form->getData();
+
+            $repairs = $this->em->getRepository(Repair::class)->repairsByDateByCategory($data['category'], $data['startDate'], $data['endDate']);
+
+
+            $mySymptoms[] = null;
+
+            /** @var Repair $repair */
+            foreach ($repairs as $repair) {
+
+
+                foreach ($repair->getSymptoms() as $symptom) {
+
+
+                    if (!array_key_exists($symptom->getName(), $mySymptoms)) {
+
+                        $mySymptoms[$symptom->getName()] = 1;
+
+                    } else {
+
+                        $mySymptoms[$symptom->getName()] = $mySymptoms[$symptom->getName()] + 1;
+                    }
+
+
+                }
+
+            }
+
+
+            return $this->render('admin/reporting/symptoms.html.twig', [
+                'repairs' => $repairs,
+                'mySymptoms' => $mySymptoms,
+                'category' => $data['category'],
+                'startDate' => $data['startDate'],
+                'endDate' => $data['endDate']
+            ]);
+
+        }
+
+        return $this->render('admin/reporting/form.html.twig', [
+            'form' => $form->createView()
+        ]);
 
     }
 
