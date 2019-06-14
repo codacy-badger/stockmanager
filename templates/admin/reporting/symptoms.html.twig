@@ -1,0 +1,39 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block body %}
+    <table class="table">
+        <tr>
+            <th>Catégorie</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>nombre de pannes</th>
+            <th>symptomes</th>
+        </tr>
+        <tr>
+            <td>
+                {{ category.name }}
+            </td>
+            <td>{{ startDate | date('d/m/Y', 'Europe/Paris') }}</td>
+            <td>{{ endDate | date('d/m/Y', 'Europe/Paris') }}</td>
+            <td>
+                {{ repairs | length }}
+            </td>
+            <td>
+
+                <ul>
+
+                    {% for key, symptom in mySymptoms | sort | reverse %}
+                        {% if symptom %}
+                            <li>
+                                {{ key }}: {{ symptom }}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+
+            </td>
+        </tr>
+
+    </table>
+{% endblock %}

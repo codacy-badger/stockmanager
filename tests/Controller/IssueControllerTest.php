@@ -5,27 +5,22 @@ namespace App\Tests\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
 
 class IssueControllerTest extends WebTestCase
 {
 
 
-
     /**
-     * Test if the main member page
+     * Test redirection to login page when going to member page with no authenticated user
      */
-    public function testMemberPage()
+    public function testGoToMemberPageWithoutLogin()
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
+        $client->request('GET', '/member');
 
-        $crawler = $client->request('GET', '/member');
-
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertTrue($client->getResponse()->isRedirect('http://localhost/login'));
     }
-
-
 
 }
