@@ -17,5 +17,5 @@ test.html
 "/node_modules"
 .htaccess
 composer.phar
-security.yaml
+
 
